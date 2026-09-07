@@ -1,0 +1,2130 @@
+# Hermes CLI evidence batch b8-context-memory — 2026-09-07 — Hermes v0.20.6
+
+=== $ hermes memory status ===
+Memory status
+────────────────────────────────────────
+  Built-in (MEMORY.md / USER.md):
+    Memory injection:   enabled ✓
+    User profile:       enabled ✓
+    Memory tool:        enabled ✓
+  Provider:  (none — built-in only)
+
+  Installed plugins:
+    • byterover  (API key / local)
+    • hindsight  (API key / local)
+    • holographic  (local)
+    • honcho  (API key / local)
+    • mem0  (API key / local)
+    • openviking  (API key / local)
+    • retaindb  (API key / local)
+    • supermemory  (requires API key)
+
+=== $ hermes prompt-size --json ===
+{
+  "platform": "cli",
+  "model": "minimax/minimax-m3:free",
+  "system_prompt": {
+    "chars": 28738,
+    "bytes": 29293
+  },
+  "skills_index": {
+    "chars": 10627,
+    "bytes": 10649
+  },
+  "memory": {
+    "chars": 3556,
+    "bytes": 3776
+  },
+  "user_profile": {
+    "chars": 1426,
+    "bytes": 1655
+  },
+  "tools": {
+    "count": 21,
+    "json_bytes": 43612
+  },
+  "sections": [
+    [
+      "stable (identity/guidance/skills)",
+      11461,
+      11533
+    ],
+    [
+      "context (AGENTS.md/cwd files)",
+      0,
+      0
+    ],
+    [
+      "volatile (memory/profile/timestamp)",
+      17275,
+      17758
+    ]
+  ],
+  "skills_breakdown": [
+    {
+      "name": "humanizer",
+      "index_line_bytes": 65,
+      "index_line_total_bytes": 65,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 34463,
+      "path": "/home/amirelite_ai/.hermes/skills/creative/humanizer/SKILL.md"
+    },
+    {
+      "name": "claude-code",
+      "index_line_bytes": 70,
+      "index_line_total_bytes": 70,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 34281,
+      "path": "/home/amirelite_ai/.hermes/skills/autonomous-ai-agents/claude-code/SKILL.md"
+    },
+    {
+      "name": "p5js",
+      "index_line_bytes": 62,
+      "index_line_total_bytes": 62,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 27534,
+      "path": "/home/amirelite_ai/.hermes/skills/creative/p5js/SKILL.md"
+    },
+    {
+      "name": "claude-design",
+      "index_line_bytes": 78,
+      "index_line_total_bytes": 78,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 25117,
+      "path": "/home/amirelite_ai/.hermes/skills/creative/claude-design/SKILL.md"
+    },
+    {
+      "name": "comfyui",
+      "index_line_bytes": 73,
+      "index_line_total_bytes": 73,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 24075,
+      "path": "/home/amirelite_ai/.hermes/skills/creative/comfyui/SKILL.md"
+    },
+    {
+      "name": "llm-wiki",
+      "index_line_bytes": 73,
+      "index_line_total_bytes": 73,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 20121,
+      "path": "/home/amirelite_ai/.hermes/skills/research/llm-wiki/SKILL.md"
+    },
+    {
+      "name": "computer-use",
+      "index_line_bytes": 75,
+      "index_line_total_bytes": 75,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 18599,
+      "path": "/home/amirelite_ai/.hermes/skills/autonomous-ai-agents/computer-use/SKILL.md"
+    },
+    {
+      "name": "decisioncraft-course",
+      "index_line_bytes": 78,
+      "index_line_total_bytes": 78,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 18081,
+      "path": "/home/amirelite_ai/.hermes/skills/decisioncraft-course/SKILL.md"
+    },
+    {
+      "name": "xurl",
+      "index_line_bytes": 72,
+      "index_line_total_bytes": 72,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 16345,
+      "path": "/home/amirelite_ai/.hermes/skills/social-media/xurl/SKILL.md"
+    },
+    {
+      "name": "touchdesigner-mcp",
+      "index_line_bytes": 63,
+      "index_line_total_bytes": 63,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 15269,
+      "path": "/home/amirelite_ai/.hermes/skills/creative/touchdesigner-mcp/SKILL.md"
+    },
+    {
+      "name": "ascii-video",
+      "index_line_bytes": 77,
+      "index_line_total_bytes": 77,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 15011,
+      "path": "/home/amirelite_ai/.hermes/skills/creative/ascii-video/SKILL.md"
+    },
+    {
+      "name": "simplify-code",
+      "index_line_bytes": 69,
+      "index_line_total_bytes": 69,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 14702,
+      "path": "/home/amirelite_ai/.hermes/skills/software-development/simplify-code/SKILL.md"
+    },
+    {
+      "name": "notion",
+      "index_line_bytes": 72,
+      "index_line_total_bytes": 72,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 14629,
+      "path": "/home/amirelite_ai/.hermes/skills/productivity/notion/SKILL.md"
+    },
+    {
+      "name": "hermes-agent-skill-authoring",
+      "index_line_bytes": 93,
+      "index_line_total_bytes": 93,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 14438,
+      "path": "/home/amirelite_ai/.hermes/skills/software-development/hermes-agent-skill-authoring/SKILL.md"
+    },
+    {
+      "name": "competitive-game-agent-lab",
+      "index_line_bytes": 94,
+      "index_line_total_bytes": 94,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 14410,
+      "path": "/home/amirelite_ai/.hermes/skills/competitive-game-agent-lab/SKILL.md"
+    },
+    {
+      "name": "systematic-debugging",
+      "index_line_bytes": 88,
+      "index_line_total_bytes": 88,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 14065,
+      "path": "/home/amirelite_ai/.hermes/skills/software-development/systematic-debugging/SKILL.md"
+    },
+    {
+      "name": "pretext",
+      "index_line_bytes": 70,
+      "index_line_total_bytes": 70,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 13959,
+      "path": "/home/amirelite_ai/.hermes/skills/creative/pretext/SKILL.md"
+    },
+    {
+      "name": "github-repo-management",
+      "index_line_bytes": 80,
+      "index_line_total_bytes": 80,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 13727,
+      "path": "/home/amirelite_ai/.hermes/skills/github/github-repo-management/SKILL.md"
+    },
+    {
+      "name": "google-workspace",
+      "index_line_bytes": 83,
+      "index_line_total_bytes": 83,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 13670,
+      "path": "/home/amirelite_ai/.hermes/skills/productivity/google-workspace/SKILL.md"
+    },
+    {
+      "name": "github-code-review",
+      "index_line_bytes": 76,
+      "index_line_total_bytes": 76,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 13614,
+      "path": "/home/amirelite_ai/.hermes/skills/github/github-code-review/SKILL.md"
+    },
+    {
+      "name": "replays-analytics-conventions",
+      "index_line_bytes": 91,
+      "index_line_total_bytes": 91,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 13512,
+      "path": "/home/amirelite_ai/.hermes/skills/replays-analytics-conventions/SKILL.md"
+    },
+    {
+      "name": "python-debugpy",
+      "index_line_bytes": 68,
+      "index_line_total_bytes": 68,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 13347,
+      "path": "/home/amirelite_ai/.hermes/skills/software-development/python-debugpy/SKILL.md"
+    },
+    {
+      "name": "hermes-agent",
+      "index_line_bytes": 80,
+      "index_line_total_bytes": 80,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 13183,
+      "path": "/home/amirelite_ai/.hermes/skills/autonomous-ai-agents/hermes-agent/SKILL.md"
+    },
+    {
+      "name": "weights-and-biases",
+      "index_line_bytes": 86,
+      "index_line_total_bytes": 86,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 12676,
+      "path": "/home/amirelite_ai/.hermes/skills/mlops/evaluation/weights-and-biases/SKILL.md"
+    },
+    {
+      "name": "pdf",
+      "index_line_bytes": 59,
+      "index_line_total_bytes": 59,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 12244,
+      "path": "/home/amirelite_ai/.hermes/skills/productivity/pdf/SKILL.md"
+    },
+    {
+      "name": "evaluating-llms-harness",
+      "index_line_bytes": 83,
+      "index_line_total_bytes": 83,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 12204,
+      "path": "/home/amirelite_ai/.hermes/skills/mlops/evaluation/evaluating-llms-harness/SKILL.md"
+    },
+    {
+      "name": "manim-video",
+      "index_line_bytes": 69,
+      "index_line_total_bytes": 69,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 12150,
+      "path": "/home/amirelite_ai/.hermes/skills/creative/manim-video/SKILL.md"
+    },
+    {
+      "name": "github-auth",
+      "index_line_bytes": 75,
+      "index_line_total_bytes": 75,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 11949,
+      "path": "/home/amirelite_ai/.hermes/skills/github/github-auth/SKILL.md"
+    },
+    {
+      "name": "box",
+      "index_line_bytes": 66,
+      "index_line_total_bytes": 66,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 11697,
+      "path": "/home/amirelite_ai/.hermes/skills/productivity/box/SKILL.md"
+    },
+    {
+      "name": "airtable",
+      "index_line_bytes": 75,
+      "index_line_total_bytes": 75,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 11314,
+      "path": "/home/amirelite_ai/.hermes/skills/productivity/airtable/SKILL.md"
+    },
+    {
+      "name": "grounded-citations",
+      "index_line_bytes": 84,
+      "index_line_total_bytes": 84,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 11231,
+      "path": "/home/amirelite_ai/.hermes/skills/research/grounded-citations/SKILL.md"
+    },
+    {
+      "name": "songwriting-and-ai-music",
+      "index_line_bytes": 76,
+      "index_line_total_bytes": 76,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 10963,
+      "path": "/home/amirelite_ai/.hermes/skills/creative/songwriting-and-ai-music/SKILL.md"
+    },
+    {
+      "name": "node-inspect-debugger",
+      "index_line_bytes": 88,
+      "index_line_total_bytes": 88,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 10894,
+      "path": "/home/amirelite_ai/.hermes/skills/software-development/node-inspect-debugger/SKILL.md"
+    },
+    {
+      "name": "powerpoint",
+      "index_line_bytes": 66,
+      "index_line_total_bytes": 66,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 10781,
+      "path": "/home/amirelite_ai/.hermes/skills/productivity/powerpoint/SKILL.md"
+    },
+    {
+      "name": "telegram-folder-mirror",
+      "index_line_bytes": 85,
+      "index_line_total_bytes": 85,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 10616,
+      "path": "/home/amirelite_ai/.hermes/skills/messaging/telegram-folder-mirror/SKILL.md"
+    },
+    {
+      "name": "ascii-art",
+      "index_line_bytes": 68,
+      "index_line_total_bytes": 68,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 10552,
+      "path": "/home/amirelite_ai/.hermes/skills/creative/ascii-art/SKILL.md"
+    },
+    {
+      "name": "baoyu-infographic",
+      "index_line_bytes": 85,
+      "index_line_total_bytes": 85,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 10434,
+      "path": "/home/amirelite_ai/.hermes/skills/creative/baoyu-infographic/SKILL.md"
+    },
+    {
+      "name": "docx",
+      "index_line_bytes": 70,
+      "index_line_total_bytes": 70,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 10395,
+      "path": "/home/amirelite_ai/.hermes/skills/productivity/docx/SKILL.md"
+    },
+    {
+      "name": "test-driven-development",
+      "index_line_bytes": 82,
+      "index_line_total_bytes": 82,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 10306,
+      "path": "/home/amirelite_ai/.hermes/skills/software-development/test-driven-development/SKILL.md"
+    },
+    {
+      "name": "arxiv",
+      "index_line_bytes": 69,
+      "index_line_total_bytes": 69,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 10075,
+      "path": "/home/amirelite_ai/.hermes/skills/research/arxiv/SKILL.md"
+    },
+    {
+      "name": "github-pr-workflow",
+      "index_line_bytes": 79,
+      "index_line_total_bytes": 79,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 10034,
+      "path": "/home/amirelite_ai/.hermes/skills/github/github-pr-workflow/SKILL.md"
+    },
+    {
+      "name": "sketch",
+      "index_line_bytes": 69,
+      "index_line_total_bytes": 69,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 9788,
+      "path": "/home/amirelite_ai/.hermes/skills/creative/sketch/SKILL.md"
+    },
+    {
+      "name": "popular-web-designs",
+      "index_line_bytes": 87,
+      "index_line_total_bytes": 87,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 9722,
+      "path": "/home/amirelite_ai/.hermes/skills/creative/popular-web-designs/SKILL.md"
+    },
+    {
+      "name": "xlsx",
+      "index_line_bytes": 62,
+      "index_line_total_bytes": 62,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 9655,
+      "path": "/home/amirelite_ai/.hermes/skills/productivity/xlsx/SKILL.md"
+    },
+    {
+      "name": "telegram-file-delivery",
+      "index_line_bytes": 88,
+      "index_line_total_bytes": 88,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 9619,
+      "path": "/home/amirelite_ai/.hermes/skills/telegram-file-delivery/SKILL.md"
+    },
+    {
+      "name": "serving-llms-vllm",
+      "index_line_bytes": 85,
+      "index_line_total_bytes": 85,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 9335,
+      "path": "/home/amirelite_ai/.hermes/skills/mlops/inference/serving-llms-vllm/SKILL.md"
+    },
+    {
+      "name": "github-issues",
+      "index_line_bytes": 80,
+      "index_line_total_bytes": 80,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 9312,
+      "path": "/home/amirelite_ai/.hermes/skills/github/github-issues/SKILL.md"
+    },
+    {
+      "name": "kaggle-env-competitions",
+      "index_line_bytes": 86,
+      "index_line_total_bytes": 86,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 9288,
+      "path": "/home/amirelite_ai/.hermes/skills/kaggle-env-competitions/SKILL.md"
+    },
+    {
+      "name": "kaggle-competition-agents",
+      "index_line_bytes": 91,
+      "index_line_total_bytes": 91,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 9108,
+      "path": "/home/amirelite_ai/.hermes/skills/kaggle-competition-agents/SKILL.md"
+    },
+    {
+      "name": "plan",
+      "index_line_bytes": 66,
+      "index_line_total_bytes": 66,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 8903,
+      "path": "/home/amirelite_ai/.hermes/skills/software-development/plan/SKILL.md"
+    },
+    {
+      "name": "llama-cpp",
+      "index_line_bytes": 73,
+      "index_line_total_bytes": 73,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 8880,
+      "path": "/home/amirelite_ai/.hermes/skills/mlops/inference/llama-cpp/SKILL.md"
+    },
+    {
+      "name": "spike",
+      "index_line_bytes": 68,
+      "index_line_total_bytes": 68,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 8729,
+      "path": "/home/amirelite_ai/.hermes/skills/software-development/spike/SKILL.md"
+    },
+    {
+      "name": "replay-day-snapshot",
+      "index_line_bytes": 87,
+      "index_line_total_bytes": 87,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 8685,
+      "path": "/home/amirelite_ai/.hermes/skills/replay-day-snapshot/SKILL.md"
+    },
+    {
+      "name": "telegram-topic-binding",
+      "index_line_bytes": 89,
+      "index_line_total_bytes": 89,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 8602,
+      "path": "/home/amirelite_ai/.hermes/skills/messaging/telegram-topic-binding/SKILL.md"
+    },
+    {
+      "name": "design-md",
+      "index_line_bytes": 76,
+      "index_line_total_bytes": 76,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 8477,
+      "path": "/home/amirelite_ai/.hermes/skills/creative/design-md/SKILL.md"
+    },
+    {
+      "name": "requesting-code-review",
+      "index_line_bytes": 88,
+      "index_line_total_bytes": 88,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 8465,
+      "path": "/home/amirelite_ai/.hermes/skills/software-development/requesting-code-review/SKILL.md"
+    },
+    {
+      "name": "competition-replay-analysis",
+      "index_line_bytes": 95,
+      "index_line_total_bytes": 95,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 7910,
+      "path": "/home/amirelite_ai/.hermes/skills/competition-replay-analysis/SKILL.md"
+    },
+    {
+      "name": "merge-reconciler",
+      "index_line_bytes": 80,
+      "index_line_total_bytes": 80,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 7606,
+      "path": "/home/amirelite_ai/.hermes/skills/autonomous-ai-agents/merge-reconciler/SKILL.md"
+    },
+    {
+      "name": "excalidraw",
+      "index_line_bytes": 72,
+      "index_line_total_bytes": 72,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 7297,
+      "path": "/home/amirelite_ai/.hermes/skills/creative/excalidraw/SKILL.md"
+    },
+    {
+      "name": "himalaya",
+      "index_line_bytes": 60,
+      "index_line_total_bytes": 60,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 7272,
+      "path": "/home/amirelite_ai/.hermes/skills/email/himalaya/SKILL.md"
+    },
+    {
+      "name": "opencode",
+      "index_line_bytes": 70,
+      "index_line_total_bytes": 70,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 7259,
+      "path": "/home/amirelite_ai/.hermes/skills/autonomous-ai-agents/opencode/SKILL.md"
+    },
+    {
+      "name": "teams-meeting-pipeline",
+      "index_line_bytes": 87,
+      "index_line_total_bytes": 87,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 6953,
+      "path": "/home/amirelite_ai/.hermes/skills/productivity/teams-meeting-pipeline/SKILL.md"
+    },
+    {
+      "name": "maps",
+      "index_line_bytes": 68,
+      "index_line_total_bytes": 68,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 6705,
+      "path": "/home/amirelite_ai/.hermes/skills/productivity/maps/SKILL.md"
+    },
+    {
+      "name": "dogfood",
+      "index_line_bytes": 72,
+      "index_line_total_bytes": 72,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 6324,
+      "path": "/home/amirelite_ai/.hermes/skills/software-development/dogfood/SKILL.md"
+    },
+    {
+      "name": "competitive-game-agents",
+      "index_line_bytes": 88,
+      "index_line_total_bytes": 88,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 6292,
+      "path": "/home/amirelite_ai/.hermes/skills/competitive-game-agents/SKILL.md"
+    },
+    {
+      "name": "inspecting-hermes-desktop-dom",
+      "index_line_bytes": 83,
+      "index_line_total_bytes": 83,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 6204,
+      "path": "/home/amirelite_ai/.hermes/skills/software-development/inspecting-hermes-desktop-dom/SKILL.md"
+    },
+    {
+      "name": "chista-replay-analysis",
+      "index_line_bytes": 90,
+      "index_line_total_bytes": 90,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 6096,
+      "path": "/home/amirelite_ai/.hermes/skills/chista-replay-analysis/SKILL.md"
+    },
+    {
+      "name": "github-issue-to-pr",
+      "index_line_bytes": 85,
+      "index_line_total_bytes": 85,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 6058,
+      "path": "/home/amirelite_ai/.hermes/skills/github/github-issue-to-pr/SKILL.md"
+    },
+    {
+      "name": "architecture-diagram",
+      "index_line_bytes": 86,
+      "index_line_total_bytes": 86,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 5830,
+      "path": "/home/amirelite_ai/.hermes/skills/creative/architecture-diagram/SKILL.md"
+    },
+    {
+      "name": "ortools-milp-cpsat-modeling",
+      "index_line_bytes": 93,
+      "index_line_total_bytes": 93,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 5788,
+      "path": "/home/amirelite_ai/.hermes/skills/ortools-milp-cpsat-modeling/SKILL.md"
+    },
+    {
+      "name": "ocr-and-documents",
+      "index_line_bytes": 76,
+      "index_line_total_bytes": 76,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 5784,
+      "path": "/home/amirelite_ai/.hermes/skills/productivity/ocr-and-documents/SKILL.md"
+    },
+    {
+      "name": "codex",
+      "index_line_bytes": 65,
+      "index_line_total_bytes": 65,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 5738,
+      "path": "/home/amirelite_ai/.hermes/skills/autonomous-ai-agents/codex/SKILL.md"
+    },
+    {
+      "name": "game-agent-optimization",
+      "index_line_bytes": 87,
+      "index_line_total_bytes": 87,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 5333,
+      "path": "/home/amirelite_ai/.hermes/skills/software-development/game-agent-optimization/SKILL.md"
+    },
+    {
+      "name": "blocked-page-recovery",
+      "index_line_bytes": 81,
+      "index_line_total_bytes": 81,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 5152,
+      "path": "/home/amirelite_ai/.hermes/skills/research/blocked-page-recovery/SKILL.md"
+    },
+    {
+      "name": "kaggle-competition-agent",
+      "index_line_bytes": 88,
+      "index_line_total_bytes": 88,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 5151,
+      "path": "/home/amirelite_ai/.hermes/skills/kaggle-competition-agent/SKILL.md"
+    },
+    {
+      "name": "blogwatcher",
+      "index_line_bytes": 77,
+      "index_line_total_bytes": 77,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 5111,
+      "path": "/home/amirelite_ai/.hermes/skills/research/blogwatcher/SKILL.md"
+    },
+    {
+      "name": "gcp-vm-resize-upgrade",
+      "index_line_bytes": 86,
+      "index_line_total_bytes": 86,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 5086,
+      "path": "/home/amirelite_ai/.hermes/skills/infra/gcp-vm-resize-upgrade/SKILL.md"
+    },
+    {
+      "name": "or-tools-optimization",
+      "index_line_bytes": 89,
+      "index_line_total_bytes": 89,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 5055,
+      "path": "/home/amirelite_ai/.hermes/skills/or-tools-optimization/SKILL.md"
+    },
+    {
+      "name": "decision-science-teaching",
+      "index_line_bytes": 93,
+      "index_line_total_bytes": 93,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 4955,
+      "path": "/home/amirelite_ai/.hermes/skills/decision-science-teaching/SKILL.md"
+    },
+    {
+      "name": "session-librarian",
+      "index_line_bytes": 83,
+      "index_line_total_bytes": 83,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 4827,
+      "path": "/home/amirelite_ai/.hermes/skills/productivity/session-librarian/SKILL.md"
+    },
+    {
+      "name": "gcp-gemini-integration",
+      "index_line_bytes": 84,
+      "index_line_total_bytes": 84,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 4671,
+      "path": "/home/amirelite_ai/.hermes/skills/gcp-gemini-integration/SKILL.md"
+    },
+    {
+      "name": "competitor-news-monitor",
+      "index_line_bytes": 86,
+      "index_line_total_bytes": 86,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 4501,
+      "path": "/home/amirelite_ai/.hermes/skills/research/competitor-news-monitor/SKILL.md"
+    },
+    {
+      "name": "decision-optimization-rl",
+      "index_line_bytes": 85,
+      "index_line_total_bytes": 85,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 4499,
+      "path": "/home/amirelite_ai/.hermes/skills/decision-optimization-rl/SKILL.md"
+    },
+    {
+      "name": "product-price-monitor",
+      "index_line_bytes": 87,
+      "index_line_total_bytes": 87,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 4400,
+      "path": "/home/amirelite_ai/.hermes/skills/productivity/product-price-monitor/SKILL.md"
+    },
+    {
+      "name": "kaggriculture-lab",
+      "index_line_bytes": 79,
+      "index_line_total_bytes": 79,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 4195,
+      "path": "/home/amirelite_ai/.hermes/skills/competitive-game-agents/kaggriculture-lab/SKILL.md"
+    },
+    {
+      "name": "decision-optimization-course",
+      "index_line_bytes": 82,
+      "index_line_total_bytes": 82,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 4190,
+      "path": "/home/amirelite_ai/.hermes/skills/decision-optimization-course/SKILL.md"
+    },
+    {
+      "name": "messaging-gateway-troubleshooting",
+      "index_line_bytes": 91,
+      "index_line_total_bytes": 91,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 4166,
+      "path": "/home/amirelite_ai/.hermes/skills/messaging-gateway-troubleshooting/SKILL.md"
+    },
+    {
+      "name": "email-inbox-triage",
+      "index_line_bytes": 84,
+      "index_line_total_bytes": 84,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 4057,
+      "path": "/home/amirelite_ai/.hermes/skills/email/email-inbox-triage/SKILL.md"
+    },
+    {
+      "name": "gcp-vm-storage-setup",
+      "index_line_bytes": 88,
+      "index_line_total_bytes": 88,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 4034,
+      "path": "/home/amirelite_ai/.hermes/skills/gcp-vm-storage-setup/SKILL.md"
+    },
+    {
+      "name": "weekly-review-planning",
+      "index_line_bytes": 86,
+      "index_line_total_bytes": 86,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 3975,
+      "path": "/home/amirelite_ai/.hermes/skills/productivity/weekly-review-planning/SKILL.md"
+    },
+    {
+      "name": "document-to-action-items",
+      "index_line_bytes": 91,
+      "index_line_total_bytes": 91,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 3966,
+      "path": "/home/amirelite_ai/.hermes/skills/productivity/document-to-action-items/SKILL.md"
+    },
+    {
+      "name": "meeting-action-items",
+      "index_line_bytes": 85,
+      "index_line_total_bytes": 85,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 3808,
+      "path": "/home/amirelite_ai/.hermes/skills/productivity/meeting-action-items/SKILL.md"
+    },
+    {
+      "name": "huggingface-hub",
+      "index_line_bytes": 83,
+      "index_line_total_bytes": 83,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 3715,
+      "path": "/home/amirelite_ai/.hermes/skills/mlops/huggingface-hub/SKILL.md"
+    },
+    {
+      "name": "codebase-inspection",
+      "index_line_bytes": 80,
+      "index_line_total_bytes": 80,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 3628,
+      "path": "/home/amirelite_ai/.hermes/skills/github/codebase-inspection/SKILL.md"
+    },
+    {
+      "name": "youtube-content",
+      "index_line_bytes": 72,
+      "index_line_total_bytes": 72,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 3538,
+      "path": "/home/amirelite_ai/.hermes/skills/media/youtube-content/SKILL.md"
+    },
+    {
+      "name": "hermes-mastery-tutoring",
+      "index_line_bytes": 90,
+      "index_line_total_bytes": 90,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 3283,
+      "path": "/home/amirelite_ai/.hermes/skills/hermes-mastery-tutoring/SKILL.md"
+    },
+    {
+      "name": "obsidian",
+      "index_line_bytes": 75,
+      "index_line_total_bytes": 75,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 3092,
+      "path": "/home/amirelite_ai/.hermes/skills/note-taking/obsidian/SKILL.md"
+    },
+    {
+      "name": "openhue",
+      "index_line_bytes": 73,
+      "index_line_total_bytes": 73,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 2843,
+      "path": "/home/amirelite_ai/.hermes/skills/smart-home/openhue/SKILL.md"
+    },
+    {
+      "name": "gif-search",
+      "index_line_bytes": 64,
+      "index_line_total_bytes": 64,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 2720,
+      "path": "/home/amirelite_ai/.hermes/skills/media/gif-search/SKILL.md"
+    },
+    {
+      "name": "songsee",
+      "index_line_bytes": 71,
+      "index_line_total_bytes": 71,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 2336,
+      "path": "/home/amirelite_ai/.hermes/skills/media/songsee/SKILL.md"
+    },
+    {
+      "name": "decision-science-tutoring",
+      "index_line_bytes": 91,
+      "index_line_total_bytes": 91,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 1956,
+      "path": "/home/amirelite_ai/.hermes/skills/decision-science-tutoring/SKILL.md"
+    },
+    {
+      "name": "nano-pdf",
+      "index_line_bytes": 72,
+      "index_line_total_bytes": 72,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 1605,
+      "path": "/home/amirelite_ai/.hermes/skills/productivity/nano-pdf/SKILL.md"
+    }
+  ],
+  "toolsets_breakdown": [
+    {
+      "toolset": "computer_use",
+      "tool_count": 1,
+      "json_bytes": 6215
+    },
+    {
+      "toolset": "file",
+      "tool_count": 4,
+      "json_bytes": 5772
+    },
+    {
+      "toolset": "terminal",
+      "tool_count": 2,
+      "json_bytes": 4365
+    },
+    {
+      "toolset": "delegation",
+      "tool_count": 1,
+      "json_bytes": 3751
+    },
+    {
+      "toolset": "skills",
+      "tool_count": 3,
+      "json_bytes": 3206
+    },
+    {
+      "toolset": "memory",
+      "tool_count": 1,
+      "json_bytes": 3178
+    },
+    {
+      "toolset": "session_search",
+      "tool_count": 1,
+      "json_bytes": 3178
+    },
+    {
+      "toolset": "browser-use",
+      "tool_count": 1,
+      "json_bytes": 3048
+    },
+    {
+      "toolset": "code_execution",
+      "tool_count": 1,
+      "json_bytes": 2934
+    },
+    {
+      "toolset": "web",
+      "tool_count": 2,
+      "json_bytes": 1910
+    },
+    {
+      "toolset": "tts",
+      "tool_count": 1,
+      "json_bytes": 1868
+    },
+    {
+      "toolset": "clarify",
+      "tool_count": 1,
+      "json_bytes": 1636
+    },
+    {
+      "toolset": "vision",
+      "tool_count": 1,
+      "json_bytes": 1360
+    },
+    {
+      "toolset": "todo",
+      "tool_count": 1,
+      "json_bytes": 1149
+    }
+  ]
+}
+
+=== $ hermes prompt-size --platform telegram --json ===
+{
+  "platform": "telegram",
+  "model": "minimax/minimax-m3:free",
+  "system_prompt": {
+    "chars": 28456,
+    "bytes": 29007
+  },
+  "skills_index": {
+    "chars": 10627,
+    "bytes": 10649
+  },
+  "memory": {
+    "chars": 3556,
+    "bytes": 3776
+  },
+  "user_profile": {
+    "chars": 1426,
+    "bytes": 1655
+  },
+  "tools": {
+    "count": 21,
+    "json_bytes": 43612
+  },
+  "sections": [
+    [
+      "stable (identity/guidance/skills)",
+      11174,
+      11242
+    ],
+    [
+      "context (AGENTS.md/cwd files)",
+      0,
+      0
+    ],
+    [
+      "volatile (memory/profile/timestamp)",
+      17280,
+      17763
+    ]
+  ],
+  "skills_breakdown": [
+    {
+      "name": "humanizer",
+      "index_line_bytes": 65,
+      "index_line_total_bytes": 65,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 34463,
+      "path": "/home/amirelite_ai/.hermes/skills/creative/humanizer/SKILL.md"
+    },
+    {
+      "name": "claude-code",
+      "index_line_bytes": 70,
+      "index_line_total_bytes": 70,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 34281,
+      "path": "/home/amirelite_ai/.hermes/skills/autonomous-ai-agents/claude-code/SKILL.md"
+    },
+    {
+      "name": "p5js",
+      "index_line_bytes": 62,
+      "index_line_total_bytes": 62,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 27534,
+      "path": "/home/amirelite_ai/.hermes/skills/creative/p5js/SKILL.md"
+    },
+    {
+      "name": "claude-design",
+      "index_line_bytes": 78,
+      "index_line_total_bytes": 78,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 25117,
+      "path": "/home/amirelite_ai/.hermes/skills/creative/claude-design/SKILL.md"
+    },
+    {
+      "name": "comfyui",
+      "index_line_bytes": 73,
+      "index_line_total_bytes": 73,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 24075,
+      "path": "/home/amirelite_ai/.hermes/skills/creative/comfyui/SKILL.md"
+    },
+    {
+      "name": "llm-wiki",
+      "index_line_bytes": 73,
+      "index_line_total_bytes": 73,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 20121,
+      "path": "/home/amirelite_ai/.hermes/skills/research/llm-wiki/SKILL.md"
+    },
+    {
+      "name": "computer-use",
+      "index_line_bytes": 75,
+      "index_line_total_bytes": 75,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 18599,
+      "path": "/home/amirelite_ai/.hermes/skills/autonomous-ai-agents/computer-use/SKILL.md"
+    },
+    {
+      "name": "decisioncraft-course",
+      "index_line_bytes": 78,
+      "index_line_total_bytes": 78,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 18081,
+      "path": "/home/amirelite_ai/.hermes/skills/decisioncraft-course/SKILL.md"
+    },
+    {
+      "name": "xurl",
+      "index_line_bytes": 72,
+      "index_line_total_bytes": 72,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 16345,
+      "path": "/home/amirelite_ai/.hermes/skills/social-media/xurl/SKILL.md"
+    },
+    {
+      "name": "touchdesigner-mcp",
+      "index_line_bytes": 63,
+      "index_line_total_bytes": 63,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 15269,
+      "path": "/home/amirelite_ai/.hermes/skills/creative/touchdesigner-mcp/SKILL.md"
+    },
+    {
+      "name": "ascii-video",
+      "index_line_bytes": 77,
+      "index_line_total_bytes": 77,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 15011,
+      "path": "/home/amirelite_ai/.hermes/skills/creative/ascii-video/SKILL.md"
+    },
+    {
+      "name": "simplify-code",
+      "index_line_bytes": 69,
+      "index_line_total_bytes": 69,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 14702,
+      "path": "/home/amirelite_ai/.hermes/skills/software-development/simplify-code/SKILL.md"
+    },
+    {
+      "name": "notion",
+      "index_line_bytes": 72,
+      "index_line_total_bytes": 72,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 14629,
+      "path": "/home/amirelite_ai/.hermes/skills/productivity/notion/SKILL.md"
+    },
+    {
+      "name": "hermes-agent-skill-authoring",
+      "index_line_bytes": 93,
+      "index_line_total_bytes": 93,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 14438,
+      "path": "/home/amirelite_ai/.hermes/skills/software-development/hermes-agent-skill-authoring/SKILL.md"
+    },
+    {
+      "name": "competitive-game-agent-lab",
+      "index_line_bytes": 94,
+      "index_line_total_bytes": 94,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 14410,
+      "path": "/home/amirelite_ai/.hermes/skills/competitive-game-agent-lab/SKILL.md"
+    },
+    {
+      "name": "systematic-debugging",
+      "index_line_bytes": 88,
+      "index_line_total_bytes": 88,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 14065,
+      "path": "/home/amirelite_ai/.hermes/skills/software-development/systematic-debugging/SKILL.md"
+    },
+    {
+      "name": "pretext",
+      "index_line_bytes": 70,
+      "index_line_total_bytes": 70,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 13959,
+      "path": "/home/amirelite_ai/.hermes/skills/creative/pretext/SKILL.md"
+    },
+    {
+      "name": "github-repo-management",
+      "index_line_bytes": 80,
+      "index_line_total_bytes": 80,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 13727,
+      "path": "/home/amirelite_ai/.hermes/skills/github/github-repo-management/SKILL.md"
+    },
+    {
+      "name": "google-workspace",
+      "index_line_bytes": 83,
+      "index_line_total_bytes": 83,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 13670,
+      "path": "/home/amirelite_ai/.hermes/skills/productivity/google-workspace/SKILL.md"
+    },
+    {
+      "name": "github-code-review",
+      "index_line_bytes": 76,
+      "index_line_total_bytes": 76,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 13614,
+      "path": "/home/amirelite_ai/.hermes/skills/github/github-code-review/SKILL.md"
+    },
+    {
+      "name": "replays-analytics-conventions",
+      "index_line_bytes": 91,
+      "index_line_total_bytes": 91,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 13512,
+      "path": "/home/amirelite_ai/.hermes/skills/replays-analytics-conventions/SKILL.md"
+    },
+    {
+      "name": "python-debugpy",
+      "index_line_bytes": 68,
+      "index_line_total_bytes": 68,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 13347,
+      "path": "/home/amirelite_ai/.hermes/skills/software-development/python-debugpy/SKILL.md"
+    },
+    {
+      "name": "hermes-agent",
+      "index_line_bytes": 80,
+      "index_line_total_bytes": 80,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 13183,
+      "path": "/home/amirelite_ai/.hermes/skills/autonomous-ai-agents/hermes-agent/SKILL.md"
+    },
+    {
+      "name": "weights-and-biases",
+      "index_line_bytes": 86,
+      "index_line_total_bytes": 86,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 12676,
+      "path": "/home/amirelite_ai/.hermes/skills/mlops/evaluation/weights-and-biases/SKILL.md"
+    },
+    {
+      "name": "pdf",
+      "index_line_bytes": 59,
+      "index_line_total_bytes": 59,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 12244,
+      "path": "/home/amirelite_ai/.hermes/skills/productivity/pdf/SKILL.md"
+    },
+    {
+      "name": "evaluating-llms-harness",
+      "index_line_bytes": 83,
+      "index_line_total_bytes": 83,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 12204,
+      "path": "/home/amirelite_ai/.hermes/skills/mlops/evaluation/evaluating-llms-harness/SKILL.md"
+    },
+    {
+      "name": "manim-video",
+      "index_line_bytes": 69,
+      "index_line_total_bytes": 69,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 12150,
+      "path": "/home/amirelite_ai/.hermes/skills/creative/manim-video/SKILL.md"
+    },
+    {
+      "name": "github-auth",
+      "index_line_bytes": 75,
+      "index_line_total_bytes": 75,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 11949,
+      "path": "/home/amirelite_ai/.hermes/skills/github/github-auth/SKILL.md"
+    },
+    {
+      "name": "box",
+      "index_line_bytes": 66,
+      "index_line_total_bytes": 66,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 11697,
+      "path": "/home/amirelite_ai/.hermes/skills/productivity/box/SKILL.md"
+    },
+    {
+      "name": "airtable",
+      "index_line_bytes": 75,
+      "index_line_total_bytes": 75,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 11314,
+      "path": "/home/amirelite_ai/.hermes/skills/productivity/airtable/SKILL.md"
+    },
+    {
+      "name": "grounded-citations",
+      "index_line_bytes": 84,
+      "index_line_total_bytes": 84,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 11231,
+      "path": "/home/amirelite_ai/.hermes/skills/research/grounded-citations/SKILL.md"
+    },
+    {
+      "name": "songwriting-and-ai-music",
+      "index_line_bytes": 76,
+      "index_line_total_bytes": 76,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 10963,
+      "path": "/home/amirelite_ai/.hermes/skills/creative/songwriting-and-ai-music/SKILL.md"
+    },
+    {
+      "name": "node-inspect-debugger",
+      "index_line_bytes": 88,
+      "index_line_total_bytes": 88,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 10894,
+      "path": "/home/amirelite_ai/.hermes/skills/software-development/node-inspect-debugger/SKILL.md"
+    },
+    {
+      "name": "powerpoint",
+      "index_line_bytes": 66,
+      "index_line_total_bytes": 66,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 10781,
+      "path": "/home/amirelite_ai/.hermes/skills/productivity/powerpoint/SKILL.md"
+    },
+    {
+      "name": "telegram-folder-mirror",
+      "index_line_bytes": 85,
+      "index_line_total_bytes": 85,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 10616,
+      "path": "/home/amirelite_ai/.hermes/skills/messaging/telegram-folder-mirror/SKILL.md"
+    },
+    {
+      "name": "ascii-art",
+      "index_line_bytes": 68,
+      "index_line_total_bytes": 68,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 10552,
+      "path": "/home/amirelite_ai/.hermes/skills/creative/ascii-art/SKILL.md"
+    },
+    {
+      "name": "baoyu-infographic",
+      "index_line_bytes": 85,
+      "index_line_total_bytes": 85,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 10434,
+      "path": "/home/amirelite_ai/.hermes/skills/creative/baoyu-infographic/SKILL.md"
+    },
+    {
+      "name": "docx",
+      "index_line_bytes": 70,
+      "index_line_total_bytes": 70,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 10395,
+      "path": "/home/amirelite_ai/.hermes/skills/productivity/docx/SKILL.md"
+    },
+    {
+      "name": "test-driven-development",
+      "index_line_bytes": 82,
+      "index_line_total_bytes": 82,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 10306,
+      "path": "/home/amirelite_ai/.hermes/skills/software-development/test-driven-development/SKILL.md"
+    },
+    {
+      "name": "arxiv",
+      "index_line_bytes": 69,
+      "index_line_total_bytes": 69,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 10075,
+      "path": "/home/amirelite_ai/.hermes/skills/research/arxiv/SKILL.md"
+    },
+    {
+      "name": "github-pr-workflow",
+      "index_line_bytes": 79,
+      "index_line_total_bytes": 79,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 10034,
+      "path": "/home/amirelite_ai/.hermes/skills/github/github-pr-workflow/SKILL.md"
+    },
+    {
+      "name": "sketch",
+      "index_line_bytes": 69,
+      "index_line_total_bytes": 69,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 9788,
+      "path": "/home/amirelite_ai/.hermes/skills/creative/sketch/SKILL.md"
+    },
+    {
+      "name": "popular-web-designs",
+      "index_line_bytes": 87,
+      "index_line_total_bytes": 87,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 9722,
+      "path": "/home/amirelite_ai/.hermes/skills/creative/popular-web-designs/SKILL.md"
+    },
+    {
+      "name": "xlsx",
+      "index_line_bytes": 62,
+      "index_line_total_bytes": 62,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 9655,
+      "path": "/home/amirelite_ai/.hermes/skills/productivity/xlsx/SKILL.md"
+    },
+    {
+      "name": "telegram-file-delivery",
+      "index_line_bytes": 88,
+      "index_line_total_bytes": 88,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 9619,
+      "path": "/home/amirelite_ai/.hermes/skills/telegram-file-delivery/SKILL.md"
+    },
+    {
+      "name": "serving-llms-vllm",
+      "index_line_bytes": 85,
+      "index_line_total_bytes": 85,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 9335,
+      "path": "/home/amirelite_ai/.hermes/skills/mlops/inference/serving-llms-vllm/SKILL.md"
+    },
+    {
+      "name": "github-issues",
+      "index_line_bytes": 80,
+      "index_line_total_bytes": 80,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 9312,
+      "path": "/home/amirelite_ai/.hermes/skills/github/github-issues/SKILL.md"
+    },
+    {
+      "name": "kaggle-env-competitions",
+      "index_line_bytes": 86,
+      "index_line_total_bytes": 86,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 9288,
+      "path": "/home/amirelite_ai/.hermes/skills/kaggle-env-competitions/SKILL.md"
+    },
+    {
+      "name": "kaggle-competition-agents",
+      "index_line_bytes": 91,
+      "index_line_total_bytes": 91,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 9108,
+      "path": "/home/amirelite_ai/.hermes/skills/kaggle-competition-agents/SKILL.md"
+    },
+    {
+      "name": "plan",
+      "index_line_bytes": 66,
+      "index_line_total_bytes": 66,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 8903,
+      "path": "/home/amirelite_ai/.hermes/skills/software-development/plan/SKILL.md"
+    },
+    {
+      "name": "llama-cpp",
+      "index_line_bytes": 73,
+      "index_line_total_bytes": 73,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 8880,
+      "path": "/home/amirelite_ai/.hermes/skills/mlops/inference/llama-cpp/SKILL.md"
+    },
+    {
+      "name": "spike",
+      "index_line_bytes": 68,
+      "index_line_total_bytes": 68,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 8729,
+      "path": "/home/amirelite_ai/.hermes/skills/software-development/spike/SKILL.md"
+    },
+    {
+      "name": "replay-day-snapshot",
+      "index_line_bytes": 87,
+      "index_line_total_bytes": 87,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 8685,
+      "path": "/home/amirelite_ai/.hermes/skills/replay-day-snapshot/SKILL.md"
+    },
+    {
+      "name": "telegram-topic-binding",
+      "index_line_bytes": 89,
+      "index_line_total_bytes": 89,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 8602,
+      "path": "/home/amirelite_ai/.hermes/skills/messaging/telegram-topic-binding/SKILL.md"
+    },
+    {
+      "name": "design-md",
+      "index_line_bytes": 76,
+      "index_line_total_bytes": 76,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 8477,
+      "path": "/home/amirelite_ai/.hermes/skills/creative/design-md/SKILL.md"
+    },
+    {
+      "name": "requesting-code-review",
+      "index_line_bytes": 88,
+      "index_line_total_bytes": 88,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 8465,
+      "path": "/home/amirelite_ai/.hermes/skills/software-development/requesting-code-review/SKILL.md"
+    },
+    {
+      "name": "competition-replay-analysis",
+      "index_line_bytes": 95,
+      "index_line_total_bytes": 95,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 7910,
+      "path": "/home/amirelite_ai/.hermes/skills/competition-replay-analysis/SKILL.md"
+    },
+    {
+      "name": "merge-reconciler",
+      "index_line_bytes": 80,
+      "index_line_total_bytes": 80,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 7606,
+      "path": "/home/amirelite_ai/.hermes/skills/autonomous-ai-agents/merge-reconciler/SKILL.md"
+    },
+    {
+      "name": "excalidraw",
+      "index_line_bytes": 72,
+      "index_line_total_bytes": 72,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 7297,
+      "path": "/home/amirelite_ai/.hermes/skills/creative/excalidraw/SKILL.md"
+    },
+    {
+      "name": "himalaya",
+      "index_line_bytes": 60,
+      "index_line_total_bytes": 60,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 7272,
+      "path": "/home/amirelite_ai/.hermes/skills/email/himalaya/SKILL.md"
+    },
+    {
+      "name": "opencode",
+      "index_line_bytes": 70,
+      "index_line_total_bytes": 70,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 7259,
+      "path": "/home/amirelite_ai/.hermes/skills/autonomous-ai-agents/opencode/SKILL.md"
+    },
+    {
+      "name": "teams-meeting-pipeline",
+      "index_line_bytes": 87,
+      "index_line_total_bytes": 87,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 6953,
+      "path": "/home/amirelite_ai/.hermes/skills/productivity/teams-meeting-pipeline/SKILL.md"
+    },
+    {
+      "name": "maps",
+      "index_line_bytes": 68,
+      "index_line_total_bytes": 68,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 6705,
+      "path": "/home/amirelite_ai/.hermes/skills/productivity/maps/SKILL.md"
+    },
+    {
+      "name": "dogfood",
+      "index_line_bytes": 72,
+      "index_line_total_bytes": 72,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 6324,
+      "path": "/home/amirelite_ai/.hermes/skills/software-development/dogfood/SKILL.md"
+    },
+    {
+      "name": "competitive-game-agents",
+      "index_line_bytes": 88,
+      "index_line_total_bytes": 88,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 6292,
+      "path": "/home/amirelite_ai/.hermes/skills/competitive-game-agents/SKILL.md"
+    },
+    {
+      "name": "inspecting-hermes-desktop-dom",
+      "index_line_bytes": 83,
+      "index_line_total_bytes": 83,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 6204,
+      "path": "/home/amirelite_ai/.hermes/skills/software-development/inspecting-hermes-desktop-dom/SKILL.md"
+    },
+    {
+      "name": "chista-replay-analysis",
+      "index_line_bytes": 90,
+      "index_line_total_bytes": 90,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 6096,
+      "path": "/home/amirelite_ai/.hermes/skills/chista-replay-analysis/SKILL.md"
+    },
+    {
+      "name": "github-issue-to-pr",
+      "index_line_bytes": 85,
+      "index_line_total_bytes": 85,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 6058,
+      "path": "/home/amirelite_ai/.hermes/skills/github/github-issue-to-pr/SKILL.md"
+    },
+    {
+      "name": "architecture-diagram",
+      "index_line_bytes": 86,
+      "index_line_total_bytes": 86,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 5830,
+      "path": "/home/amirelite_ai/.hermes/skills/creative/architecture-diagram/SKILL.md"
+    },
+    {
+      "name": "ortools-milp-cpsat-modeling",
+      "index_line_bytes": 93,
+      "index_line_total_bytes": 93,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 5788,
+      "path": "/home/amirelite_ai/.hermes/skills/ortools-milp-cpsat-modeling/SKILL.md"
+    },
+    {
+      "name": "ocr-and-documents",
+      "index_line_bytes": 76,
+      "index_line_total_bytes": 76,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 5784,
+      "path": "/home/amirelite_ai/.hermes/skills/productivity/ocr-and-documents/SKILL.md"
+    },
+    {
+      "name": "codex",
+      "index_line_bytes": 65,
+      "index_line_total_bytes": 65,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 5738,
+      "path": "/home/amirelite_ai/.hermes/skills/autonomous-ai-agents/codex/SKILL.md"
+    },
+    {
+      "name": "game-agent-optimization",
+      "index_line_bytes": 87,
+      "index_line_total_bytes": 87,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 5333,
+      "path": "/home/amirelite_ai/.hermes/skills/software-development/game-agent-optimization/SKILL.md"
+    },
+    {
+      "name": "blocked-page-recovery",
+      "index_line_bytes": 81,
+      "index_line_total_bytes": 81,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 5152,
+      "path": "/home/amirelite_ai/.hermes/skills/research/blocked-page-recovery/SKILL.md"
+    },
+    {
+      "name": "kaggle-competition-agent",
+      "index_line_bytes": 88,
+      "index_line_total_bytes": 88,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 5151,
+      "path": "/home/amirelite_ai/.hermes/skills/kaggle-competition-agent/SKILL.md"
+    },
+    {
+      "name": "blogwatcher",
+      "index_line_bytes": 77,
+      "index_line_total_bytes": 77,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 5111,
+      "path": "/home/amirelite_ai/.hermes/skills/research/blogwatcher/SKILL.md"
+    },
+    {
+      "name": "gcp-vm-resize-upgrade",
+      "index_line_bytes": 86,
+      "index_line_total_bytes": 86,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 5086,
+      "path": "/home/amirelite_ai/.hermes/skills/infra/gcp-vm-resize-upgrade/SKILL.md"
+    },
+    {
+      "name": "or-tools-optimization",
+      "index_line_bytes": 89,
+      "index_line_total_bytes": 89,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 5055,
+      "path": "/home/amirelite_ai/.hermes/skills/or-tools-optimization/SKILL.md"
+    },
+    {
+      "name": "decision-science-teaching",
+      "index_line_bytes": 93,
+      "index_line_total_bytes": 93,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 4955,
+      "path": "/home/amirelite_ai/.hermes/skills/decision-science-teaching/SKILL.md"
+    },
+    {
+      "name": "session-librarian",
+      "index_line_bytes": 83,
+      "index_line_total_bytes": 83,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 4827,
+      "path": "/home/amirelite_ai/.hermes/skills/productivity/session-librarian/SKILL.md"
+    },
+    {
+      "name": "gcp-gemini-integration",
+      "index_line_bytes": 84,
+      "index_line_total_bytes": 84,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 4671,
+      "path": "/home/amirelite_ai/.hermes/skills/gcp-gemini-integration/SKILL.md"
+    },
+    {
+      "name": "competitor-news-monitor",
+      "index_line_bytes": 86,
+      "index_line_total_bytes": 86,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 4501,
+      "path": "/home/amirelite_ai/.hermes/skills/research/competitor-news-monitor/SKILL.md"
+    },
+    {
+      "name": "decision-optimization-rl",
+      "index_line_bytes": 85,
+      "index_line_total_bytes": 85,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 4499,
+      "path": "/home/amirelite_ai/.hermes/skills/decision-optimization-rl/SKILL.md"
+    },
+    {
+      "name": "product-price-monitor",
+      "index_line_bytes": 87,
+      "index_line_total_bytes": 87,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 4400,
+      "path": "/home/amirelite_ai/.hermes/skills/productivity/product-price-monitor/SKILL.md"
+    },
+    {
+      "name": "kaggriculture-lab",
+      "index_line_bytes": 79,
+      "index_line_total_bytes": 79,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 4195,
+      "path": "/home/amirelite_ai/.hermes/skills/competitive-game-agents/kaggriculture-lab/SKILL.md"
+    },
+    {
+      "name": "decision-optimization-course",
+      "index_line_bytes": 82,
+      "index_line_total_bytes": 82,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 4190,
+      "path": "/home/amirelite_ai/.hermes/skills/decision-optimization-course/SKILL.md"
+    },
+    {
+      "name": "messaging-gateway-troubleshooting",
+      "index_line_bytes": 91,
+      "index_line_total_bytes": 91,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 4166,
+      "path": "/home/amirelite_ai/.hermes/skills/messaging-gateway-troubleshooting/SKILL.md"
+    },
+    {
+      "name": "email-inbox-triage",
+      "index_line_bytes": 84,
+      "index_line_total_bytes": 84,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 4057,
+      "path": "/home/amirelite_ai/.hermes/skills/email/email-inbox-triage/SKILL.md"
+    },
+    {
+      "name": "gcp-vm-storage-setup",
+      "index_line_bytes": 88,
+      "index_line_total_bytes": 88,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 4034,
+      "path": "/home/amirelite_ai/.hermes/skills/gcp-vm-storage-setup/SKILL.md"
+    },
+    {
+      "name": "weekly-review-planning",
+      "index_line_bytes": 86,
+      "index_line_total_bytes": 86,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 3975,
+      "path": "/home/amirelite_ai/.hermes/skills/productivity/weekly-review-planning/SKILL.md"
+    },
+    {
+      "name": "document-to-action-items",
+      "index_line_bytes": 91,
+      "index_line_total_bytes": 91,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 3966,
+      "path": "/home/amirelite_ai/.hermes/skills/productivity/document-to-action-items/SKILL.md"
+    },
+    {
+      "name": "meeting-action-items",
+      "index_line_bytes": 85,
+      "index_line_total_bytes": 85,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 3808,
+      "path": "/home/amirelite_ai/.hermes/skills/productivity/meeting-action-items/SKILL.md"
+    },
+    {
+      "name": "huggingface-hub",
+      "index_line_bytes": 83,
+      "index_line_total_bytes": 83,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 3715,
+      "path": "/home/amirelite_ai/.hermes/skills/mlops/huggingface-hub/SKILL.md"
+    },
+    {
+      "name": "codebase-inspection",
+      "index_line_bytes": 80,
+      "index_line_total_bytes": 80,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 3628,
+      "path": "/home/amirelite_ai/.hermes/skills/github/codebase-inspection/SKILL.md"
+    },
+    {
+      "name": "youtube-content",
+      "index_line_bytes": 72,
+      "index_line_total_bytes": 72,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 3538,
+      "path": "/home/amirelite_ai/.hermes/skills/media/youtube-content/SKILL.md"
+    },
+    {
+      "name": "hermes-mastery-tutoring",
+      "index_line_bytes": 90,
+      "index_line_total_bytes": 90,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 3283,
+      "path": "/home/amirelite_ai/.hermes/skills/hermes-mastery-tutoring/SKILL.md"
+    },
+    {
+      "name": "obsidian",
+      "index_line_bytes": 75,
+      "index_line_total_bytes": 75,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 3092,
+      "path": "/home/amirelite_ai/.hermes/skills/note-taking/obsidian/SKILL.md"
+    },
+    {
+      "name": "openhue",
+      "index_line_bytes": 73,
+      "index_line_total_bytes": 73,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 2843,
+      "path": "/home/amirelite_ai/.hermes/skills/smart-home/openhue/SKILL.md"
+    },
+    {
+      "name": "gif-search",
+      "index_line_bytes": 64,
+      "index_line_total_bytes": 64,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 2720,
+      "path": "/home/amirelite_ai/.hermes/skills/media/gif-search/SKILL.md"
+    },
+    {
+      "name": "songsee",
+      "index_line_bytes": 71,
+      "index_line_total_bytes": 71,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 2336,
+      "path": "/home/amirelite_ai/.hermes/skills/media/songsee/SKILL.md"
+    },
+    {
+      "name": "decision-science-tutoring",
+      "index_line_bytes": 91,
+      "index_line_total_bytes": 91,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 1956,
+      "path": "/home/amirelite_ai/.hermes/skills/decision-science-tutoring/SKILL.md"
+    },
+    {
+      "name": "nano-pdf",
+      "index_line_bytes": 72,
+      "index_line_total_bytes": 72,
+      "index_line_shared_bytes": 0,
+      "index_line_skill_count": 1,
+      "skill_md_bytes": 1605,
+      "path": "/home/amirelite_ai/.hermes/skills/productivity/nano-pdf/SKILL.md"
+    }
+  ],
+  "toolsets_breakdown": [
+    {
+      "toolset": "computer_use",
+      "tool_count": 1,
+      "json_bytes": 6215
+    },
+    {
+      "toolset": "file",
+      "tool_count": 4,
+      "json_bytes": 5772
+    },
+    {
+      "toolset": "terminal",
+      "tool_count": 2,
+      "json_bytes": 4365
+    },
+    {
+      "toolset": "delegation",
+      "tool_count": 1,
+      "json_bytes": 3751
+    },
+    {
+      "toolset": "skills",
+      "tool_count": 3,
+      "json_bytes": 3206
+    },
+    {
+      "toolset": "memory",
+      "tool_count": 1,
+      "json_bytes": 3178
+    },
+    {
+      "toolset": "session_search",
+      "tool_count": 1,
+      "json_bytes": 3178
+    },
+    {
+      "toolset": "browser-use",
+      "tool_count": 1,
+      "json_bytes": 3048
+    },
+    {
+      "toolset": "code_execution",
+      "tool_count": 1,
+      "json_bytes": 2934
+    },
+    {
+      "toolset": "web",
+      "tool_count": 2,
+      "json_bytes": 1910
+    },
+    {
+      "toolset": "tts",
+      "tool_count": 1,
+      "json_bytes": 1868
+    },
+    {
+      "toolset": "clarify",
+      "tool_count": 1,
+      "json_bytes": 1636
+    },
+    {
+      "toolset": "vision",
+      "tool_count": 1,
+      "json_bytes": 1360
+    },
+    {
+      "toolset": "todo",
+      "tool_count": 1,
+      "json_bytes": 1149
+    }
+  ]
+}
+
+=== $ hermes sessions search --help 2>&1 | head -20 ===
+usage: hermes sessions [-h]
+                       {list,export,delete,prune,archive,optimize,clean-markers,optimize-storage,repair,repair-routing,recover,stats,rename,pin,unpin,pinned,retitle-skills,browse,import}
+                       ...
+hermes sessions: error: argument sessions_action: invalid choice: 'search' (choose from 'list', 'export', 'delete', 'prune', 'archive', 'optimize', 'clean-markers', 'optimize-storage', 'repair', 'repair-routing', 'recover', 'stats', 'rename', 'pin', 'unpin', 'pinned', 'retitle-skills', 'browse', 'import')
+
+=== $ ls ~/.hermes/ | head -25 ===
+AGENTS.md
+SOUL.md
+audio_cache
+auth.json
+auth.lock
+bin
+cache
+channel_directory.json
+config.yaml
+config.yaml.bak.20260828_191032
+cron
+gateway
+gateway-starts.log
+gateway.lock
+gateway.pid
+gateway.sock
+gateway_state.json
+hermes-agent
+hooks
+image_cache
+kanban
+kanban.db
+kanban.db-shm
+kanban.db-wal
+kanban.db.dispatch.lock
+
+=== $ head -5 ~/.hermes/SOUL.md 2>/dev/null || echo "no SOUL.md" ===
+You are Hermes Agent, an intelligent AI assistant created by Nous Research. You are helpful, knowledgeable, and direct. You assist users with a wide range of tasks including answering questions, writing and editing code, analyzing information, creative work, and executing actions via your tools. You communicate clearly, admit uncertainty when appropriate, and prioritize being genuinely useful over being verbose unless otherwise directed below. Be targeted and efficient in your exploration and investigations.
+
+=== $ head -3 ~/.hermes/MEMORY.md 2>/dev/null || echo "no MEMORY.md" ===
+no MEMORY.md
+
