@@ -3,106 +3,131 @@
 ## Why this matters (job link)
 
 Cost and performance optimization appears in most senior postings — Paramount wants
-engineers who optimize "scalable, resilient, and impactful AI solutions"
-(`docs/research/jobs/source-01.md`); 100ms asks for metric-driven improvement of "correctness,
-latency, hallucination control" (`docs/research/jobs/source-05.md`). The cheapest lever an
-applied AI engineer owns is **model routing**: right model, right task, right price. Hermes
-makes routing a first-class configuration concern — providers, aliases, Mixture of Agents,
-fallback chains, credential pools — and this chapter makes you fluent in all of it.
+"scalable, resilient, and impactful AI solutions" (`docs/research/jobs/source-01.md`);
+100ms asks for metric-driven work on "correctness, latency, hallucination control"
+(`docs/research/jobs/source-05.md`). The cheapest lever an applied AI engineer owns is
+**model routing**: right model, right task, right price, with a failover path. Hermes makes
+routing a first-class configuration concern — providers, aliases, Mixture of Agents,
+fallback chains, credential pools, auxiliary models — and this chapter makes you fluent in
+all six.
 
 ## Concepts
 
-**Provider vs model.** A provider is an API surface (OpenRouter, Anthropic, OpenAI, Google,
-Nous Portal, a local Ollama server, ...). A model is an identifier served by a provider
-(`gemini/gemini-2.5-pro` = Google model via OpenRouter). Hermes resolves `provider/model`
-pairs at runtime and supports per-provider auth: API keys (`.env`), OAuth logins
-(`hermes model` with browser flow), or pooled credentials.
+### Provider vs model
 
-**The model alias layer.** `hermes config get model` (verified, evidence b2) shows the
-three-layer resolution:
+A **provider** is an API surface: OpenRouter, Anthropic, OpenAI, Google, Nous Portal, an
+Ollama server on localhost, any OpenAI-compatible endpoint. A **model** is an identifier a
+provider serves (`gemini/gemini-2.5-pro` = Google model via OpenRouter;
+`vertex/gemini-2.5-pro` = same weights via Vertex AI — different billing, limits, latency).
+Hermes resolves `provider/model` pairs at runtime and supports three auth patterns: API
+keys (`.env`), OAuth browser logins, pooled credentials.
+
+### The three-layer model resolution
+
+`hermes config get model` (verified, evidence b2) shows how a request resolves:
 
 ```
-default: minimax/minimax-m3:free      <- what runs now
-provider: openrouter                  <- which API surface
+default: minimax/minimax-m3:free      <- layer 1: what runs now
+provider: openrouter                  <- layer 2: which API surface
 aliases:
-  gemini-pro: gemini/gemini-2.5-pro   <- friendly names you define
+  gemini-pro: gemini/gemini-2.5-pro   <- layer 3: your routing vocabulary
   gemini-flash: gemini/gemini-2.5-flash
   vertex-pro: vertex/gemini-2.5-pro
+  vertex-flash: vertex/gemini-2.5-flash
 ```
 
-Aliases are your routing vocabulary: define `cheap`, `smart`, `fast` once, then use them in
-slash commands, cron prompts, and scripts. Renaming providers later becomes a one-line fix.
+Aliases are the routing vocabulary you will use everywhere: `/model gemini-flash` in
+sessions, `model: gemini-pro` in cron prompts, `-m $FAST` in scripts. Define once, rename
+providers later in one line.
 
-**Mixture of Agents (MoA).** `/moa <prompt>` fans one prompt out to several configured
-models and synthesizes. Configure slots with `hermes moa configure` (verified subcommands:
-`list, configure, delete`). Use it for high-stakes answers where model disagreement is a
-signal, not for routine work.
+### Scope: session vs global
 
-**Fallback chain.** `hermes fallback add/list/remove/clear` (verified). Providers are tried
-in order when the primary fails with rate-limit, overload, or connection errors. This is
-production hygiene: a cron briefing that must fire every morning needs a fallback path.
+`/model X` in a session changes that session only; `--global` persists to config.yaml.
+Scripts and cron always use the default unless the prompt overrides it. Rule of thumb:
+experiment in session scope, commit choices in global scope.
 
-**Credential pools.** `hermes auth add/list/remove/status` (verified). Multiple API keys or
-OAuth tokens per provider, rotated automatically to survive per-key rate limits. This is
-what you use when one key's RPM cap is the bottleneck.
+### Mixture of Agents (MoA)
 
-**Auxiliary models.** Beyond the main model, Hermes uses small models for side-jobs
-(compression, vision, titles). They are configured in `config.yaml` and cost a fraction of
-main-model calls. Routing discipline: main model for reasoning, aux for volume work.
+`hermes moa list|configure|delete` (verified). `/moa <prompt>` fans one prompt out to
+several configured models and synthesizes their answers. Model *disagreement* is the
+signal you are buying — use it for high-stakes judgments (eval design, architecture
+reviews), never for routine work (cost multiplies by slot count).
 
-**Evidence:** `docs/research/hermes/cli-evidence-2026-09-07-b2-config-models.txt` (all
-subcommand trees + live `config get model` output).
+### Fallback chain
+
+`hermes fallback list|add|remove|clear` (verified): providers tried in order when the
+primary fails with rate-limit, overload, or connection errors. Production rule: **every
+scheduled/unsupervised job assumes a fallback exists.** A 6am cron briefing on a single
+rate-limited provider is a silent missed deliverable.
+
+### Credential pools
+
+`hermes auth add|list|remove|reset|status` (verified): multiple API keys or OAuth tokens
+per provider, rotated automatically to recover from per-key rate limits. Use when RPM/TPM
+caps — not model quality — are the bottleneck.
+
+### Auxiliary models
+
+Side-jobs (context compression, vision pre-processing, session titles) run on small
+configured aux models, not your main model. Aux misconfiguration is a classic silent cost
+leak: a 300B main model titling sessions burns money invisibly. Check them in
+`hermes config show`.
+
+### Cost visibility
+
+`hermes insights --days 7` (verified) aggregates token usage, costs, tool patterns from
+session history. Routing decisions should be made against this, not vibes.
+
+**Evidence:** `docs/research/hermes/cli-evidence-2026-09-07-b2-config-models.txt`
+(subcommand trees for config/model/moa/fallback/auth + live `config get model` output),
+`docs/research/hermes/cli-evidence-2026-09-07-b6-security-observability.txt` (insights).
 
 ## Verified commands
 
-Inspect configuration (never open config.yaml directly when a command exists):
+Inspect configuration — use commands, never hand-edit while the gateway runs:
 
 ```bash
 hermes config show          # full resolved config
-hermes config get model     # default model + provider + aliases
-hermes config path          # where config.yaml lives
-hermes config env-path      # where .env lives
+hermes config get model     # default + provider + aliases (live output above)
+hermes config path          # settings file location
+hermes config env-path      # secrets file location
 hermes config check         # missing/outdated options
-```
-
-Change model — two scopes:
-
-```bash
-hermes model                            # interactive picker (provider + model)
 hermes config set model gemini/gemini-2.5-flash    # direct set
+hermes config unset display.skin                   # remove a key
 ```
-
-In a session (Telegram or CLI), `/model <name>` switches session-only; `--global` persists.
 
 Routing infrastructure:
 
 ```bash
-hermes moa list             # inspect MoA slots
-hermes fallback list        # current fallback chain
-hermes fallback add openrouter/meta-llama/llama-3.3-70b-instruct   # append a fallback
-hermes auth list            # pooled credentials per provider
+hermes moa list                          # inspect MoA slots
+hermes moa configure                     # interactive slot editor
+hermes fallback list                     # current chain
+hermes fallback add openrouter/meta-llama/llama-3.3-70b-instruct
+hermes auth list                         # pooled credentials per provider
+hermes auth status                       # pool health
 ```
 
-Cost awareness in-session:
+Cost awareness:
 
 ```bash
-hermes insights --days 7    # token usage + cost trends from session history (verified subcommand)
+hermes insights --days 7     # tokens, cost trends, tool usage patterns
 ```
 
 ## Common pitfalls
 
-- **Setting model in the wrong scope.** `/model X` in a Telegram topic changes that session
-  only; forgetting `--global` means "why did it revert?" the next session.
-- **No fallback on scheduled jobs.** A 6am cron job with a single provider is a single
-  point of failure; rate-limit at 6am means silent missed delivery.
-- **MoA for everything.** MoA multiplies token cost by the slot count. It is a judgment
-  tool, not a default.
-- **Editing config.yaml by hand while the gateway runs.** Prefer `hermes config set`; a
-  stray indent corrupts live config. `hermes config check` after any manual edit.
-- **Forgetting `.env` discipline.** `hermes config env-path` tells you where keys go; they
-  never go in config.yaml, git, or screenshots.
+- **Wrong scope.** `/model X` without `--global` reverts next session — the classic "why
+  did it switch back?" ticket.
+- **No fallback on scheduled jobs.** Chapter 07 depends on this chapter: cron jobs with a
+  single provider fail silently at 6am.
+- **MoA as default.** MoA multiplies cost by slot count per prompt. Judgment tool only.
+- **Hand-editing config.yaml with a live gateway.** Prefer `hermes config set`; if you
+  must edit, run `hermes config check` immediately after.
+- **Secrets misplacement.** `hermes config env-path` is where keys go — never config.yaml,
+  never git, never screenshots in docs.
+- **Aux model neglect.** Unreviewed aux models quietly burn tokens on every compression
+  and title operation.
 
 ## Exercises
 
-Work through `exercises/ex02-configuration-models.md`. Verification: alias routing works,
-fallback chain has ≥1 backup, you can explain your current default model's cost tier.
+Work through `exercises/ex02-configuration-models.md`. Verification: fallback chain has a
+backup, MoA slots inspected, insights reviewed, config hygiene checks pass.
