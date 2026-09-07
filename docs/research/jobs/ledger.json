@@ -1,0 +1,41 @@
+{
+  "version": 1,
+  "sources": [
+    {
+      "id": 1,
+      "url": "https://careers.paramount.com/job/Burbank-Senior-Applied-AI-Engineer-CA-91505/1387513800",
+      "title": "",
+      "accessed": "2026-09-06"
+    },
+    {
+      "id": 2,
+      "url": "https://www.databricks.com/company/careers/engineering---pipeline/senior-applied-ai-engineer-8091041002",
+      "title": "",
+      "accessed": "2026-09-06"
+    },
+    {
+      "id": 3,
+      "url": "https://jobs.lever.co/truezerotech/69f748f9-f6af-4ed4-bddb-05c138102c47",
+      "title": "",
+      "accessed": "2026-09-06"
+    },
+    {
+      "id": 4,
+      "url": "https://jobs.ashbyhq.com/reflectionai/8b97b583-3cc6-4834-ae2c-d5aecf22ed7d",
+      "title": "",
+      "accessed": "2026-09-06"
+    },
+    {
+      "id": 5,
+      "url": "https://job-boards.greenhouse.io/symbolica/jobs/4893316008",
+      "title": "",
+      "accessed": "2026-09-06"
+    },
+    {
+      "id": 6,
+      "url": "https://jobs.lever.co/100ms/4c9f19c7-4432-4394-ba93-167319c68adc",
+      "title": "",
+      "accessed": "2026-09-06"
+    }
+  ]
+}

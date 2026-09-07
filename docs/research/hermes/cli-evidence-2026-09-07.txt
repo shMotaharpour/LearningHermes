@@ -1,0 +1,290 @@
+# Hermes CLI evidence batch — 2026-09-07 — Hermes v0.20.6
+
+=== $ hermes --help ===
+usage: hermes [-h] [--version] [-z PROMPT] [--usage-file PATH] [-m MODEL]
+              [--provider PROVIDER] [--reasoning LEVEL] [-t TOOLSETS]
+              [--resume SESSION] [--no-restore-cwd] [--in DIR]
+              [--continue [SESSION_NAME]] [--worktree] [--accept-hooks]
+              [--skills SKILLS] [--yolo] [--pass-session-id]
+              [--ignore-user-config] [--ignore-rules] [--safe-mode] [--tui]
+              [--cli] [--dev]
+              {chat,model,moa,fallback,worktree,browser,secrets,egress,migrate,gateway,proxy,lsp,setup,whatsapp,whatsapp-cloud,slack,send,login,logout,auth,status,pause,resume,cron,sync,webhook,peer,portal,kanban,project,hooks,doctor,verify,security,approvals,dump,debug,backup,checkpoints,import,import-agent,config,skin,console,pairing,skills,bundles,plugins,curator,pets,journey,learning,memory-graph,memory,tools,computer-use,mcp,sessions,insights,monitoring,claw,update,uninstall,acp,profile,completion,dashboard,serve,desktop,gui,logs,prompt-size}
+              ...
+
+Hermes Agent - AI assistant with tool-calling capabilities
+
+positional arguments:
+  {chat,model,moa,fallback,worktree,browser,secrets,egress,migrate,gateway,proxy,lsp,setup,whatsapp,whatsapp-cloud,slack,send,login,logout,auth,status,pause,resume,cron,sync,webhook,peer,portal,kanban,project,hooks,doctor,verify,security,approvals,dump,debug,backup,checkpoints,import,import-agent,config,skin,console,pairing,skills,bundles,plugins,curator,pets,journey,learning,memory-graph,memory,tools,computer-use,mcp,sessions,insights,monitoring,claw,update,uninstall,acp,profile,completion,dashboard,serve,desktop,gui,logs,prompt-size}
+                        Command to run
+    chat                Interactive chat with the agent
+    model               Select default model and provider
+    moa                 Configure Mixture of Agents provider/model slots
+    fallback            Manage fallback providers (tried when the primary
+                        model fails)
+    worktree            Audit and reclaim accumulated git worktrees and merged
+                        branches
+    browser             Real-profile browsing helpers (close a browser locking
+                        its profile)
+    secrets             Manage external secret sources (Bitwarden, 1Password)
+    egress              Manage the iron-proxy egress credential-injection
+                        firewall
+    migrate             Migrate configuration for retired models or deprecated
+                        settings
+    gateway             Messaging gateway management
+    proxy               Local OpenAI-compatible proxy to OAuth providers
+    lsp                 Language Server Protocol management
+    setup               Interactive setup wizard
+    whatsapp            Set up WhatsApp integration
+    whatsapp-cloud      Set up WhatsApp Business Cloud API integration
+    slack               Slack integration helpers (manifest generation, etc.)
+    send                Send a message to a configured platform (scripts, cron
+                        jobs, CI).
+    logout              Clear authentication for an inference provider
+    auth                Manage pooled provider credentials
+
+=== $ hermes config get model ===
+default: minimax/minimax-m3:free
+provider: openrouter
+aliases:
+  gemini-pro: gemini/gemini-2.5-pro
+  gemini-flash: gemini/gemini-2.5-flash
+  vertex-pro: vertex/gemini-2.5-pro
+  vertex-flash: vertex/gemini-2.5-flash
+
+=== $ hermes sessions --help ===
+usage: hermes sessions [-h]
+                       {list,export,delete,prune,archive,optimize,clean-markers,optimize-storage,repair,repair-routing,recover,stats,rename,pin,unpin,pinned,retitle-skills,browse,import}
+                       ...
+
+View and manage the SQLite session store
+
+positional arguments:
+  {list,export,delete,prune,archive,optimize,clean-markers,optimize-storage,repair,repair-routing,recover,stats,rename,pin,unpin,pinned,retitle-skills,browse,import}
+    list                List recent sessions
+    export              Export sessions to JSONL, Markdown, or QMD
+    delete              Delete a specific session
+    prune               Delete old sessions (filterable by time window,
+                        source, title, ...)
+    archive             Bulk-archive (soft-hide) sessions matching filters —
+                        no deletion
+    optimize            Reclaim disk space: merge FTS5 segments + VACUUM (no
+                        data change)
+    clean-markers       Permanently clear stale tool-call marker content left
+                        by sessions from before #78148
+    optimize-storage    Migrate the search index to the compact v23 layout
+                        (reclaims disk on large DBs)
+    repair              Repair a malformed state.db schema so hidden sessions
+                        reappear
+    repair-routing      Re-stamp gateway sessions that lost their routing
+                        identity
+    recover             Rebuild canonical session data into a separate clean
+                        database
+    stats               Show session store statistics
+    rename              Set or change a session's title
+    pin                 Pin session(s) — durable keep flag, exempt from auto-
+                        archive
+    unpin               Remove the pin (durable keep flag) from session(s)
+    pinned              List pinned sessions
+    retitle-skills      Re-title sessions whose auto-title came from a
+                        /skill's own text
+    browse              Interactive session picker — browse, search, and
+                        resume sessions
+    import              Import a Claude Code or Codex CLI session into Hermes
+
+options:
+
+=== $ hermes skills --help ===
+usage: hermes skills [-h]
+                     {trust,untrust,browse,search,install,inspect,list,check,update,audit,uninstall,reset,list-modified,diff,opt-out,opt-in,repair-official,publish,snapshot,tap,config}
+                     ...
+
+Search, install, inspect, audit, configure, and manage skills from skills.sh,
+well-known agent skill endpoints, GitHub, ClawHub, and other registries.
+
+positional arguments:
+  {trust,untrust,browse,search,install,inspect,list,check,update,audit,uninstall,reset,list-modified,diff,opt-out,opt-in,repair-official,publish,snapshot,tap,config}
+    trust               Trust a project so its repo-local skills
+                        (./.hermes/skills, ./.agents/skills) load
+    untrust             Revoke project-skill trust for a repo
+    browse              Browse all available skills (paginated)
+    search              Search skill registries
+    install             Install a skill
+    inspect             Preview a skill without installing
+    list                List installed skills
+    check               Check installed hub skills for updates
+    update              Update installed hub skills
+    audit               Re-scan installed hub skills
+    uninstall           Remove a hub-installed skill
+    reset               Reset a bundled skill — clears 'user-modified'
+                        tracking so updates work again
+    list-modified       List bundled skills you've edited (which `hermes
+                        update` keeps)
+    diff                Show how your copy of a bundled skill differs from the
+                        stock version
+    opt-out             Stop bundled skills from being seeded into this
+                        profile
+    opt-in              Re-enable bundled-skill seeding (undo opt-out)
+    repair-official     Backfill or restore official optional skills from repo
+                        source
+    publish             Publish a skill to a registry
+    snapshot            Export/import skill configurations
+    tap                 Manage skill sources
+    config              Interactive skill configuration — enable/disable
+                        individual skills
+
+options:
+  -h, --help            show this help message and exit
+
+=== $ hermes cron --help ===
+usage: hermes cron [-h] [--accept-hooks]
+                   {list,create,add,edit,pause,resume,run,remove,rm,delete,status,runs,history,incidents,notepad,tick}
+                   ...
+
+Manage scheduled tasks
+
+positional arguments:
+  {list,create,add,edit,pause,resume,run,remove,rm,delete,status,runs,history,incidents,notepad,tick}
+    list                List scheduled jobs
+    create (add)        Create a scheduled job
+    edit                Edit an existing scheduled job
+    pause               Pause a scheduled job
+    resume              Resume a paused job
+    run                 Run a job on the next scheduler tick
+    remove (rm, delete)
+                        Remove a scheduled job
+    status              Check if cron scheduler is running
+    runs (history)      Show durable execution attempts
+    incidents           List or acknowledge durable cron failure incidents
+    notepad             Read/write a job's durable notepad (persistent KV
+                        across runs)
+    tick                Run due jobs once and exit
+
+options:
+  -h, --help            show this help message and exit
+  --accept-hooks        Auto-approve unseen shell hooks without a TTY prompt
+                        (equivalent to HERMES_ACCEPT_HOOKS=1 /
+                        hooks_auto_accept: true).
+
+=== $ hermes mcp --help ===
+usage: hermes mcp [-h] [--accept-hooks]
+                  {serve,add,remove,rm,list,ls,test,configure,config,login,reauth,picker,catalog,install}
+                  ...
+
+Manage MCP server connections and run Hermes as an MCP server. MCP servers
+provide additional tools via the Model Context Protocol. Use 'hermes mcp add'
+to connect to a new server, or 'hermes mcp serve' to expose Hermes
+conversations over MCP.
+
+positional arguments:
+  {serve,add,remove,rm,list,ls,test,configure,config,login,reauth,picker,catalog,install}
+    serve               Run Hermes as an MCP server (expose conversations to
+                        other agents)
+    add                 Add an MCP server (discovery-first install)
+    remove (rm)         Remove an MCP server
+    list (ls)           List configured MCP servers
+    test                Test MCP server connection
+    configure (config)  Toggle tool selection
+    login               Force re-authentication for an OAuth-based MCP server
+    reauth              Re-authenticate one OAuth MCP server, or all of them
+                        (--all)
+    picker              Interactive catalog picker (also the default for
+                        `hermes mcp`)
+    catalog             List Nous-approved MCPs available for one-click
+                        install
+    install             Install a catalog MCP by name (e.g. `hermes mcp
+                        install n8n`)
+
+options:
+  -h, --help            show this help message and exit
+  --accept-hooks        Auto-approve unseen shell hooks without a TTY prompt
+                        (equivalent to HERMES_ACCEPT_HOOKS=1 /
+                        hooks_auto_accept: true).
+
+=== $ hermes profile --help ===
+usage: hermes profile [-h]
+                      {list,use,create,delete,describe,show,alias,rename,export,import,install,update,info}
+                      ...
+
+positional arguments:
+  {list,use,create,delete,describe,show,alias,rename,export,import,install,update,info}
+    list                List all profiles
+    use                 Set sticky default profile
+    create              Create a new profile
+    delete              Delete a profile
+    describe            Read or set a profile's description (used by the
+                        kanban orchestrator)
+    show                Show profile details
+    alias               Manage wrapper scripts
+    rename              Rename a profile ('default': sets a display name; id
+                        unchanged)
+    export              Export a profile to archive
+    import              Import a profile from archive
+    install             Install a profile distribution from a git URL or local
+                        directory
+    update              Re-pull a distribution and apply updates (user data
+                        preserved)
+    info                Show a profile's distribution manifest (version,
+                        requirements, source)
+
+options:
+  -h, --help            show this help message and exit
+
+=== $ hermes send --help ===
+usage: hermes send [-h] [-t TARGET] [-f PATH] [-s LINE] [-l] [-q] [--json]
+                   [message]
+
+Pipe text from any shell script to any messaging platform Hermes is already configured for. Reuses the gateway's platform credentials (~/.hermes/.env + ~/.hermes/config.yaml) — no LLM, no agent loop, no running gateway required for bot-token platforms like Telegram/Discord/Slack/Signal.
+
+positional arguments:
+  message               Message text. If omitted, read from --file or stdin.
+
+options:
+  -h, --help            show this help message and exit
+  -t TARGET, --to TARGET
+                        Delivery target. Format: 'platform' (home channel),
+                        'platform:chat_id', 'platform:chat_id:thread_id', or
+                        'platform:#channel-name'. Examples: telegram,
+                        telegram:-1001234567890:17585, discord:#ops,
+                        slack:C0123ABCD, signal:+15551234567.
+  -f PATH, --file PATH  Read message body from PATH (text only). Use '-' to
+                        force stdin. To send an image/document as an
+                        attachment, use MEDIA:<path> in the message text
+                        instead.
+  -s LINE, --subject LINE
+                        Prepend a subject/header line before the message body.
+  -l, --list            List available targets. Optional positional filter:
+                        `hermes send --list telegram`.
+  -q, --quiet           Suppress stdout on success (exit code only).
+  --json                Emit raw JSON result instead of human-readable output.
+
+Examples:
+  hermes send --to telegram "deploy finished"
+  echo "RAM 92%" | hermes send --to telegram:-1001234567890
+  hermes send --to discord:#ops --file /tmp/report.md
+  hermes send --to slack:#eng --subject "[CI]" --file build.log
+  hermes send --to telegram "MEDIA:/tmp/chart.png"   # send a media attachment
+  hermes send --list                  # all platforms
+  hermes send --list telegram         # filter by platform
+
+Exit codes: 0 ok, 1 delivery/backend error, 2 usage error.
+
+=== $ hermes tools --help ===
+usage: hermes tools [-h] [--summary] {list,disable,enable,post-setup} ...
+
+Enable, disable, or list tools for CLI, Telegram, Discord, etc. Built-in
+toolsets use plain names (e.g. web, memory). MCP tools use server:tool
+notation (e.g. github:create_issue). Run 'hermes tools' with no subcommand for
+the interactive configuration UI.
+
+positional arguments:
+  {list,disable,enable,post-setup}
+    list                Show all tools and their enabled/disabled status
+    disable             Disable toolsets or MCP tools
+    enable              Enable toolsets or MCP tools
+    post-setup          Run a provider's post-setup install hook
+                        (npm/pip/binary)
+
+options:
+  -h, --help            show this help message and exit
+  --summary             Print a summary of enabled tools per platform and exit
+

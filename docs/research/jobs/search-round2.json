@@ -1,0 +1,162 @@
+{
+ "ai-automation-2": [
+  {
+   "url": "https://sundeepteki.org/uploads/3/8/2/4/38242873/preview_-_ai-automation-engineer-career-guide-2026_sundeepteki.pdf",
+   "title": "AI-Automation-Engineer-Career-Guide-2026_SundeepTeki",
+   "description": "AI Automation Engineer Career Guide  |  March 2026\nAbout This Guide\nThe AI Automation Engineer is the fastest-growing technical role in the AI industry. With the\nglobal hyperautomation market projected to exceed $1 trillion in cumulative software spending\nby 2026 (Gartner), and over 23,700 open positions on Indeed alone, the demand for engineers\nwho can bridge LLM orchestration, workflow automatio"
+  },
+  {
+   "url": "https://kreante.co/post/the-role-of-an-nocode-automation-specialist-key-skills-and-responsibilities",
+   "title": "No-Code Automation Specialist: Skills, Salary & Job Description 2026",
+   "description": "specialist is a professional who maps business processes, identifies manual bottlenecks, and builds automated workflows using visual, no-code platforms, without writing application code from scratch. They sit at the intersection of operations, product, and technology. The role has evolved significantly since 2023. Today it includes AI orchestration, meaning specialists are expected to connect LLMs"
+  },
+  {
+   "url": "https://blog.exceeds.ai/ai-automation-engineering",
+   "title": "AI Automation Engineer Guide: Skills, Salary & Career 2026",
+   "description": "and CEO, Exceeds AI | Last updated: April 22, 2026 Key Takeaways for Future AI Automation Engineers AI automation engineers orchestrate LLM workflows, APIs, and no-code tools like Zapier and n8n to build scalable intelligent systems, which differs from traditional model-building roles. Median salaries reach $145,080 with strong demand, supported by 163% year-over-year growth in AI/ML jobs and Link"
+  },
+  {
+   "url": "https://remoteria.com/blog/how-to-hire-ai-automation-specialist-2026",
+   "title": "Hire AI Automation Specialist: From $2,200/mo",
+   "description": "They are a practical systems builder who knows how to stitch together large language models (Claude, GPT, Gemini, and the open-weight models) with no-code platforms like n8n, Make, and Zapier, light Python or JavaScript glue code, vector databases, external APIs, and business systems like CRM, email, Slack, and ticketing. The role exists because the bottleneck in applying AI inside most companies "
+  },
+  {
+   "url": "https://secondtalent.com/occupations/ai-workflow-automation-specialist",
+   "title": "AI Workflow Automation Specialist: Key Skills & Responsibilities in 2026 | Second Talent",
+   "description": "Occupations  Occupation AI Workflow Automation Specialist: Key Skills & Responsibilities in 2026 Hire pre-vetted talent for this role in 24 hours. Every business is now drowning in repetitive AI-shaped tasks. Triaging support tickets with an LLM, generating personalized outreach at scale, extracting structured data from PDFs, routing leads based on intent, syncing AI-generated content across syste"
+  },
+  {
+   "url": "https://layer3labs.io/guides/rpa-and-ai-workflow-automation-careers-guide",
+   "title": "RPA & AI Workflow Automation Careers: 2026 Pay Guide",
+   "description": "Automation has quietly become one of the more accessible paths into a well-paying tech career, because most of the entry-level work does not require a computer science degree — just a working knowledge of a low-code platform and the ability to talk to non-technical stakeholders. This guide covers three overlapping roles: the RPA developer who builds bots, the RPA business analyst who scopes which "
+  }
+ ],
+ "agent-eng": [
+  {
+   "url": "https://builtin.com/job/senior-ai-engineer/10397125",
+   "title": "Senior AI Engineer - mcpk. | Built In",
+   "description": "Design and build scalable multi-agent LLM systems and backend services: agent orchestration, tool/function integrations, MCP-based data access, secure APIs, real-time streaming, and production evaluation and optimisation with strict customer data isolation. ... As they expand their AI-driven capabilities, they are looking for an expert to design and build autonomous agents at the core of their AI "
+  },
+  {
+   "url": "https://jobicy.com/jobs/147582-software-engineer-ai-agent-platform",
+   "title": "N/A",
+   "description": "AI SummaryThis is a fully remote Software Engineer role on the ChampionAI agentic platform team at QAD | Redzone. The engineer will build platform capabilities, support Applied AI teams, and develop agents for manufacturing use cases. Key responsibilities include developing features in Python with FastAPI, improving developer tooling, and ensuring prompt quality and deployment reliability. The rol"
+  },
+  {
+   "url": "https://educativ.net/jobs/job/6022725-senior-ai-software-engineer-mcp-agentic-systems-112265-nj-metropark-iselin/",
+   "title": "Senior AI Software Engineer - MCP & Agentic Systems - 112265-NJ-MetroPark, Iselin - Others - EduCativ",
+   "description": "Wells Fargo is seeking a talented and passionate AI Developer to help shape the next generation of Agentic AI systems. In this role, you'll be at the forefront of building Model Context Protocol (MCP) infrastructure â designing and implementing MCP servers and clients that power intelligent, tool-using agents. You'll work closely with AI developers, and product teams to deliver robust, secure, a"
+  },
+  {
+   "url": "https://jobright.ai/jobs/info/690edc12d046ab6061d01c03",
+   "title": "Staff Platform Engineer, Agents @ Apple | Jobright.ai",
+   "description": "Apple is a leading technology company seeking a Platform Engineer with API and Infrastructure experience to focus on the creation, deployment, and reliability of AI Agents and MCP servers. The role involves collaborating with a talented team to design features and troubleshoot production issues, while also ensuring the performance of API endpoints. ... Strong desire to document and test every part"
+  },
+  {
+   "url": "https://hiring.camp/job/5DqGgQ",
+   "title": "ML Engineer at TEC Partners Limited | Hiring.Camp",
+   "description": "ML Engineer â Corporate Engineering AI ... The Corporate Engineering AI team is the central enablement and platform delivery function for LSEGâ s internal agentic AI ecosystem. The teamâ s mission is to scale safe, highâ quality AI capabilities across the enterprise by providing shared platforms, patterns, governance, and delivery support. ... CE AI owns and operates core AI platforms incl"
+  },
+  {
+   "url": "https://outscal.com/job/senior-software-developer-mcp-and-agentic-ai-at-autodesk-in-toronto-ontario-canada",
+   "title": "Senior Software Developer - MCP and Agentic AI - Autodesk | Job Details",
+   "description": "We are seeking a dynamic and highly skilled Software Developer to join our Model Context Protocol (MCP) and Agentic AI teams. You will play a crucial role in advancing AI-driven technologies, focusing on building and enhancing intelligent software solutions that leverage Large Language Models (LLMs) and other AI technologies to benefit our diverse customer base. Responsibilities include designing,"
+  }
+ ],
+ "evals": [
+  {
+   "url": "https://hamel.dev/blog/posts/evals-faq/",
+   "title": "AI Evals: Everything You Need to Know – Hamel’s Blog",
+   "description": "Focus on evals that help you catch real issues, not ones that make your metrics look good.\n\n↗ Focus view\n\n## Q: Will today’s evaluation methods still be relevant in 5-10 years given how fast AI is changing?\n\nYes. Even with perfect models, you still need to verify they’re solving the right problem. The need for systematic error analysis , domain-specific testing, and monitoring will still be import"
+  },
+  {
+   "url": "https://devstarsj.github.io/ai/mlops/observability/2026/04/24/llm-observability-production-monitoring-guide-2026/",
+   "title": "LLM Observability in Production: A Complete Monitoring Guide ...",
+   "description": "Jump to: Menu\n\n# LLM Observability in Production: A Complete Monitoring Guide for 2026\n\n24 Apr 2026 in Ai / Mlops / Observability on Llm , Observability , Monitoring , Production , Mlops , Ai engineering , Tracing , Evaluation\n\n## LLM Observability in Production: A Complete Monitoring Guide for 2026\n\nAs large language models move from experiments into the backbone of production systems, observabil"
+  },
+  {
+   "url": "https://blog.nepexgroup.com/ai/devops/backend/2026/07/20/ai-observability-monitoring-tracing-llm-applications-production.html",
+   "title": "AI Observability in Production: Tracing, Evaluating, and Monitoring LLM Applications | Sandesh Rana Blog",
+   "description": "Sandesh Rana\n\n# Sandesh Rana\n\nI'm a developer from Himalayas, with a passion for crafting efficient and elegant code, with creativity and precision.\n\n[GitHub](https://github.com/vimm0) [Twitter](https://twitter.com/vimm0) [LinkedIn](https://www.linkedin.com/in/sandesh-rana-12783611a/) [Stack Overflow](https://stackoverflow.com/users/6108201/vimm-rana) [YouTube](https://www.youtube.com/@nepexgroup)"
+  },
+  {
+   "url": "https://arize.com/resources/llm-evaluation/",
+   "title": "LLM evaluation: methods, metrics, RAG & agent evals guide | Arize",
+   "description": "* If both stages score well but users remain dissatisfied, revisit the task definition, response format, latency, and dataset coverage.\n\n## Choosing between online and offline LLM evaluation\n\nWhile it may seem advantageous to apply online evaluations universally, they introduce additional costs in production environments. The decision to use online evaluations should be driven by the specific need"
+  },
+  {
+   "url": "https://www.comet.com/site/blog/llm-observability/",
+   "title": "LLM Observability: The Ultimate Guide for AI Developers",
+   "description": "Traditional Application Performance Monitoring (APM) makes sure the train is on the track, but tells you nothing about who’s riding it.\n\nLLM observability addresses this challenge by making the internal state, reasoning processes, and semantic behavior of AI systems transparent and measurable. Unlike passive monitoring that watches systems in production, LLM observability is an active engineering "
+  },
+  {
+   "url": "https://techsy.io/en/blog/ai-observability-guide",
+   "title": "AI Observability: Complete LLM Monitoring Guide [2026]",
+   "description": "Learn how to monitor LLMs in production with tracing, evaluation loops, and cost tracking. Compare 8 tools and get a step-by-step implementation roadmap."
+  }
+ ],
+ "fde": [
+  {
+   "url": "https://www.futureproofing.dev/resources/ai-native-team/forward-deployed-ai-engineers",
+   "title": "Forward Deployed AI Engineers: What They Do and How to Hire One",
+   "description": "The AI variant adds LLM-specific scope. Sundeep Teki's Forward Deployed AI Engineer guide describes the role as combining \"deep technical expertise in LLM deployment, production-grade system design, and customer-facing consulting.\" Where classic FDEs handled deterministic data pipelines, AI FDEs manage the \"stochastic chaos\" of generative models, building guardrails and evaluations that force prob"
+  },
+  {
+   "url": "https://salesforce.wd12.myworkdayjobs.com/en-US/External_Career_Site/job/AI-Engineer---Forward-Deployed-Engineer_JR350182",
+   "title": "AI Engineer - Forward Deployed Engineer - Myworkdayjobs.com",
+   "description": "Design agent intelligence: prompts, reasoning, tool calls, and integration with customer systems, leveraging our Agentic AI platform and current LLM techniques."
+  },
+  {
+   "url": "https://fde.academy/blog/why-companies-are-hiring-forward-deployed-engineers",
+   "title": "Why Companies Are Hiring Forward Deployed Engineers in 2026",
+   "description": "There are quite a number of industries that are contributing to high FDE hiring patterns. The industries are very intensive on complicated technology implementations.\n\n### AI and LLM Infrastructure Companies\n\nLarge AI platforms can be constructed by companies that depend on forward deployed engineers.\n\nReasons include:\n\n AI systems need to be customized to each client.\n Customers require assistanc"
+  },
+  {
+   "url": "https://careers-stagwellglobal.icims.com/jobs/8318/ai-forward-deployed-engineer/job",
+   "title": "AI Forward Deployed Engineer in United States | Careers at United States",
+   "description": "The AI Forward Deployed Engineer serves as a forward-deployed partner to enterprise customers, working directly with stakeholders to understand business challenges, design practical AI solutions, drive implementation, and ensure successful operational adoption. [...] As organizations move from AI experimentation to enterprise-wide adoption, Stagwell helps customers integrate data, technology, work"
+  },
+  {
+   "url": "https://openai.com/careers/forward-deployed-engineer-(fde)-sf-san-francisco",
+   "title": "Forward Deployed Engineer (FDE) - SF - OpenAI",
+   "description": "About the role\n\nForward Deployed Engineers (FDEs) lead complex end-to-end deployments of frontier models in production alongside our most strategic customers. You will own discovery, technical scoping, system design, build, and production rollout, partnering directly with customer engineering and domain teams. [...] Write and review production-grade code across frontend and backend using Python, J"
+  },
+  {
+   "url": "https://www.youtube.com/watch?v=vLlIBT0HSSc",
+   "title": "How to Become a Forward Deployed Engineer in 2026",
+   "description": "and understanding large scale code bases. Now that's effectively Elsa\nbeing able to take requirements and turning them into components,\ndata flows, trade offs and decisions that you can defend,\nespecially to clients into stakeholders. Now bucket two is the AI stuff. So you need to be fluent in building\nwith Llms calling model APIs, prompt engineering,\nstructured outputs, building production AI sys"
+  }
+ ],
+ "platform": [
+  {
+   "url": "https://www.instagram.com/reel/Dc8Q6pBTZ3j/",
+   "title": "The only AI Engineer roadmap you need : 2 months, zero fluff. Save this ...",
+   "description": "13 hours ago · ai engineer, llm, large language models, rag, retrieval augmented generation, prompt engineering, vector database, embeddings, semantic search, ..."
+  },
+  {
+   "url": "https://www.facebook.com/Myvirtualmateaus/posts/-build-ai-that-works-in-the-real-worldare-you-a-backend-engineer-who-wants-to-tu/1719012463560501/",
+   "title": "Innovex AI hiring senior AI/backend engineer for RAG and IDP - Facebook",
+   "description": "3 days ago · Required Qualifications: - Bachelor's or Master's degree in Computer Science, AI, Data Science, or a related field. - 3+ years of experience in ..."
+  },
+  {
+   "url": "https://www.linkedin.com/posts/adrien-biarnes_i-see-more-and-more-machine-learning-engineers-activity-7350083818860486657-I6_p",
+   "title": "Why I advise against becoming an AI Engineer - LinkedIn",
+   "description": "AI Engineering (for the vast majority of jobs in the industry) is about API calls, prompting, vector database, architecture..."
+  },
+  {
+   "url": "https://www.facebook.com/groups/595424764221375/posts/2367758010321366/",
+   "title": "We are looking for a skilled AI Engineer with at least 2 years of ...",
+   "description": "We're seeking experienced AI Engineers with advanced Python skills and proven expertise in designing, deploying, and scaling production-grade AI ..."
+  },
+  {
+   "url": "https://www.dandesacademy.com/courses/applied-ai-engineering-course",
+   "title": "Applied AI Engineering Course — GenAI, LLM, Agentic AI & MLOps",
+   "description": "Become Job-Readyin Applied AI Engineering. Build, deploy and scale real-world AI applications using Generative AI, Large Language Models, RAG, Agentic AI, ..."
+  },
+  {
+   "url": "https://www.tealhq.com/job/senior-applied-ai-engineer_7ea1a2b8e7fab208ca620f1d7458505d347d2",
+   "title": "Senior Applied AI Engineer @ Paramount - Teal",
+   "description": "Build, optimize, and tune RAG pipelines, including: embedding and vector store selection, chunking and retrieval optimization, hallucination ..."
+  }
+ ]
+}

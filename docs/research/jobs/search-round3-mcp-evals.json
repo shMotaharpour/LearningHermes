@@ -1,0 +1,98 @@
+{
+ "mcp-jobs": [
+  {
+   "url": "https://mindpal.co/jobs/77504",
+   "title": "Senior â¢ Python MCP Engineer â¢ KrakÃ³w, Poland | MindPal Jobs",
+   "description": "# Python MCP Engineer ... Intellias is looking for a Python MCP Engineer to join the Core Architecture Team working on enterprise AI and cloud platform solutions. ... In this role, you will design and develop services based on the Model Context Protocol (MCP), enabling seamless integrations between AI agents, enterprise systems, and external tools."
+  },
+  {
+   "url": "https://educativ.net/jobs/job/6022725-senior-ai-software-engineer-mcp-agentic-systems-112265-nj-metropark-iselin/",
+   "title": "Senior AI Software Engineer - MCP & Agentic Systems - 112265-NJ-MetroPark, Iselin - Others - EduCativ",
+   "description": "# Senior AI Software Engineer - MCP & Agentic Systems - 112265-NJ-MetroPark, Iselin | Wells Fargo Job ... Wells Fargo is seeking a talented and passionate AI Developer to help shape the next generation of Agentic AI systems. In this role, you'll be at the forefront of building Model Context Protocol (MCP) infrastructure â designing and implementi"
+  },
+  {
+   "url": "https://www.sniconsulting.net/job/senior-fs-software-engineer-mcp-ai-agents/",
+   "title": "Senior FS Software Engineer (MCP & AI Agents) | SNI",
+   "description": "Senior FS Software Engineer (MCP & AI Agents) | SNI ... Senior FS Software Engineer (MCP & AI Agents) ... We are seeking a skilled Full Stack Software Engineer to build and maintain production-ready Model Context Protocol (MCP) servers and AI-powered UIs that drive our agent workflows. This role focuses on the Internal AI platform, requiring you to"
+  },
+  {
+   "url": "https://career.intellias.com/vacancy/python-mcp-engineer-30400/",
+   "title": "N/A",
+   "description": "# Python MCP Engineer ... We are looking for a Python MCP Engineer to build and maintain Model Context Protocol (MCP) services powering integrations between AI agents, tools, and enterprise platforms. The role focuses on Python backend development, asynchronous APIs, MCP server implementation, observability, and secure cloud-native deployments on A"
+  },
+  {
+   "url": "https://justjoin.it/job-offer/epam-systems-senior-python-mcp-engineer-wroclaw-python",
+   "title": "Senior Python MCP Engineer - EPAM Systems",
+   "description": "We are looking for a Senior Python MCP Engineer to join our team building an Enterprise Agent Development Platform â a production-grade, cloud-native ecosystem that enables engineering teams to define, orchestrate, deploy, and observe AI agents at scale. The platform standardizes agent development across the organization using LangGraph and Stran"
+  },
+  {
+   "url": "https://www.hubmub.com/jobs/1013779/python-mcp-engineer",
+   "title": "Python MCP Engineer | HubMub",
+   "description": "# Python MCP Engineer ... We are looking for a Python MCP Engineer to build and maintain Model Context Protocol (MCP) services powering integrations between AI agents, tools, and enterprise platforms. The role focuses on Python backend development, asynchronous APIs, MCP server implementation, observability, and secure cloud-native deployments on A"
+  }
+ ],
+ "tool-calling-jobs": [
+  {
+   "url": "https://baeseokjae.github.io/posts/llm-function-calling-tool-use-guide-2026/",
+   "title": "LLM Function Calling and Tool Use Guide 2026: OpenAI ...",
+   "description": "Implement a confirmation step where the model proposes the action, your system presents it to the user, and only executes after explicit approval. OWASP also recommends a principle of least privilege: expose only the minimum tool set needed for a given session, not all available tools at once.\n\n```\nimport  hashlib\n import  time\n AUDIT_LOG  =  []\n d"
+  },
+  {
+   "url": "https://maxscheijen.github.io/posts/basic-llm-agent-with-tool-calling/",
+   "title": "Basic LLM Agent with Tool Calling - Max Scheijen",
+   "description": "__doc__ or \"\" param_descriptions = parse_param_types_from_docstring ( description ) annoations = { param : { \"type\" : openai_type_mapping ( param_type ), \"description\" : param_descriptions [ param ] . strip (), } for param , param_type in function . __annotations__ . items () if param != \"return\" } return { \"type\" : \"function\" , \"function\" : { \"nam"
+  },
+  {
+   "url": "https://blog.promptlayer.com/llm-agents-vs-function-calling/",
+   "title": "LLM Agent vs Function Calling: Key Differences & Use Cases",
+   "description": "Compare LLM agents and function calling: Understand the key differences, advantages, disadvantages, and best use cases for each technique."
+  },
+  {
+   "url": "https://myengineeringpath.dev/genai-engineer/tool-calling/",
+   "title": "LLM Tool Calling — How AI Agents Use Functions (2026)",
+   "description": "Strong answer: “I’d define three tools: `lookup_order(order_id)` for retrieving order details, `check_refund_eligibility(order_id)` for policy validation, and `process_refund(order_id, amount, reason)` for the actual refund. The key design decision is making `process_refund` require prior `check_refund_eligibility` — I’d enforce this in the applica"
+  },
+  {
+   "url": "https://jobdescription.org/jobs/artificial-intelligence/ai-agent-engineer",
+   "title": "AI Agent Engineer Job Description, Salary & Career Outlook",
+   "description": "Bachelor's or master's in computer science or software engineering; demonstrable project work often weighted equally to credentials\n\nTypical experience\n    3–5 years (software engineering or ML background); senior roles require 5+ years with production agent ownership\n\nKey certifications\n    No formal certs widely required; practical LangChain, Aut"
+  },
+  {
+   "url": "https://dev.to/qvfagundes/function-calling-and-tool-use-turning-llms-into-action-taking-agents-30ca",
+   "title": "Function Calling and Tool Use: Turning LLMs into Action ...",
+   "description": "After this article, you'll be able to build LLM agents that take real actions. Important: Function calling is NOT locked to one provider. It works with: The core concept is the same across all providers. Only the API syntax differs slightly. Function calling is a two-step conversation between you and the LLM: Step 1: You provide functions."
+  }
+ ],
+ "evals-jobs": [
+  {
+   "url": "https://www.devopsschool.com/blog/llm-quality-engineer-role-blueprint-responsibilities-skills-kpis-and-career-path",
+   "title": "LLM Quality Engineer: Role Blueprint, Responsibilities ...",
+   "description": "This role builds and operates the evaluation, testing, and monitoring capabilities required to prevent regressions, quantify quality, and improve user outcomes"
+  },
+  {
+   "url": "https://www.linkedin.com/jobs/view/ai-evaluation-engineer-remote-at-jobs-ai-4408267123",
+   "title": "AI Evaluation Engineer (Remote) at Jobs Ai — United States",
+   "description": "Help design and evaluate autonomous AI agents across multiple LLMs, spanning health, education, daily life, and other real-world domains (all coding work)."
+  },
+  {
+   "url": "https://jobs.smartrecruiters.com/NCS3/6000000000955545--eg-llm-ai-quality-engineer",
+   "title": "NCS #EG LLM / AI Quality Engineer",
+   "description": "Qualifications · 3+ years in software testing/QA with strong test methodology and tooling; hands-on API testing and performance testing. · Understanding of ML"
+  },
+  {
+   "url": "https://www.indeed.com/q-ai-evaluation-engineer-jobs.html",
+   "title": "Ai Evaluation Engineer Jobs, Employment | Indeed",
+   "description": "The ideal candidate is excited about applying LLMs and modern ML tooling to real-world problems. You think in terms of systems, tradeoffs, and outcomes — not just models. You care about performance, quality, latency, and cost in production. Most importantly, you're motivated by shipping impactful AI experiences that customers actually use.\n\nWhat Yo"
+  },
+  {
+   "url": "https://www.ziprecruiter.com/Jobs/Llm-Evaluation",
+   "title": "Llm Evaluation Jobs (NOW HIRING) Sep 26",
+   "description": "Browse 1000+ LLM EVALUATION jobs from companies hiring now. New openings posted daily. Apply early, be seen first & 1-click apply to your next"
+  },
+  {
+   "url": "https://careers.servicenow.com/jobs/744000137502479/senior-engineering-manager-agentic-generative-ai-benchmarking-and-evaluations",
+   "title": "Senior Engineering Manager, Agentic & Generative AI Benchmarking and Evaluations, Santa Clara | ServiceNow Careers",
+   "description": "Strong foundational knowledge of frontier AI SDKs and deep experience deploying or testing agentic/probabilistic software architectures (multi-agent orchestration, tool execution, and probabilistic feature deployment).\n Demonstrated experience implementing rigorous AI metrics (e.g., ROUGE, BLEU, G-Eval, LLM-as-a-judge patterns, and custom determini"
+  }
+ ]
+}

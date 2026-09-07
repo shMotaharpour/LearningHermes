@@ -1,0 +1,43 @@
+{
+  "success": true,
+  "data": {
+    "web": [
+      {
+        "url": "https://jobs.lever.co/minted/b8d10bb5-b8f4-4d3c-95d7-34342ea01df5",
+        "title": "Minted - AI & Automation Engineer",
+        "description": "Minted logo\n\n## AI & Automation Engineer\n\nYour role:\n\nWe are seeking an innovative AI & Automation Engineer to design and implement AI-driven automations and internal copilots that optimize workflows across our organization. This role combines cutting-edge generative AI technologies with practical automation engineering to transform how our teams work. [...] You'll build intelligent assistants that serve HR, Finance, Operations, and other departments, while integrating LLM-based solutions into our corporate tools and infrastructure. The ideal candidate brings hands-on AI platform experience combined with a strong foundation in workflow automation and systems integration.\n\n### You will manage:\n\n### You have:\n\nLever logo",
+        "position": 1
+      },
+      {
+        "url": "https://jobs.lever.co/adventus/58e97d3e-a01f-49a4-80d2-155972373145",
+        "title": "Adventus - AI Automation Engineer / Developer",
+        "description": "We are seeking an AI Automation Engineer / Developer to design, build, and deploy AI agents that automate enterprise workflows and business processes across the organization. This role will focus on integrating AI capabilities with platforms such as Microsoft Dynamics 365, SAP, ServiceNow, Microsoft Azure, and Microsoft Copilot to improve operational efficiency, reduce manual work, and enhance decision-making. The ideal candidate has hands-on experience developing AI/LLM-powered applications, [...] applications, workflow automation, API integrations, and enterprise system orchestration. [...] Adventus logo\n\n## AI Automation Engineer / Developer\n\nAbout the Role",
+        "position": 2
+      },
+      {
+        "url": "https://jobs.lever.co/jobgether/6997f750-65f3-4f9c-9cb5-db4a05dc5cc0",
+        "title": "Jobgether - AI Engineer / AI Automation Specialist",
+        "description": "This is a hands-on opportunity for an AI-focused engineer to turn business challenges into practical, reliable, and scalable automated solutions. You will build AI-powered applications, intelligent agents, integrations, and workflows that reduce manual effort and improve operational efficiency. The role combines software development, LLMs, APIs, prompt engineering, automation platforms, and agentic workflows. You will work across the full delivery lifecycle, taking ideas from initial concept [...] initial concept and experimentation through implementation, testing, deployment, and ongoing improvement. The position offers significant autonomy and exposure to rapidly evolving generative AI technologies and automation tools. You will collaborate with business and technical stakeholders while evaluating new technologies and identifying opportunities for meaningful automation. This role is ideal for someone who enjoys building with AI and prioritizes measurable business impact over [...] Jobgether logo\n\n## AI Engineer / AI Automation Specialist\n\nThis position is listed on behalf of a partner company, who manages all applications and next steps. Our partner is looking for an AI Engineer / AI Automation Specialist based in Brazil .",
+        "position": 3
+      },
+      {
+        "url": "https://jobs.lever.co/dadavidson/2d7d0c4b-f0fc-4a93-993f-1952d364767e",
+        "title": "D.A. Davidson - AI & Automation Engineer",
+        "description": "We are seeking a Mid-Level AI and Automation Engineer to develop next-generation AI capabilities within our Microsoft-based environment. This role will focus on building intelligent assistants and automated workflows using tools like Microsoft 365 Copilot Studio, Power Automate, and Azure AI Foundry. The ideal candidate will combine software engineering expertise with a passion for leveraging AI to transform business processes in a financial services and wealth management domain. You will work [...] ## AI & Automation Engineer\n\nMinneapolis, MN / Seattle, WA / Great Falls, MT / Billings, MT / Helena, MT / Missoula, MT / Bozeman, MT / Omaha, NE / Salt Lake City, UT / Denver, CO / Portland, OR\n\nD.A. Davidson & Co. \u2013 Information Technology /\n\nFull Time /\n\napply for this job [...] Qualifications:\n\n\u2022 Education & Experience: Bachelor\u2019s degree in Computer Science, Software Engineering, or related field. 5+ years of experience in software development, automation engineering, or similar roles.\n\n\u2022 Microsoft Ecosystem Proficiency: Hands-on experience with Microsoft Power Automate and related Power Platform tools for workflow automation. Familiarity with M365 Copilot features or similar AI bot/agent development tools (e.g. Azure AI services, cognitive services).",
+        "position": 4
+      },
+      {
+        "url": "https://job-boards.greenhouse.io/tebra/jobs/4700274005",
+        "title": "Job Application for Senior AI Automation Engineer at Tebra",
+        "description": "We are seeking a hands-on AI & Automation Engineer to design, build, and optimize integrations, automations, and advanced AI workflows, including agentic architecture, that power our enterprise business operations. You\u2019ll own the Workato automation stack, engineer scalable AI workflows on top of core platforms (Salesforce, NetSuite, Snowflake, Slack), and implement agentic capabilities that allow systems to act as intelligent tools, reducing manual work and accelerating insights. [...] This role requires deep technical execution skills in integration development, agentic system design, and programming, combined with a practical understanding of AI workflows. You will collaborate directly with stakeholders to translate business needs into scalable, automated solutions and deliver measurable improvements in system efficiency and operational performance.\n\n# Your Area of Focus\n\nIntegration & Automation Development\n\nAgentic System Design\n\nData/RAG Pipeline Design & Management [...] 1 = I have hands-on experience designing and deploying agentic systems, RAG pipelines, or vector databases (e.g., Pinecone, Cortex).  \n2 = I have built basic AI/ML API integrations, but haven't architected full pipelines or agentic workflows.  \n3 = I have theoretical knowledge of AI/ML concepts and am eager to apply them practically.  \n4 = I do not have experience with AI concepts yet.\n\n### U.S. Standard Demographic Questions",
+        "position": 5
+      },
+      {
+        "url": "http://job-boards.greenhouse.io/eclinicalsolutions/jobs/5067845007",
+        "title": "Job Application for Principal AI Engineer \u2013 Automation & AI at eClinical Solutions",
+        "description": "The Principal AI Engineer \u2013 Automation & AI is a hands-on technical leader responsible for designing, building, and deploying AI-powered automation solutions across eClinical Solutions.\n\nThis role is builder-first (70\u201380% hands-on development) and operates within a small, high-output team (2\u20134 engineers). You will work directly with the CTAO and business leaders to identify high-value use cases and rapidly translate them into working AI systems in production. [...] # Principal AI Engineer \u2013 Automation & AI\n\neClinical Solutions is a global leader in clinical data intelligence, delivering the elluminate\u00ae Clinical Data Cloud\u00ae \u2014 an AI-powered platform driving agentic data review, SDTM automation, and RBQM for 18 of the top 50 pharmaceutical companies worldwide. [...] As part of our eNOVA AI-First transformation, we are embedding AI across every pillar of clinical development and enterprise operations \u2014 compressing cycle times, improving data quality, and redefining how work gets done.\n\nAs we scale our AI capabilities, we are building a high-impact, hands-on AI engineering function focused on delivering real, production-grade automation across the enterprise.\n\nYou will make an impact:",
+        "position": 6
+      }
+    ]
+  }
+}

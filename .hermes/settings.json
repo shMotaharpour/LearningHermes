@@ -1,0 +1,16 @@
+{
+  "project": "LearningHermes",
+  "language_policy": {
+    "english_branch": "all files English only",
+    "farsi_branch": "Persian prose; English technical terms, code, paths, frontmatter keys"
+  },
+  "commit_style": "chNN: <description>",
+  "validation": {
+    "structure": "python3 scripts/validate_course.py --root .",
+    "parity": "python3 scripts/validate_course.py --root . --other <other-checkout>"
+  },
+  "evidence_dirs": [
+    "docs/research/hermes/",
+    "docs/research/jobs/"
+  ]
+}

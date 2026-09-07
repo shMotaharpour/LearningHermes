@@ -1,45 +1,65 @@
 # LearningHermes
 
-A structured, book-style course for mastering [Hermes Agent](https://github.com/NousResearch/hermes-agent) — from first steps to building production products. Written for AI Engineers who want to use Hermes as their daily autonomous agent.
+A structured, project-based course for mastering [Hermes Agent](https://github.com/NousResearch/hermes-agent)
+and becoming a **Senior Applied AI Engineer** — from first session to shipping production
+agent systems. Every chapter maps to competencies extracted from real job postings and is
+verified against live Hermes behavior.
 
-## Goals
+**Bilingual course:** branch `english` is the base; branch `farsi` is a full Persian
+translation (English technical terms preserved). Content is identical across branches.
 
-- **Learn**: a complete reference covering every Hermes capability, step by step.
-- **Practice**: each chapter has hands-on exercises with real commands.
-- **Build**: capstone projects that ship real products with Hermes.
+## The Course
 
-## Repository Layout
+- **Syllabus:** [CURRICULUM.md](CURRICULUM.md) — 5 parts, 16 chapters, competency mapping.
+- **Path:** Agent Operator → Agent Power User → Automation Engineer → Agent Developer →
+  Senior Applied AI Engineer.
+
+## Repository Layout (agent-based)
 
 ```
-chapters/
-  01-foundations/         # What Hermes is, install, config, sessions, models
-  02-daily-usage/         # Slash commands, messaging (Telegram), profiles, skills
-  03-agentic-workflow/    # Agentic prompting, tools, debugging, multi-agent
-  04-automation/          # Cron jobs, webhooks, monitoring, scheduled briefings
-  05-building-products/   # Building/shipping real projects: MVP -> deploy, CI/CD, GitHub
-  06-mastery/             # Skills authoring, MCP, plugin/extension, advanced patterns
-examples/                 # Runnable sample code / configs referenced by chapters
-exercises/                # Hands-on practice tasks per chapter
-assets/                   # Diagrams, screenshots
-docs/research/            # Raw research notes that feed chapter drafts
+AGENTS.md                  # Root agent instructions (what any agent working in this repo must know)
+chapters/                  # 16 chapters, 5 parts — one directory per chapter
+  NN-slug/
+    README.md              # Chapter content: concepts -> verified commands -> pitfalls -> exercises
+    AGENTS.md              # Per-chapter authoring rules for agents
+    notes.md               # (optional) drafting notes; removed on publication
+exercises/                 # One hands-on exercise file per chapter (exNN-<slug>.md)
+examples/                  # Runnable configs, prompts, and scripts referenced by chapters
+assets/                    # Diagrams and screenshots
+docs/
+  research/
+    hermes/                # Verified Hermes CLI outputs + llms.txt snapshot (evidence base)
+    jobs/                  # Job posting research: postings, searches, ledger
+scripts/                   # Course tooling (validate_course.py and friends)
+tests/                     # Tests for repo scripts
+.hermes/
+  skills/                  # Project-local skills agents auto-load when working here
+  settings.json            # Project-scoped Hermes settings
 ```
 
 ## How to Read This Course
 
-- Chapters are numbered and self-contained; read `01` first, then any order.
-- Every chapter ends with **Exercises** that live in `exercises/`.
-- Code blocks are exact, verified commands — prefer copy-paste over retyping.
+- Read `CURRICULUM.md` first, then chapters in order within each part.
+- Every chapter ends with exercises in `exercises/` — do them on a real machine.
+- Code blocks are exact, verified commands. Evidence for every claim lives in `docs/research/`.
+
+## For Agents Working in This Repo
+
+Read `AGENTS.md` (root) before anything else — it defines the authoring workflow,
+verification requirements, commit conventions, and the bilingual branch rules.
 
 ## Contribution / Workflow
 
-- All files in this repo are **English only**.
-- Chapter drafts: write directly in `chapters/NN-topic/`.
-- Verify every command against real Hermes behavior before publishing (run it, paste output into `docs/research/` as evidence).
-- Keep chapters concise: concept → exact commands → exercise. No marketing prose.
-- Commit style: `chNN: <short description>` (e.g. `ch02: add Telegram slash-command reference`).
-- Build: this is a Markdown book repo — no build step. Validate links with `grep -rL` spot checks before release.
+- Base branch: `english`. Translation branch: `farsi`.
+- Verify every Hermes command against real behavior before it enters a chapter; save raw
+  output under `docs/research/hermes/`.
+- Keep chapters tight: concept → exact commands → exercise. No marketing prose.
+- Commits: `chNN: <short description>` (e.g. `ch07: add cron notepad reference`).
+- Validate structure/parity: `python3 scripts/validate_course.py --root .` (add
+  `--other <path>` to compare two branch checkouts).
 
 ## Sources of Truth
 
-- Official docs: https://hermes-agent.nousresearch.com/docs/llms.txt (always current)
-- Source repo: https://github.com/NousResearch/hermes-agent
+- Official docs index: https://hermes-agent.nousresearch.com/docs/llms.txt
+- Hermes source: https://github.com/NousResearch/hermes-agent
+- Job-market evidence: `docs/research/jobs/`
