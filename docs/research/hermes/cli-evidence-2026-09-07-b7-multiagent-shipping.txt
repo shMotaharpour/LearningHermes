@@ -1,0 +1,253 @@
+# Hermes CLI evidence batch b7-multiagent-shipping — 2026-09-07 — Hermes v0.20.6
+
+=== $ hermes peer --help ===
+usage: hermes peer [-h] {add,set,list,ls,remove,rm,dm} ...
+
+Register other Hermes gateways as peers and message their agents. 'hermes peer dm <peer>[/<agent>] "..."' delivers into the remote agent's canonical Bot Chat over the peer's API server and prints the reply — the cross-machine twin of 'hermes -p <bot> chat'. The peer must run the api_server platform; its API_SERVER_KEY is stored locally as a credential in ~/.hermes/.env.
+
+positional arguments:
+  {add,set,list,ls,remove,rm,dm}
+    add (set)           Register (or update) a peer gateway
+    list (ls)           List registered peers
+    remove (rm)         Remove a peer
+    dm                  Message an agent on a peer gateway and print its reply
+
+options:
+  -h, --help            show this help message and exit
+
+Examples:
+  hermes peer add spark --url http://spark.lan:8377 --key <API_SERVER_KEY>
+  hermes peer list
+  hermes peer dm spark "Message from 🤖 dixie (@dixie): disk status?"
+  hermes peer dm spark/researcher "..."   # named profile on a multiplexed peer
+  hermes peer remove spark
+
+Exit codes: 0 ok, 1 delivery/peer error, 2 usage error.
+
+=== $ hermes kanban --help ===
+usage: hermes kanban [-h] [--board <slug>]
+                     {init,boards,create,swarm,list,ls,show,assign,set-model,reclaim,reassign,diagnostics,diag,link,unlink,claim,comment,attach,attachments,attach-rm,complete,edit,block,schedule,unblock,request-review,request-changes,reopen-review,promote,archive,tail,dispatch,daemon,watch,stats,notify-subscribe,notify-list,notify-unsubscribe,log,runs,heartbeat,assignees,context,specify,decompose,gc,repair}
+                     ...
+
+Durable SQLite-backed task board shared across Hermes profiles. Tasks are
+claimed atomically, can depend on other tasks, and are executed by a named
+profile in an isolated workspace. See https://hermes-
+agent.nousresearch.com/docs/user-guide/features/kanban or docs/hermes-
+kanban-v1-spec.pdf for the full design.
+
+positional arguments:
+  {init,boards,create,swarm,list,ls,show,assign,set-model,reclaim,reassign,diagnostics,diag,link,unlink,claim,comment,attach,attachments,attach-rm,complete,edit,block,schedule,unblock,request-review,request-changes,reopen-review,promote,archive,tail,dispatch,daemon,watch,stats,notify-subscribe,notify-list,notify-unsubscribe,log,runs,heartbeat,assignees,context,specify,decompose,gc,repair}
+    init                Create kanban.db if missing (idempotent)
+    boards              Manage kanban boards (one board per project /
+                        workstream)
+    create              Create a new task
+    swarm               Create a Kanban Swarm v1 graph (parallel workers →
+                        verifier → synthesizer)
+    list (ls)           List tasks
+    show                Show a task with comments + events
+    assign              Assign or reassign a task
+    set-model           Set or clear a task's model/provider override (takes
+                        effect on the next dispatch)
+    reclaim             Release an active worker claim on a running task
+    reassign            Reassign a task to a different profile, optionally
+                        reclaiming first
+    diagnostics (diag)  List active diagnostics on the current board
+    link                Add a parent->child dependency
+    unlink              Remove a parent->child dependency
+    claim               Atomically claim a ready task (prints resolved
+                        workspace path)
+    comment             Append a comment
+    attach              Attach a local file to a task
+    attachments         List a task's attachments
+    attach-rm           Delete an attachment by id
+    complete            Mark one or more tasks done
+    edit                Edit recovery fields on an already-completed task
+    block               Mark one or more tasks blocked
+    schedule            Park one or more tasks in Scheduled (waiting on time,
+                        not human input)
+    unblock             Return blocked/scheduled tasks to ready, or todo while
+                        parents remain open
+    request-review      Move a task to 'review' (implementation done, awaiting
+                        review) — NOT a block
+    request-changes     Reviewer verdict: return the active review run to its
+                        implementer
+    reopen-review       Send one or more review tasks back for changes (review
+                        -> ready/todo)
+    promote             Manually move one or more todo/blocked tasks to ready
+                        (recovery path)
+    archive             Archive one or more tasks
+    tail                Follow a task's event stream
+    dispatch            One dispatcher pass: reclaim stale, promote ready,
+                        spawn workers
+    daemon              DEPRECATED — dispatcher now runs in the gateway. Use
+                        `hermes gateway start`.
+    watch               Live-stream task_events to the terminal (Ctrl+C to
+                        exit)
+    stats               Per-status + per-assignee counts + oldest-ready age
+    notify-subscribe    Subscribe a gateway source to a task's terminal events
+                        (used by /kanban subscribe in the gateway adapter)
+    notify-list         List notification subscriptions (optionally for a
+                        single task)
+    notify-unsubscribe  Remove a gateway subscription from a task
+    log                 Print the worker log for a task (from <kanban-
+                        root>/kanban/logs/)
+    runs                Show attempt history for a task (one row per run:
+                        profile, outcome, elapsed, summary)
+    heartbeat           Emit a heartbeat event for a running task (worker
+                        liveness signal)
+    assignees           List known profiles + per-profile task counts (union
+                        of ~/.hermes/profiles/ and current assignees on the
+                        board)
+    context             Print the full context a worker sees for a task (title
+                        + body + parent results + comments).
+    specify             Flesh out a triage-column task into a concrete spec
+                        (title + body) and promote it to todo. Uses the
+                        auxiliary LLM configured under
+                        auxiliary.triage_specifier.
+    decompose           Decompose a triage-column task into a graph of child
+                        tasks routed to specialist profiles by description.
+                        Falls back to specify-style single-task promotion when
+                        the task doesn't benefit from fan-out. Uses
+                        auxiliary.kanban_decomposer.
+    gc                  Garbage-collect archived-task workspaces, old events,
+                        and old logs
+    repair              Check kanban.db integrity and auto-repair index-only
+                        corruption
+
+options:
+  -h, --help            show this help message and exit
+  --board <slug>        Board slug to operate on. Defaults to the current
+                        board (set via `hermes kanban boards switch <slug>` or
+                        the HERMES_KANBAN_BOARD env var). Use `hermes kanban
+                        boards list` to see all boards.
+
+=== $ hermes project --help ===
+usage: hermes project [-h]
+                      {create,list,ls,show,add-folder,remove-folder,rename,set-primary,use,archive,restore,bind-board}
+                      ...
+
+Projects are human-named workspaces that can span multiple folders / repos.
+They anchor desktop session grouping and, when bound to a kanban board, give
+tasks a deterministic worktree + branch convention. State is per-profile.
+
+positional arguments:
+  {create,list,ls,show,add-folder,remove-folder,rename,set-primary,use,archive,restore,bind-board}
+    create              Create a new project
+    list (ls)           List projects
+    show                Show a project's details
+    add-folder          Add a folder to a project
+    remove-folder       Remove a folder from a project
+    rename              Rename a project
+    set-primary         Set the primary folder
+    use                 Set the active project
+    archive             Archive a project
+    restore             Restore an archived project
+    bind-board          Bind a kanban board to a project
+
+options:
+  -h, --help            show this help message and exit
+
+=== $ hermes portal --help ===
+usage: hermes portal [-h] {login,info,status,open,tools} ...
+
+Run `hermes portal` with no subcommand to log in to Nous Portal and set it up
+— pick a model, set Nous as your provider, and offer the Tool Gateway (the
+human-readable alias for `hermes auth add nous --type oauth`, identical to
+`hermes setup --portal`). Subcommands: login (default), info, open, tools.
+
+positional arguments:
+  {login,info,status,open,tools}
+    login               Log in to Nous Portal + set it up (default; one-shot
+                        onboarding)
+    info                Show Portal auth + Tool Gateway routing summary
+    open                Open the Portal subscription page in your default
+                        browser
+    tools               List Tool Gateway tools and which are routed via Nous
+
+options:
+  -h, --help            show this help message and exit
+
+=== $ hermes dashboard --help ===
+usage: hermes dashboard [-h] [--port PORT] [--host HOST] [--insecure]
+                        [--skip-build] [--isolated] [--stop] [--status]
+                        [--no-open]
+                        {register} ...
+
+Launch the Hermes Agent web dashboard for managing config, API keys, and
+sessions
+
+positional arguments:
+  {register}
+    register    Register a self-hosted dashboard with Nous Portal (writes the
+                OAuth client ID to .env)
+
+options:
+  -h, --help    show this help message and exit
+  --port PORT   Port (default 9119, 0 for auto-assign by OS)
+  --host HOST   Host (default 127.0.0.1)
+  --insecure    DEPRECATED / NO-OP. Formerly bypassed auth on a non-loopback
+                bind. As of the June 2026 hardening it no longer disables
+                authentication — a public bind always requires an auth
+                provider (password or OAuth). Bind 127.0.0.1 + tunnel to keep
+                it local.
+  --skip-build  Skip the web UI build step and serve the existing dist
+                directly. Useful for non-interactive contexts (Windows
+                Scheduled Tasks, CI) where npm may not be available. Pre-build
+                with: cd web && npm run build
+  --isolated    When launched from a named profile, run a dedicated server
+                scoped to that profile instead of routing to the machine-level
+                server. Default behavior is unified: profile launches attach
+                to (or start) ONE machine-level server and preselect the
+                profile.
+  --stop        Stop all running Hermes web server processes and exit
+  --status      List running Hermes web server processes and exit
+  --no-open     Don't open browser automatically
+
+=== $ hermes backup --help ===
+usage: hermes backup [-h] [-o OUTPUT] [-q] [-l LABEL]
+
+Create a zip archive of your entire Hermes configuration, skills, sessions,
+and data (excludes the hermes-agent codebase). Use --quick for a fast snapshot
+of just critical state files.
+
+options:
+  -h, --help            show this help message and exit
+  -o OUTPUT, --output OUTPUT
+                        Output path for the zip file (default: ~/hermes-
+                        backup-<timestamp>.zip)
+  -q, --quick           Quick snapshot: only critical state files (config,
+                        state.db, .env, auth, cron)
+  -l LABEL, --label LABEL
+                        Label for the snapshot (only used with --quick)
+
+=== $ hermes doctor 2>&1 | head -30 ===
+┌─────────────────────────────────────────────────────────┐
+│                 🩺 Hermes Doctor                        │
+└─────────────────────────────────────────────────────────┘
+
+◆ Security Advisories
+  ✓ No active security advisories
+
+◆ MCP Server Security
+  ✓ No suspicious MCP stdio commands
+
+◆ Python Environment
+  ✓ Python 3.11.16
+  ✓ SQLite 3.53.1
+    → SQLite source id: 2026-05-05 10:34:17 c88b22011a54b4f6fbd149e9f8e4…
+    → state.db: WAL journal mode (29.5 MB)
+    → cron/executions.db: WAL journal mode (588.0 KB)
+    → verification_evidence.db: WAL journal mode (60.0 KB)
+    → kanban.db: WAL journal mode (116.0 KB)
+  ✓ Virtual environment active
+  ✓ Version files consistent (0.20.6)
+
+◆ SSL / CA Certificates
+  ✓ SSL CA certificate bundle is valid
+
+◆ Required Packages
+  ✓ OpenAI SDK
+  ✓ Rich (terminal UI)
+  ✓ python-dotenv
+  ✓ PyYAML
+

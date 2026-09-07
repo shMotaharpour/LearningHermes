@@ -1,0 +1,110 @@
+# Hermes CLI evidence batch b1-foundations-core — 2026-09-07 — Hermes v0.20.6
+
+=== $ hermes chat --help 2>&1 | head -40 ===
+usage: hermes chat [-h] [-q QUERY | --query-file PATH] [--oneshot]
+                   [--image IMAGE] [-m MODEL] [-t TOOLSETS]
+                   [--reasoning LEVEL] [-s SKILLS] [--provider PROVIDER] [-v]
+                   [-Q] [--resume SESSION_ID] [--no-restore-cwd] [--in DIR]
+                   [--continue [SESSION_NAME]] [--create-if-missing]
+                   [--worktree] [--accept-hooks] [--checkpoints]
+                   [--max-turns N] [--run-budget SECONDS] [--yolo]
+                   [--pass-session-id] [--ignore-user-config] [--ignore-rules]
+                   [--safe-mode] [--source SOURCE] [--tui] [--cli] [--dev]
+
+Start an interactive chat session with Hermes Agent
+
+options:
+  -h, --help            show this help message and exit
+  -q QUERY, --query QUERY
+                        Query to run. On a real TTY the prompt seeds an
+                        interactive session (submitted literally as the first
+                        turn); combined with --oneshot or -Q, or on a non-TTY,
+                        it answers and exits.
+  --query-file PATH     Read the single query from a file instead of the
+                        command line ('-' reads stdin). Safe for arbitrary
+                        text: nothing is shell-interpreted, so quotes, $(...),
+                        and backticks are preserved verbatim. Mutually
+                        exclusive with -q.
+  --oneshot             With -q/--query-file: answer the query and exit
+                        (legacy single-query behavior) instead of seeding an
+                        interactive session. Implied on non-TTY stdio and by
+                        -Q/--quiet.
+  --image IMAGE         Optional local image path to attach to a single query
+  -m MODEL, --model MODEL
+                        Model to use (e.g., anthropic/claude-sonnet-4)
+  -t TOOLSETS, --toolsets TOOLSETS
+                        Comma-separated toolsets to enable
+  --reasoning LEVEL     Reasoning effort for this session: none, minimal, low,
+                        medium, high, xhigh, max, or ultra. Overrides
+                        agent.reasoning_effort for this run only (same levels
+                        as the /reasoning slash command).
+  -s SKILLS, --skills SKILLS
+                        Preload one or more skills for the session (repeat
+                        flag or comma-separate)
+
+=== $ hermes status --help ===
+usage: hermes status [-h] [--all] [--deep]
+
+Display status of Hermes Agent components
+
+options:
+  -h, --help  show this help message and exit
+  --all       Show all details (redacted for sharing)
+  --deep      Run deep checks (may take longer)
+
+=== $ hermes prompt-size --help ===
+usage: hermes prompt-size [-h] [--platform PLATFORM] [--json]
+
+Report the fixed prompt budget for a fresh session: system prompt total,
+skills index, memory, user profile, and tool-schema JSON. Runs offline (no API
+call).
+
+options:
+  -h, --help           show this help message and exit
+  --platform PLATFORM  Platform to simulate (cli, telegram, discord, ...).
+                       Default: cli
+  --json               Emit the breakdown as JSON
+
+=== $ hermes import-agent --help ===
+usage: hermes import-agent [-h] [--source SOURCE] [--dry-run] [--overwrite]
+                           [--yes]
+                           [{claude-code,codex}]
+
+One-command import of another coding agent's setup into Hermes. Maps
+CLAUDE.md/AGENTS.md instructions, permission allowlists, MCP servers, skills,
+and memories into their Hermes equivalents. Always shows a preview before
+making changes. API keys and credentials are never imported — run 'hermes
+setup' for those.
+
+positional arguments:
+  {claude-code,codex}  Which agent to import from (default: auto-detect
+                       ~/.claude or ~/.codex)
+
+options:
+  -h, --help           show this help message and exit
+  --source SOURCE      Path to the agent's config directory (default:
+                       ~/.claude or ~/.codex)
+  --dry-run            Preview only — stop after showing what would be
+                       imported
+  --overwrite          Overwrite existing Hermes items on name conflicts
+                       (default: skip)
+  --yes, -y            Skip confirmation prompts
+
+=== $ hermes memory --help ===
+usage: hermes memory [-h] {setup,status,off,reset} ...
+
+Set up and manage external memory provider plugins. Available providers:
+honcho, openviking, mem0, hindsight, holographic, retaindb, byterover. Only
+one external provider can be active at a time. Built-in memory
+(MEMORY.md/USER.md) is always active.
+
+positional arguments:
+  {setup,status,off,reset}
+    setup               Interactive provider selection and configuration
+    status              Show current memory provider config
+    off                 Disable external provider (built-in only)
+    reset               Erase all built-in memory (MEMORY.md and USER.md)
+
+options:
+  -h, --help            show this help message and exit
+

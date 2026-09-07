@@ -1,0 +1,90 @@
+# Hermes CLI evidence batch b3-sessions-tools — 2026-09-07 — Hermes v0.20.6
+
+=== $ hermes sessions list 2>&1 | head -12 ===
+Title                        Workspace          Last Active   ID
+──────────────────────────────────────────────────────────────────────────────────────────────────────────────
+اضافه کردن b.ai به هرمسم     —                  50m ago       20260907_065414_0ac41a9e
+AI Eng                       —                  just now      20260906_231510_f4298797
+اتصال تاپیک به پروژه وب سا   —                  20h ago       20260906_003026_a576ba08
+[Note: model was just swit   —                  7h ago        20260905_233931_12ecb45e
+قرار دادن نمودارها بدون فع   —                  5d ago        20260901_155224_529a4fa8
+LearningHermes               —                  8h ago        20260831_133738_ee009e12
+مقایسه کتابخانههای بهینهسا   —                  yesterday     20260831_133506_70f93b00
+[Note: model was just swit   —                  6d ago        20260831_112954_69994475
+تحلیل توالی زمانی انتخابها   —                  17h ago       20260830_221736_c3a48cae
+ارسال فایلهای /chista/Chis   —                  4d ago        20260829_185023_67856d84
+
+=== $ hermes sessions stats ===
+Total sessions: 21
+Total messages: 5972
+  cli: 2 sessions
+  telegram: 16 sessions
+Database size: 29.5 MB
+
+=== $ hermes checkpoints --help ===
+usage: hermes checkpoints [-h] COMMAND ...
+
+Manage the filesystem checkpoint store — the shadow git repo hermes uses to
+snapshot working directories before write_file/patch/terminal calls. Lets you
+see how much space checkpoints occupy, force a prune, or wipe the base.
+
+positional arguments:
+  COMMAND
+    status      Show total size, project count, and per-project breakdown
+    list        Alias for 'status'
+    prune       Delete orphan/stale checkpoints and GC the store
+    clear       Delete the entire checkpoint base (all /rollback history)
+    clear-legacy
+                Delete only the legacy-<ts>/ archives from v1 migration
+
+options:
+  -h, --help    show this help message and exit
+
+=== $ hermes tools --summary ===
+[stderr]
+Error: 'hermes tools' requires an interactive terminal.
+It cannot be run through a pipe or non-interactive subprocess.
+Run it directly in your terminal instead.
+
+=== $ hermes browser --help ===
+usage: hermes browser [-h] {close-profile} ...
+
+Helpers for real-profile browsing (browser.use_real_profile). close-profile
+terminates the browser process tree holding your default profile so Hermes can
+copy it — DESTRUCTIVE (unsaved tabs in that browser are lost). The agent runs
+this only after you approve closing the browser.
+
+positional arguments:
+  {close-profile}
+    close-profile  Close the browser locking your real profile (asks nothing —
+                   run only with the user's explicit OK; loses unsaved tabs)
+
+options:
+  -h, --help       show this help message and exit
+
+=== $ hermes computer-use --help ===
+usage: hermes computer-use [-h] {install,status,doctor,permissions} ...
+
+Install or check the cua-driver binary used by the `computer_use` toolset.
+Supported on macOS, Windows, and Linux. Use `hermes computer-use install` to
+fetch and run the upstream cua-driver installer. This is equivalent to the
+post-setup hook that `hermes tools` runs when you first enable the Computer
+Use toolset, and is a stable target for re-running the install if it didn't
+fire (e.g. when toggling the toolset on a returning-user setup). Use `hermes
+computer-use doctor` to run cua-driver's `health_report` MCP tool and surface
+its check matrix (TCC, bundle identity, version, platform support, ...) in
+human-readable form.
+
+positional arguments:
+  {install,status,doctor,permissions}
+    install             Install or repair the cua-driver binary
+                        (macOS/Windows/Linux)
+    status              Print whether cua-driver is installed and on PATH
+    doctor              Run cua-driver `health_report` and surface the check
+                        matrix
+    permissions         Check or grant macOS Accessibility + Screen Recording
+                        (macOS)
+
+options:
+  -h, --help            show this help message and exit
+

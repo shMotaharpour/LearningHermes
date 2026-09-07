@@ -1,0 +1,116 @@
+# Hermes CLI evidence batch b2-config-models — 2026-09-07 — Hermes v0.20.6
+
+=== $ hermes config --help ===
+usage: hermes config [-h]
+                     {show,edit,get,set,unset,path,env-path,check,migrate} ...
+
+Manage Hermes Agent configuration
+
+positional arguments:
+  {show,edit,get,set,unset,path,env-path,check,migrate}
+    show                Show current configuration
+    edit                Open config file in editor
+    get                 Print a resolved configuration value
+    set                 Set a configuration value
+    unset               Remove a configuration value
+    path                Print config file path
+    env-path            Print .env file path
+    check               Check for missing/outdated config
+    migrate             Update config with new options
+
+options:
+  -h, --help            show this help message and exit
+
+=== $ hermes config get model ===
+default: minimax/minimax-m3:free
+provider: openrouter
+aliases:
+  gemini-pro: gemini/gemini-2.5-pro
+  gemini-flash: gemini/gemini-2.5-flash
+  vertex-pro: vertex/gemini-2.5-pro
+  vertex-flash: vertex/gemini-2.5-flash
+
+=== $ hermes config get display.skin ===
+default
+
+=== $ hermes model --help ===
+usage: hermes model [-h] [--refresh] [--portal-url PORTAL_URL]
+                    [--inference-url INFERENCE_URL] [--client-id CLIENT_ID]
+                    [--scope SCOPE] [--no-browser] [--timeout TIMEOUT]
+                    [--ca-bundle CA_BUNDLE] [--insecure]
+
+Interactively select your inference provider and default model
+
+options:
+  -h, --help            show this help message and exit
+  --refresh             Wipe the model picker disk cache and re-fetch every
+                        provider's live /v1/models list.
+  --portal-url PORTAL_URL
+                        Portal base URL for Nous login (default: production
+                        portal)
+  --inference-url INFERENCE_URL
+                        Inference API base URL for Nous login (default:
+                        production inference API)
+  --client-id CLIENT_ID
+                        OAuth client id to use for Nous login (default:
+                        hermes-cli)
+  --scope SCOPE         OAuth scope to request for Nous login
+  --no-browser          Do not attempt to open the browser automatically
+                        during Nous login
+  --timeout TIMEOUT     HTTP request timeout in seconds for Nous login
+                        (default: 15)
+  --ca-bundle CA_BUNDLE
+                        Path to CA bundle PEM file for Nous TLS verification
+  --insecure            Disable TLS verification for Nous login (testing only)
+
+=== $ hermes moa --help ===
+usage: hermes moa [-h] {list,ls,configure,config,delete,rm} ...
+
+Configure the provider/model set used by /moa <prompt>.
+
+positional arguments:
+  {list,ls,configure,config,delete,rm}
+    list (ls)           Show current MoA model slots
+    configure (config)  Interactively pick MoA models
+    delete (rm)         Delete a MoA preset
+
+options:
+  -h, --help            show this help message and exit
+
+=== $ hermes fallback --help ===
+usage: hermes fallback [-h] {list,ls,add,remove,rm,clear} ...
+
+Manage the fallback provider chain. Fallback providers are tried in order when
+the primary model fails with rate-limit, overload, or connection errors. See:
+https://hermes-agent.nousresearch.com/docs/user-guide/features/fallback-
+providers
+
+positional arguments:
+  {list,ls,add,remove,rm,clear}
+    list (ls)           Show the current fallback chain (default when no
+                        subcommand)
+    add                 Pick a provider + model (same picker as `hermes
+                        model`) and append to the chain
+    remove (rm)         Pick an entry to delete from the chain
+    clear               Remove all fallback entries
+
+options:
+  -h, --help            show this help message and exit
+
+=== $ hermes auth --help ===
+usage: hermes auth [-h] {add,list,remove,reset,status,logout,spotify} ...
+
+positional arguments:
+  {add,list,remove,reset,status,logout,spotify}
+    add                 Add a pooled credential
+    list                List pooled credentials
+    remove              Remove a pooled credential by index, id, or label
+    reset               Clear exhaustion status for all credentials for a
+                        provider
+    status              Show auth status for a provider
+    logout              Log out a provider and clear stored auth state
+    spotify             Authenticate Hermes with Spotify via PKCE
+
+options:
+  -h, --help            show this help message and exit
+

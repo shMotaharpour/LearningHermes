@@ -1,0 +1,140 @@
+# Hermes CLI evidence batch b4-gateway-cron-events — 2026-09-07 — Hermes v0.20.6
+
+=== $ hermes gateway --help ===
+usage: hermes gateway [-h] [--accept-hooks]
+                      {run,start,stop,restart,status,install,uninstall,list,setup,migrate-legacy,enroll}
+                      ...
+
+Manage the messaging gateway (Telegram, Discord, WhatsApp, Weixin, and more)
+
+positional arguments:
+  {run,start,stop,restart,status,install,uninstall,list,setup,migrate-legacy,enroll}
+    run                 Run gateway in foreground (recommended for WSL,
+                        Docker, Termux)
+    start               Start the installed systemd/launchd background service
+    stop                Stop gateway service
+    restart             Restart gateway service
+    status              Show gateway status
+    install             Install gateway as a systemd/launchd background
+                        service
+    uninstall           Uninstall gateway service
+    list                List all profiles and their gateway status
+    setup               Configure messaging platforms
+    migrate-legacy      Remove legacy hermes.service units from pre-rename
+                        installs
+    enroll              Enroll this gateway with a relay connector (writes
+                        relay auth creds to .env)
+
+options:
+  -h, --help            show this help message and exit
+  --accept-hooks        Auto-approve unseen shell hooks without a TTY prompt
+                        (equivalent to HERMES_ACCEPT_HOOKS=1 /
+                        hooks_auto_accept: true).
+
+=== $ hermes gateway status ===
+● hermes-gateway.service - Hermes Agent Gateway - Messaging Platform Integration
+     Loaded: loaded (/home/amirelite_ai/.config/systemd/user/hermes-gateway.service; enabled; preset: enabled)
+     Active: active (running) since Mon 2026-09-07 07:03:20 UTC; 49min ago
+   Main PID: 614768 (hermes)
+      Tasks: 30 (limit: 4597)
+     Memory: 418.1M (peak: 484.2M)
+        CPU: 2min 39.909s
+     CGroup: /user.slice/user-1001.slice/user@1001.service/app.slice/hermes-gateway.service
+             ├─614768 /home/amirelite_ai/.hermes/hermes-agent/venv/bin/python -m hermes_cli.main gateway run
+             ├─615850 /home/amirelite_ai/.hermes/hermes-agent/venv/bin/python /tmp/hermes_kernel_fkgf0d__/hermes_kernel_runner.py
+             ├─618353 /bin/sh -c "hermes gateway status"
+             ├─618354 /home/amirelite_ai/.hermes/hermes-agent/venv/bin/python /home/amirelite_ai/.hermes/hermes-agent/venv/bin/hermes gateway status
+             └─618361 systemctl --user status hermes-gateway --no-pager
+
+Sep 07 07:45:49 instance-20260828-174414 python[614768]:   File "/home/amirelite_ai/.hermes/hermes-agent/venv/lib/python3.11/site-packages/openai/_base_client.py", line 1070, in request
+Sep 07 07:45:49 instance-20260828-174414 python[614768]:     raise self._make_status_error_from_response(err.response) from None
+Sep 07 07:45:49 instance-20260828-174414 python[614768]: openai.RateLimitError: Error code: 429 - {'error': {'message': 'The request rate exceeds the current model Concurrency limit 1200. Please reduce the request frequency or contact Tencent Cloud support to request a higher limit.', 'type': 'gateway_error', 'param': '', 'code': '429001'}}
+Sep 07 07:45:49 instance-20260828-174414 python[614768]: 2026-09-07 07:45:49,892 WARNING agent.conversation_loop: API call failed (attempt 1/3) error_type=RateLimitError thread=hermes-gateway_0:133063579264704 provider=b-ai base_url=https://api.b.ai/v1 model=glm-5.3-flash summary=HTTP 429: The request rate exceeds the current model Concurrency limit 1200. Please reduce the request frequency or contact Tencent Cloud support to request a higher limit.
+Sep 07 07:45:49 instance-20260828-174414 python[614768]: 2026-09-07 07:45:49,893 WARNING agent.conversation_loop: Retrying API call in 2.432733607114686s (attempt 1/3) thread=hermes-gateway_0:133063579264704 provider=b-ai base_url=https://api.b.ai/v1 model=glm-5.3-flash policy=default error=Error code: 429 - {'error': {'message': 'The request rate exceeds the current model Concurrency limit 1200. Please reduce the request frequency or contact Tencent Cloud support to request a higher limit.', 'type': 'gateway_error', 'param': '', 'code': '429001'}}
+Sep 07 07:46:03 instance-20260828-174414 python[614768]: 2026-09-07 07:46:03,028 WARNING agent.tool_executor: Tool memory returned error (0.01s): {"success": false, "error": "Replacement would put memory at 3,763/2,200 chars. Shorten the new content, or 'remove' other stale or less important entries to make room (see current_entries below), the
+Sep 07 07:46:16 instance-20260828-174414 python[614768]: 2026-09-07 07:46:16,147 WARNING agent.tool_executor: Tool memory returned error (0.01s): {"success": false, "error": "Replacement would put memory at 3,667/2,200 chars. Shorten the new content, or 'remove' other stale or less important entries to make room (see current_entries below), the
+Sep 07 07:46:28 instance-20260828-174414 python[614768]: 2026-09-07 07:46:28,262 WARNING agent.tool_executor: Tool memory returned error (0.01s): {"success": false, "error": "After applying all 2 operations, memory would be at 3,493/2,200 chars -- over the limit. Remove or shorten more entries in the same batch (see current_entries below), then
+Sep 07 07:46:49 instance-20260828-174414 python[614768]: 2026-09-07 07:46:49,603 WARNING agent.tool_executor: Tool memory returned error (0.01s): {"success": false, "done": true, "error": "Memory consolidation failed 4 times this turn. Stop retrying memory calls — leave memory unchanged for now and continue with your reply to the user. The fact
+Sep 07 07:47:20 instance-20260828-174414 python[614768]: 2026-09-07 07:47:20,040 WARNING gateway.run: Normal final-send NOT suppressed despite active stream consumer for session agent:main:telegram:group:-1003924862595:1178: streamed=False previewed=False content_delivered=False transformed=False final_len=2034 — possible duplicate send (see wecom ack-timeout RCA).
+✓ User gateway service is running
+✓ Systemd linger is enabled (service survives logout)
+
+=== $ hermes send --list 2>&1 | head -15 ===
+Available messaging targets:
+
+Telegram:
+  telegram:Hermes / topic 1178 (group)
+  telegram:Hermes / topic 1 (group)
+  telegram:Hermes / topic 835 (group)
+  telegram:Hermes / topic 78 (group)
+  telegram:Hermes / topic 2461 (group)
+  telegram:Hermes / topic 123 (group)
+  telegram:Hermes / topic 307 (group)
+  telegram:Hermes / topic 1435 (group)
+  telegram:Hermes / topic 4 (group)
+  telegram:Hossein Motaharpour (dm)
+
+Use these as the "target" parameter when sending.
+
+=== $ hermes webhook --help ===
+usage: hermes webhook [-h] {subscribe,add,list,ls,remove,rm,test} ...
+
+Create, list, and remove webhook subscriptions for event-driven agent
+activation
+
+positional arguments:
+  {subscribe,add,list,ls,remove,rm,test}
+    subscribe (add)     Create a webhook subscription
+    list (ls)           List all dynamic subscriptions
+    remove (rm)         Remove a subscription
+    test                Send a test POST to a webhook route
+
+options:
+  -h, --help            show this help message and exit
+
+=== $ hermes hooks --help ===
+usage: hermes hooks [-h] {list,ls,test,revoke,remove,rm,doctor} ...
+
+Inspect shell-script hooks declared in ~/.hermes/config.yaml, test them
+against synthetic payloads, and manage the first-use consent allowlist at
+~/.hermes/shell-hooks-allowlist.json.
+
+positional arguments:
+  {list,ls,test,revoke,remove,rm,doctor}
+    list (ls)           List configured hooks with matcher, timeout, and
+                        consent status
+    test                Fire every hook matching <event> against a synthetic
+                        payload
+    revoke (remove, rm)
+                        Remove a command's allowlist entries (takes effect on
+                        next restart)
+    doctor              Check each configured hook: exec bit, allowlist, mtime
+                        drift, JSON validity, and synthetic run timing
+
+options:
+  -h, --help            show this help message and exit
+
+=== $ hermes cron list 2>&1 | head -15 ===
+┌─────────────────────────────────────────────────────────────────────────┐
+│                         Scheduled Jobs                                  │
+└─────────────────────────────────────────────────────────────────────────┘
+
+  1871545456cd [active]
+    Name:      docs-folder-watch
+    Schedule:  every 1m
+    Repeat:    ∞
+    Next run:  2026-09-07T07:53:46.983582+00:00
+    Deliver:   telegram:-1003924862595:307
+    Script:    docs_diff_send.py
+    Mode:      no-agent (script stdout delivered directly)
+    Last run:  2026-09-07T07:52:46.983582+00:00  ok
+    Execution: completed  42580eae25ca43bbb4dfb00dce1efd87
+
+=== $ hermes cron status ===
+✓ Gateway is running — cron jobs will fire automatically
+  PID: 614768
+  Ticker heartbeat: 1s ago
+
+  1 active job(s)
+  Next run: 2026-09-07T07:53:46.983582+00:00
+

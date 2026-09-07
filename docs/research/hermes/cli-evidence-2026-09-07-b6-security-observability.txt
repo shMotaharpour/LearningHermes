@@ -1,0 +1,159 @@
+# Hermes CLI evidence batch b6-security-observability — 2026-09-07 — Hermes v0.20.6
+
+=== $ hermes security --help ===
+usage: hermes security [-h] <subcommand> ...
+
+On-demand vulnerability scan against OSV.dev. Covers the Hermes venv
+(installed PyPI dists), Python deps declared by plugins under
+~/.hermes/plugins/, and pinned npx/uvx MCP servers in config.yaml. Does NOT
+scan globally-installed packages or editor/browser extensions.
+
+positional arguments:
+  <subcommand>
+    audit       Run a one-shot supply-chain audit
+
+options:
+  -h, --help    show this help message and exit
+
+=== $ hermes approvals --help ===
+usage: hermes approvals [-h] <subcommand> ...
+
+Tools for the dangerous-command approval system. `hermes approvals suggest`
+mines past approval decisions from the session database and proposes
+command_allowlist entries so repeatedly-approved commands stop prompting.
+
+positional arguments:
+  <subcommand>
+    suggest     Propose command_allowlist entries from past approvals
+    test        Dry-run the approval verdict for a command (never executes it)
+
+options:
+  -h, --help    show this help message and exit
+
+=== $ hermes secrets --help ===
+usage: hermes secrets [-h] {bitwarden,bw,onepassword,op,1password} ...
+
+Pull API keys from an external secret manager at process startup instead of
+storing them in ~/.hermes/.env. Supports Bitwarden Secrets Manager and
+1Password. See: https://hermes-agent.nousresearch.com/docs/user-guide/secrets/
+
+positional arguments:
+  {bitwarden,bw,onepassword,op,1password}
+    bitwarden (bw)      Bitwarden Secrets Manager integration
+    onepassword (op, 1password)
+                        1Password (op:// references) integration
+
+options:
+  -h, --help            show this help message and exit
+
+=== $ hermes egress --help ===
+usage: hermes egress [-h]
+                     {install,setup,start,stop,restart,reload,status,disable,config}
+                     ...
+
+Manage iron-proxy, the optional TLS-intercepting egress firewall that swaps
+proxy tokens for real API credentials before outbound requests leave a
+sandbox. Disabled by default. See: https://hermes-
+agent.nousresearch.com/docs/user-guide/egress/iron-proxy
+
+positional arguments:
+  {install,setup,start,stop,restart,reload,status,disable,config}
+    install             Download iron-proxy binary (v0.39.0)
+    setup               Interactive wizard: install + CA + mint tokens + write
+                        config
+    start               Start the managed iron-proxy
+    stop                Stop the managed iron-proxy
+    restart             Restart the managed iron-proxy (stop if running, then
+                        start)
+    reload              Hot-reload the running daemon's ruleset from
+                        proxy.yaml (management API — no restart, no dropped
+                        connections)
+    status              Show proxy state and mappings
+    disable             Turn off the proxy integration
+    config              Print the generated proxy.yaml path
+
+options:
+  -h, --help            show this help message and exit
+
+=== $ hermes insights --help ===
+usage: hermes insights [-h] [--days DAYS] [--source SOURCE]
+
+Analyze session history to show token usage, costs, tool patterns, and
+activity trends
+
+options:
+  -h, --help       show this help message and exit
+  --days DAYS      Number of days to analyze (default: 30)
+  --source SOURCE  Filter by platform (cli, telegram, discord, etc.)
+
+=== $ hermes monitoring --help ===
+usage: hermes monitoring [-h] {status} ...
+
+Gateway monitoring: service health metrics plus redacted diagnostics, exported
+over OTLP to an operator-configured endpoint. Content-free by construction —
+no prompts, messages, tool args/results, or usage analytics. Configure under
+monitoring.* in config.yaml.
+
+positional arguments:
+  {status}
+    status    Show monitoring settings, export state, and redaction posture
+
+options:
+  -h, --help  show this help message and exit
+
+=== $ hermes logs --help ===
+usage: hermes logs [-h] [-n LINES] [-f] [--level LEVEL] [--session ID]
+                   [--since TIME] [--component NAME]
+                   [log_name]
+
+View, tail, and filter agent.log / errors.log / gateway.log / gui.log / desktop.log
+
+positional arguments:
+  log_name              Log to view: agent (default), errors, gateway, gui, or
+                        'list' to show available files
+
+options:
+  -h, --help            show this help message and exit
+  -n LINES, --lines LINES
+                        Number of lines to show (default: 50)
+  -f, --follow          Follow the log in real time (like tail -f)
+  --level LEVEL         Minimum log level to show (DEBUG, INFO, WARNING,
+                        ERROR)
+  --session ID          Filter lines containing this session ID substring
+  --since TIME          Show lines since TIME ago (e.g. 1h, 30m, 2d)
+  --component NAME      Filter by component: gateway, agent, tools, cli, cron,
+                        gui
+
+Examples:
+    hermes logs                    Show last 50 lines of agent.log
+    hermes logs -f                 Follow agent.log in real time
+    hermes logs errors             Show last 50 lines of errors.log
+    hermes logs gateway -n 100     Show last 100 lines of gateway.log
+    hermes logs gui -f             Follow gui.log in real time
+    hermes logs desktop -f         Follow desktop.log (Electron app boot/backend)
+    hermes logs --level WARNING    Only show WARNING and above
+    hermes logs --session abc123   Filter by session ID
+    hermes logs --component tools  Only show tool-related lines
+    hermes logs --since 1h         Lines from the last hour
+    hermes logs --since 30m -f     Follow, starting from 30 min ago
+    hermes logs list               List available log files with sizes
+
+=== $ hermes worktree --help ===
+usage: hermes worktree [-h] {list,ls,audit,prune} ...
+
+Attended reclaim for the .worktrees/ directory hermes -w sessions accumulate.
+Never deletes uncommitted tracked changes, unique unpushed commits, or in-use
+trees; untracked-only scratch is archived to ~/.hermes/archive/worktree-prune/
+before removal. See: https://hermes-agent.nousresearch.com/docs/user-
+guide/cli#worktree-cleanup
+
+positional arguments:
+  {list,ls,audit,prune}
+    list (ls, audit)    Classify every tree: age, size, verdict, reason
+                        (default action)
+    prune               Remove safe trees and delete fully-merged local
+                        branches
+
+options:
+  -h, --help            show this help message and exit
+

@@ -1,0 +1,164 @@
+# Hermes CLI evidence batch b5-skills-mcp-plugins — 2026-09-07 — Hermes v0.20.6
+
+=== $ hermes skills list 2>&1 | head -25 ===
+Installed Skills                                
+┏━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━┳━━━━━━━━━┳━━━━━━━━━┓
+┃ Name                  ┃ Category               ┃ Source  ┃ Trust   ┃ Status  ┃
+┡━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━╇━━━━━━━━━╇━━━━━━━━━┩
+│ chista-replay-analys… │                        │ local   │ local   │ enabled │
+│ competition-replay-a… │                        │ local   │ local   │ enabled │
+│ competitive-game-age… │                        │ local   │ local   │ enabled │
+│ competitive-game-age… │                        │ local   │ local   │ enabled │
+│ decision-optimizatio… │                        │ local   │ local   │ enabled │
+│ decision-optimizatio… │                        │ local   │ local   │ enabled │
+│ decision-science-tea… │                        │ local   │ local   │ enabled │
+│ decision-science-tut… │                        │ local   │ local   │ enabled │
+│ decisioncraft-course  │                        │ local   │ local   │ enabled │
+│ gcp-gemini-integrati… │                        │ local   │ local   │ enabled │
+│ gcp-vm-storage-setup  │                        │ local   │ local   │ enabled │
+│ hermes-mastery-tutor… │                        │ local   │ local   │ enabled │
+│ kaggle-competition-a… │                        │ local   │ local   │ enabled │
+│ kaggle-competition-a… │                        │ local   │ local   │ enabled │
+│ kaggle-env-competiti… │                        │ local   │ local   │ enabled │
+│ messaging-gateway-tr… │                        │ local   │ local   │ enabled │
+│ or-tools-optimization │                        │ local   │ local   │ enabled │
+│ ortools-milp-cpsat-m… │                        │ local   │ local   │ enabled │
+│ replay-day-snapshot   │                        │ local   │ local   │ enabled │
+│ replays-analytics-co… │                        │ local   │ local   │ enabled │
+│ telegram-file-delive… │                        │ local   │ local   │ enabled │
+
+=== $ hermes skills inspect --help ===
+usage: hermes skills inspect [-h] identifier
+
+positional arguments:
+  identifier  Skill identifier
+
+options:
+  -h, --help  show this help message and exit
+
+=== $ hermes mcp list ===
+No MCP servers configured.
+
+  Add one with:
+    hermes mcp add <name> --url <endpoint>
+    hermes mcp add <name> --command <cmd> --args <args...>
+
+=== $ hermes mcp catalog 2>&1 | head -20 ===
+MCP Catalog + configured servers:
+
+  Name               Status                   Description
+  ------------------ ------------------------ -----------
+  airtable           available                Bases, tables, and records from your Airtable workspace.
+  algolia            available                Algolia search: indices, analytics, and settings (read-only).
+  alltrails          available                AllTrails: find hikes and trails with reviews and ratings.
+  amplitude          available                Amplitude analytics: charts, dashboards, experiments, flags.
+  asana              available                Tasks, projects, and goals from your Asana workspace.
+  atlassian          available                Jira issues and Confluence pages via Atlassian's hosted remote MCP.
+  attio              available                CRM records, lists, and notes in Attio.
+  aws-knowledge      available                Authoritative AWS docs, API references, and best practices.
+  betterstack        available                Better Stack: logs, uptime monitors, incidents, and status pages.
+  buildkite          available                CI/CD pipelines, builds, and test results from Buildkite.
+  calendly           available                Scheduling links, events, and invitees from Calendly.
+  canva              available                Create, search, and manage Canva designs.
+  circleci           available                CircleCI: diagnose build failures, read logs, rerun workflows.
+  clickup            available                Tasks, docs, and workspaces in ClickUp.
+  close              available                Sales CRM: leads, opportunities, calls, and emails.
+
+=== $ hermes plugins --help ===
+usage: hermes plugins [-h]
+                      {install,search,update,remove,rm,uninstall,list,ls,enable,disable,capabilities,doctor,pack,show,info}
+                      ...
+
+Install, update, remove, list, or validate native Hermes plugins and portable
+Agent Plugins v1 packages. Portable packages install disabled.
+
+positional arguments:
+  {install,search,update,remove,rm,uninstall,list,ls,enable,disable,capabilities,doctor,pack,show,info}
+    install             Install a plugin from a Git URL, owner/repo, or index
+                        name
+    search              Search the community plugin index
+    update              Pull latest changes for an installed plugin
+    remove (rm, uninstall)
+                        Remove an installed plugin
+    list (ls)           List installed plugins
+    enable              Enable a disabled plugin
+    disable             Disable a plugin without removing it
+    capabilities        Show declared vs granted capabilities per plugin
+    doctor              Validate a plugin with the real runtime contracts
+    pack                Declarative, shareable plugin sets (hermes-pack.yaml)
+    show (info)         Show details for a single plugin (including
+                        emits/listens)
+
+options:
+  -h, --help            show this help message and exit
+
+=== $ hermes serve --help ===
+usage: hermes serve [-h] [--port PORT] [--host HOST] [--insecure]
+                    [--skip-build] [--isolated] [--stop] [--status]
+                    [--ssh-session-token-file PATH] [--ssh-owner-nonce NONCE]
+
+Run the Hermes backend server — the JSON-RPC/WebSocket gateway the desktop app
+and remote clients connect to. Headless: it never opens a browser UI.
+
+options:
+  -h, --help            show this help message and exit
+  --port PORT           Port (default 9119, 0 for auto-assign by OS)
+  --host HOST           Host (default 127.0.0.1)
+  --insecure            DEPRECATED / NO-OP. Formerly bypassed auth on a non-
+                        loopback bind. As of the June 2026 hardening it no
+                        longer disables authentication — a public bind always
+                        requires an auth provider (password or OAuth). Bind
+                        127.0.0.1 + tunnel to keep it local.
+  --skip-build          Skip the web UI build step and serve the existing dist
+                        directly. Useful for non-interactive contexts (Windows
+                        Scheduled Tasks, CI) where npm may not be available.
+                        Pre-build with: cd web && npm run build
+  --isolated            When launched from a named profile, run a dedicated
+                        server scoped to that profile instead of routing to
+                        the machine-level server. Default behavior is unified:
+                        profile launches attach to (or start) ONE machine-
+                        level server and preselect the profile.
+  --stop                Stop all running Hermes web server processes and exit
+  --status              List running Hermes web server processes and exit
+  --ssh-session-token-file PATH
+                        Read a one-shot Desktop SSH session token from PATH
+  --ssh-owner-nonce NONCE
+                        Identify a Desktop-owned SSH backend process
+
+=== $ hermes acp --help ===
+usage: hermes acp [-h] [--accept-hooks] [--version] [--check] [--setup]
+                  [--setup-browser] [--yes]
+
+Start Hermes Agent in ACP mode for editor integration (VS Code, Zed,
+JetBrains)
+
+options:
+  -h, --help       show this help message and exit
+  --accept-hooks   Auto-approve unseen shell hooks without a TTY prompt
+                   (equivalent to HERMES_ACCEPT_HOOKS=1 / hooks_auto_accept:
+                   true).
+  --version        Print Hermes ACP version and exit
+  --check          Verify ACP dependencies and adapter imports, then exit
+  --setup          Run interactive Hermes provider/model setup for ACP
+                   terminal auth
+  --setup-browser  Install agent-browser + Playwright Chromium into
+                   ~/.hermes/node/ for browser tool support (idempotent).
+  --yes, -y        Accept all prompts (used by --setup-browser to skip the
+                   ~400 MB Chromium download confirmation).
+
+=== $ hermes proxy --help ===
+usage: hermes proxy [-h] {start,status,providers} ...
+
+Run a local HTTP server that forwards OpenAI-compatible requests to an OAuth-
+authenticated provider (e.g. Nous Portal). External apps can point at the
+proxy with any bearer token; the proxy attaches your real credentials.
+
+positional arguments:
+  {start,status,providers}
+    start               Run the proxy in the foreground
+    status              Show which proxy upstreams are ready
+    providers           List available proxy upstream providers
+
+options:
+  -h, --help            show this help message and exit
+
