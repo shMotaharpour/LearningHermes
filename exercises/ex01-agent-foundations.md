@@ -1,15 +1,28 @@
-# تمرین 01 — پایه‌های Agent
-
-> DRAFT SCAFFOLD — taskها در انتظار نگارش است. هدف: تمرین عملی برای دامنهٔ فصل 01.
+# تمرین ۰۱ — پایه‌های Agent
 
 ## Objective
 
-در انتظار نگارش.
+به خودتان ثابت کنید هیرمس یک سیستمِ اجرایی است نه یک chatbot: نصب/راستی‌آزمایی، اجرای
+agent loop با و بدون tool، و پیدا کردن هر سه سطح کانفیگ.
 
 ## Tasks
 
-1. در انتظار نگارش.
+1. **راستی‌آزمایی نصب.** `hermes --version` و `hermes doctor` را اجرا کنید. هر چیزی که
+   doctor علام می‌زند را قبل از ادامه درست کنید.
+2. **نقشهٔ CLI.** `hermes --help` را اجرا کنید. سه subcommand ناآشنا بردارید و `--help`
+   آن‌ها را ببینید (پیشنهاد: `moa`، `egress`، `checkpoints`).
+3. **agent loop بدون tool.** `hermes chat -q "Explain what a tool call is in one sentence."`
+4. **agent loop با tool.** در یک دایرکتوری پر از فایل:
+   `hermes chat -q "Count the files in the current directory and report the largest one."`
+   در transcript دنبال کنید: مدل باید terminal را صدا بزند، خروجی را بخواند، بعد جواب دهد.
+5. **یافتن سه سطح.** `hermes config path` و `hermes config env-path`. روی دیسک تأیید
+   کنید: `config.yaml` (تنظیمات)، `.env` (secretها)، `hermes-agent/` (کد).
+6. **مدل فعلی.** `hermes config get model` — provider و نام مدل را یادداشت کنید.
 
 ## Verification checklist
 
-- [ ] در انتظار نگارش.
+- [ ] `hermes doctor` بدون خطای بازدارنده.
+- [ ] می‌توانید اتفاق task 4 را به زبان loop توضیح دهید: model → tool call → result → answer.
+- [ ] خروجی `hermes config get model` با مدلی که انتظار هزینه‌اش را دارید یکی است.
+- [ ] می‌دانید برای تغییر یک تنظیم کدام فایل را ویرایش می‌کنید (و کلید API هرگز در کدام
+      نمی‌رود).
