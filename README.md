@@ -1,65 +1,65 @@
 # LearningHermes
 
-A structured, project-based course for mastering [Hermes Agent](https://github.com/NousResearch/hermes-agent)
-and becoming a **Senior Applied AI Engineer** — from first session to shipping production
-agent systems. Every chapter maps to competencies extracted from real job postings and is
-verified against live Hermes behavior.
+یک دورهٔ ساختارمند و پروژه‌محور برای تسلط بر [Hermes Agent](https://github.com/NousResearch/hermes-agent)
+و رسیدن به سطح **Senior Applied AI Engineer** — از اولین session تا shipping سیستم‌های agent
+در production. هر فصل به شایستگی‌هایی نگاشت شده که از آگهی‌های شغلی واقعی استخراج شده و
+دستوراتش با رفتار واقعی Hermes راستی‌آزمایی شده است.
 
-**Bilingual course:** branch `english` is the base; branch `farsi` is a full Persian
-translation (English technical terms preserved). Content is identical across branches.
+**دورهٔ دوزبانه:** برنچ `english` مبنا (base) است؛ برنچ `farsi` ترجمهٔ کامل فارسی است
+(اصطلاحات تخصصی انگلیسی حفظ شده‌اند). محتوای دو برنچ از نظر ساختار کاملاً برابر است.
 
-## The Course
+## دوره
 
-- **Syllabus:** [CURRICULUM.md](CURRICULUM.md) — 5 parts, 16 chapters, competency mapping.
-- **Path:** Agent Operator → Agent Power User → Automation Engineer → Agent Developer →
-  Senior Applied AI Engineer.
+- **سرفصل کامل:** [CURRICULUM.md](CURRICULUM.md) — ۵ بخش، ۱۶ فصل، نگاشت شایستگی‌ها.
+- **مسیر پیشرفت:** Agent Operator ← Agent Power User ← Automation Engineer ←
+  Agent Developer ← Senior Applied AI Engineer.
 
-## Repository Layout (agent-based)
+## ساختار ریپو (agent-based)
 
 ```
-AGENTS.md                  # Root agent instructions (what any agent working in this repo must know)
-chapters/                  # 16 chapters, 5 parts — one directory per chapter
+AGENTS.md                  # دستورالعمل root برای هر agentی که در این ریپو کار می‌کند
+chapters/                  # ۱۶ فصل در ۵ بخش — یک دایرکتوری برای هر فصل
   NN-slug/
-    README.md              # Chapter content: concepts -> verified commands -> pitfalls -> exercises
-    AGENTS.md              # Per-chapter authoring rules for agents
-    notes.md               # (optional) drafting notes; removed on publication
-exercises/                 # One hands-on exercise file per chapter (exNN-<slug>.md)
-examples/                  # Runnable configs, prompts, and scripts referenced by chapters
-assets/                    # Diagrams and screenshots
+    README.md              # محتوای فصل: مفاهیم ← دستورات verified ← pitfalls ← exercises
+    AGENTS.md              # قواعد نگارش همان فصل برای agentها
+    notes.md               # (اختیاری) یادداشت‌های پیش‌نویس؛ قبل از انتشار حذف می‌شود
+exercises/                 # یک تمرین عملی برای هر فصل (exNN-<slug>.md)
+examples/                  # کانفیگ‌ها، promptها و اسکریپت‌های قابل اجرا
+assets/                    # نمودارها و اسکرین‌شات‌ها
 docs/
   research/
-    hermes/                # Verified Hermes CLI outputs + llms.txt snapshot (evidence base)
-    jobs/                  # Job posting research: postings, searches, ledger
-scripts/                   # Course tooling (validate_course.py and friends)
-tests/                     # Tests for repo scripts
+    hermes/                # خروجی‌های verified از CLI هیرمس + snapshot ای از llms.txt
+    jobs/                  # تحقیق بازار کار: آگهی‌ها، سرچ‌ها، ledger
+scripts/                   # ابزارهای ریپو (validate_course.py و ...)
+tests/                     # تست اسکریپت‌های ریپو
 .hermes/
-  skills/                  # Project-local skills agents auto-load when working here
-  settings.json            # Project-scoped Hermes settings
+  skills/                  # skillهای project-local که agentها هنگام کار اینجا load می‌کنند
+  settings.json            # تنظیمات project-scoped
 ```
 
-## How to Read This Course
+## روش مطالعهٔ دوره
 
-- Read `CURRICULUM.md` first, then chapters in order within each part.
-- Every chapter ends with exercises in `exercises/` — do them on a real machine.
-- Code blocks are exact, verified commands. Evidence for every claim lives in `docs/research/`.
+- اول `CURRICULUM.md` را بخوان، بعد فصل‌ها را به‌ترتیب داخل هر بخش پیش برو.
+- هر فصل با exercises در `exercises/` تمام می‌شود — آن‌ها را روی یک ماشین واقعی انجام بده.
+- بلوک‌های کد، دستوراتِ دقیق و verified هستند. سند هر ادعا در `docs/research/` موجود است.
 
-## For Agents Working in This Repo
+## برای agentهایی که در این ریپو کار می‌کنند
 
-Read `AGENTS.md` (root) before anything else — it defines the authoring workflow,
-verification requirements, commit conventions, and the bilingual branch rules.
+قبل از هر کاری `AGENTS.md` (در root) را بخوان — workflow نگارش، الزامات راستی‌آزمایی،
+قواعد commit و قواعد برنچ‌های دوزبانه همان‌جا تعریف شده است.
 
-## Contribution / Workflow
+## مشارکت / Workflow
 
-- Base branch: `english`. Translation branch: `farsi`.
-- Verify every Hermes command against real behavior before it enters a chapter; save raw
-  output under `docs/research/hermes/`.
-- Keep chapters tight: concept → exact commands → exercise. No marketing prose.
-- Commits: `chNN: <short description>` (e.g. `ch07: add cron notepad reference`).
-- Validate structure/parity: `python3 scripts/validate_course.py --root .` (add
-  `--other <path>` to compare two branch checkouts).
+- برنچ مبنا: `english`. برنچ ترجمه: `farsi`.
+- هر دستور Hermes را قبل از ورود به فصل با رفتار واقعی راستی‌آزمایی کن؛ خروجی خام را در
+  `docs/research/hermes/` ذخیره کن.
+- فصل‌ها فشرده بمانند: مفهوم ← دستور دقیق ← تمرین. بدون نثر تبلیغاتی.
+- فرمت commit: `chNN: <short description>` (مثلاً `ch07: add cron notepad reference`).
+- اعتبارسنجی ساختار/برابری: `python3 scripts/validate_course.py --root .` (برای مقایسهٔ
+  دو checkout با `--other <path>`).
 
-## Sources of Truth
+## منابع اصلی (Sources of Truth)
 
-- Official docs index: https://hermes-agent.nousresearch.com/docs/llms.txt
-- Hermes source: https://github.com/NousResearch/hermes-agent
-- Job-market evidence: `docs/research/jobs/`
+- ایندکس مستندات رسمی: https://hermes-agent.nousresearch.com/docs/llms.txt
+- سورس Hermes: https://github.com/NousResearch/hermes-agent
+- شواهد بازار کار: `docs/research/jobs/`

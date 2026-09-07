@@ -1,15 +1,15 @@
-# Exercise 03 — Context Memory
+# تمرین 03 — Context و Memory
 
-> DRAFT SCAFFOLD — tasks pending. Objective: hands-on practice for chapter 03 scope.
+> DRAFT SCAFFOLD — taskها در انتظار نگارش است. هدف: تمرین عملی برای دامنهٔ فصل 03.
 
 ## Objective
 
-Pending.
+در انتظار نگارش.
 
 ## Tasks
 
-1. Pending.
+1. در انتظار نگارش.
 
 ## Verification checklist
 
-- [ ] Pending.
+- [ ] در انتظار نگارش.

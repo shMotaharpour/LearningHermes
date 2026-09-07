@@ -3,18 +3,18 @@ name: learninghermes-authoring
 description: "Use when authoring or editing LearningHermes course content — chapter contract, evidence rules, parity checks."
 ---
 
-# LearningHermes Authoring
+# نگارش LearningHermes
 
-You are working inside the LearningHermes course repo. Follow AGENTS.md at the repo root.
+داخل ریپوی دورهٔ LearningHermes هستی. AGENTS.md در ریشهٔ ریپو را رعایت کن.
 
-Contract quick-reference:
-1. Chapter = chapters/NN-slug/README.md with exactly five sections:
+مرجع سریع قرارداد:
+1. فصل = chapters/NN-slug/README.md با دقیقاً پنج سکشن:
    Why this matters (job link) / Concepts / Verified commands / Common pitfalls / Exercises.
-2. Every Hermes command must be run live first; save raw output to docs/research/hermes/
-   and cite the evidence file in the chapter.
-3. Every chapter has one exercise file exercises/exNN-<slug>.md.
-4. Docs index for feature claims: https://hermes-agent.nousresearch.com/docs/llms.txt
-5. Validate: python3 scripts/validate_course.py --root .
-6. Parity (farsi vs english): python3 scripts/validate_course.py --root . --other <other-checkout>
-7. Commits: 'chNN: <description>' (English), branch english = English only,
-   branch farsi = Persian prose + English technical terms/code.
+2. هر دستور Hermes اول به‌صورت زنده اجرا می‌شود؛ خروجی خام در docs/research/hermes/ ذخیره و
+   در فصل به آن ارجاع داده می‌شود.
+3. هر فصل یک فایل تمرین دارد: exercises/exNN-<slug>.md.
+4. ایندکس مستندات برای ادعاهای feature: https://hermes-agent.nousresearch.com/docs/llms.txt
+5. اعتبارسنجی: python3 scripts/validate_course.py --root .
+6. برابری (farsi در برابر english): python3 scripts/validate_course.py --root . --other <other-checkout>
+7. Commitها: 'chNN: <description>' (انگلیسی)؛ برنچ english فقط انگلیسی،
+   برنچ farsi نثر فارسی + اصطلاحات فنی انگلیسی.

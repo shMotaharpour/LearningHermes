@@ -1,9 +1,9 @@
-# Chapter 07 authoring rules
+# قواعد نگارش فصل 07
 
-Scope for this chapter is defined in CURRICULUM.md (Part mapping table).
-- Verify every Hermes command live before writing it here; append raw output to
-  docs/research/hermes/ and cite the file in README.md.
-- Keep the five required sections in order; do not add extra top-level sections.
-- Exercises for this chapter live at exercises/ex07-cron-scheduled-workflows.md.
-- Relevant docs pages: start from https://hermes-agent.nousresearch.com/docs/llms.txt
-  and pick the feature pages listed in CURRICULUM.md for chapter 07.
+دامنهٔ این فصل در CURRICULUM.md (جدول نگاشت بخش‌ها) تعریف شده است.
+- هر دستور Hermes را قبل از نوشتن، به‌صورت زنده راستی‌آزمایی کن؛ خروجی خام را به
+  docs/research/hermes/ اضافه و در README.md به آن ارجاع بده.
+- پنج سکشنِ الزامی را به همین ترتیب نگه دار؛ سکشن top-level جدید اضافه نکن.
+- تمرین این فصل در exercises/ex07-cron-scheduled-workflows.md است.
+- صفحات مرتبط مستندات: از https://hermes-agent.nousresearch.com/docs/llms.txt شروع کن و
+  صفحات feature ی فهرست‌شده در CURRICULUM.md برای فصل 07 را بردار.

@@ -1,15 +1,15 @@
-# Exercise 13 — Shipping Agent Products
+# تمرین 13 — Shipping ی محصولات Agent
 
-> DRAFT SCAFFOLD — tasks pending. Objective: hands-on practice for chapter 13 scope.
+> DRAFT SCAFFOLD — taskها در انتظار نگارش است. هدف: تمرین عملی برای دامنهٔ فصل 13.
 
 ## Objective
 
-Pending.
+در انتظار نگارش.
 
 ## Tasks
 
-1. Pending.
+1. در انتظار نگارش.
 
 ## Verification checklist
 
-- [ ] Pending.
+- [ ] در انتظار نگارش.

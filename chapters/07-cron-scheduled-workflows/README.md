@@ -1,23 +1,23 @@
-# Chapter 07 — Cron Scheduled Workflows
+# فصل 07 — Cron و Workflowهای زمان‌بندی‌شده
 
-> DRAFT SCAFFOLD — content pending. Scope: see CURRICULUM.md, chapter 07.
+> DRAFT SCAFFOLD — محتوا در انتظار نگارش است. دامنه: CURRICULUM.md، فصل 07.
 
 ## Why this matters (job link)
 
-Pending. Evidence base: docs/research/jobs/ (see CURRICULUM.md competency table).
+در انتظار نگارش. مبناي شواهد: docs/research/jobs/ (جدول شایستگی‌ها در CURRICULUM.md).
 
 ## Concepts
 
-Pending.
+در انتظار نگارش.
 
 ## Verified commands
 
-Pending. Evidence: docs/research/hermes/cli-evidence-2026-09-07.txt (partial).
+در انتظار نگارش. شواهد: docs/research/hermes/cli-evidence-2026-09-07.txt (بخشی).
 
 ## Common pitfalls
 
-Pending.
+در انتظار نگارش.
 
 ## Exercises
 
-See exercises/ex07-cron-scheduled-workflows.md.
+ببینید exercises/ex07-cron-scheduled-workflows.md.

@@ -1,15 +1,15 @@
-# Exercise 01 — Agent Foundations
+# تمرین 01 — پایه‌های Agent
 
-> DRAFT SCAFFOLD — tasks pending. Objective: hands-on practice for chapter 01 scope.
+> DRAFT SCAFFOLD — taskها در انتظار نگارش است. هدف: تمرین عملی برای دامنهٔ فصل 01.
 
 ## Objective
 
-Pending.
+در انتظار نگارش.
 
 ## Tasks
 
-1. Pending.
+1. در انتظار نگارش.
 
 ## Verification checklist
 
-- [ ] Pending.
+- [ ] در انتظار نگارش.

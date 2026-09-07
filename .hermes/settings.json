@@ -1,5 +1,6 @@
 {
   "project": "LearningHermes",
+  "branch": "farsi",
   "language_policy": {
     "english_branch": "all files English only",
     "farsi_branch": "Persian prose; English technical terms, code, paths, frontmatter keys"

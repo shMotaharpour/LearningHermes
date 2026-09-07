@@ -1,23 +1,23 @@
-# Chapter 10 — Skills Engineering
+# فصل 10 — مهندسی Skill
 
-> DRAFT SCAFFOLD — content pending. Scope: see CURRICULUM.md, chapter 10.
+> DRAFT SCAFFOLD — محتوا در انتظار نگارش است. دامنه: CURRICULUM.md، فصل 10.
 
 ## Why this matters (job link)
 
-Pending. Evidence base: docs/research/jobs/ (see CURRICULUM.md competency table).
+در انتظار نگارش. مبناي شواهد: docs/research/jobs/ (جدول شایستگی‌ها در CURRICULUM.md).
 
 ## Concepts
 
-Pending.
+در انتظار نگارش.
 
 ## Verified commands
 
-Pending. Evidence: docs/research/hermes/cli-evidence-2026-09-07.txt (partial).
+در انتظار نگارش. شواهد: docs/research/hermes/cli-evidence-2026-09-07.txt (بخشی).
 
 ## Common pitfalls
 
-Pending.
+در انتظار نگارش.
 
 ## Exercises
 
-See exercises/ex10-skills-engineering.md.
+ببینید exercises/ex10-skills-engineering.md.

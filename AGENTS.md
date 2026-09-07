@@ -1,65 +1,64 @@
-# AGENTS.md — LearningHermes (root)
+# AGENTS.md — LearningHermes (ریشهٔ ریپو)
 
-Book-style course repo for Hermes Agent. Markdown-first, no build step. Any agent
-(Hermes, Claude Code, Codex, or human editors) working in this repo must follow these rules.
+ریپوی کتاب‌گونهٔ دورهٔ Hermes Agent. Markdown-محور، بدون build step. هر agent ای
+(Hermes، Claude Code، Codex یا ویرایشگر انسانی) که در این ریپو کار می‌کند باید این قواعد را رعایت کند.
 
-## Identity
+## هویت
 
-- Course: LearningHermes — Hermes Agent → Senior Applied AI Engineer.
-- Syllabus is canonical: `CURRICULUM.md`. Do not add/rename/move chapters without updating
-  it, the root `README.md`, and `scripts/validate_course.py`.
-- Base branch: `english`. Translation branch: `farsi`. Both branches have identical file
-  trees; only prose language differs.
+- دوره: LearningHermes — از Hermes Agent تا Senior Applied AI Engineer.
+- سرفصل مرجع: `CURRICULUM.md`. بدون به‌روزرسانی هم‌زمانِ این فایل، `README.md` ریشه و
+  `scripts/validate_course.py` فصلی را اضافه/تغییرنام/جابه‌جا نکن.
+- برنچ مبنا: `english`. برنچ ترجمه: `farsi`. هر دو برنچ درخت فایل یکسان دارند؛ فقط زبان نثر فرق می‌کند.
 
-## Language Rules (branch-dependent)
+## قواعد زبان (وابسته به برنچ)
 
-- `english` branch: every file is English only. No Persian in any tracked file.
-- `farsi` branch: teaching prose (`.md` content outside code) is Persian; standard English
-  technical terms (agent, tool, skill, session, cron, webhook, eval, RAG, MCP, …) stay
-  English; code blocks, commands, paths, frontmatter keys, and file names stay English.
-- Commit messages are always English, format `chNN: <description>` or `repo: <description>`.
+- برنچ `english`: همهٔ فایل‌ها فقط انگلیسی. هیچ فارسی در هیچ فایل tracked.
+- برنچ `farsi`: نثر آموزشی (محتوای `.md` بیرون از کد) فارسی است؛ اصطلاحات متداول و تخصصی
+  انگلیسی (agent، tool، skill، session، cron، webhook، eval، RAG، MCP، ...) به انگلیسی می‌مانند؛
+  بلوک‌های کد، دستورات، pathها، کلیدهای frontmatter و نام فایل‌ها انگلیسی می‌مانند.
+- پیام‌های commit همیشه انگلیسی‌اند، با فرمت `chNN: <description>` یا `repo: <description>`.
 
-## Verification Rule (the core invariant)
+## قانون راستی‌آزمایی (اینوariant اصلی)
 
-Never write an unverified Hermes claim into a chapter.
+هرگز ادعای راستی‌آزمایی‌نشده دربارهٔ Hermes را وارد فصل نکن.
 
-1. Run the actual command (`hermes ...`) or fetch the official doc page.
-2. Save raw evidence under `docs/research/hermes/` (e.g. `cli-evidence-YYYY-MM-DD.txt`).
-3. Reference the evidence file from the chapter that uses the commands.
-4. If a feature can't be verified live, cite the doc page URL inline instead of inventing
-   output. Docs index: https://hermes-agent.nousresearch.com/docs/llms.txt
+1. دستور واقعی را اجرا کن (`hermes ...`) یا صفحهٔ مستندات رسمی را بگیر.
+2. شواهد خام را زیر `docs/research/hermes/` ذخیره کن (مثلاً `cli-evidence-YYYY-MM-DD.txt`).
+3. از داخل فصلی که از دستورات استفاده می‌کند به فایل شواهد ارجاع بده.
+4. اگر قابلیتی به‌صورت زنده قابل راستی‌آزمایی نبود، به‌جای ساخت خروجی، URL صفحهٔ مستندات را
+   داخل متن بیاور. ایندکس مستندات: https://hermes-agent.nousresearch.com/docs/llms.txt
 
-## Chapter Contract
+## قرارداد فصل
 
-Each chapter directory `chapters/NN-slug/` contains:
+هر دایرکتوری فصل `chapters/NN-slug/` شامل:
 
-- `README.md` with exactly these sections (in order):
+- `README.md` با دقیقاً این سکشن‌ها (به همین ترتیب):
   `## Why this matters (job link)` · `## Concepts` · `## Verified commands` ·
   `## Common pitfalls` · `## Exercises`
-- Optional `notes.md` for drafts; delete before publication.
-- `AGENTS.md` with chapter-specific authoring rules and research pointers.
+- اختیاری: `notes.md` برای پیش‌نویس؛ قبل از انتشار حذف شود.
+- `AGENTS.md` با قواعد نگارش مخصوص همان فصل و اشاره‌گرهای تحقیق.
 
-Each chapter has one matching `exercises/exNN-<slug>.md` with: objective, numbered tasks,
-and a verification checklist (commands the learner runs to confirm success).
+هر فصل یک فایل تمرین متناظر دارد: `exercises/exNN-<slug>.md` شامل: هدف، taskهای شماره‌دار،
+و checklist ی راستی‌آزمایی (دستوراتی که یادگیرنده برای تأیید موفقیت اجرا می‌کند).
 
-## Style
+## سبک نگارش
 
-- Concept → exact commands → exercise. No filler prose, no marketing.
-- Prefer real verified output over paraphrase; show command then output.
-- Keep each chapter focused on its CURRICULUM.md scope; cross-link instead of repeating.
+- مفهوم ← دستور دقیق ← تمرین. بدون نثر پرکننده، بدون متن تبلیغاتی.
+- paraphrase را به خروجی واقعیِ verified ترجیح بده؛ دستور را نشان بده، بعد خروجی را.
+- هر فصل فقط در دامنهٔ CURRICULUM.md خودش بماند؛ به‌جای تکرار، cross-link کن.
 
-## Repo Tooling
+## ابزارهای ریپو
 
-- `python3 scripts/validate_course.py --root .` — validates chapter contract + evidence
-  references. `--other <path>` compares structural parity with another branch checkout
-  (same files, same code-block counts).
-- `python3 -m pytest tests/ -q` — repo script tests.
-- Do not hand-edit anything outside this repo (Hermes config in `~/.hermes/` is read-only
-  reference material, never modified for course writing).
+- `python3 scripts/validate_course.py --root .` — اعتبارسنجی قرارداد فصل + ارجاع شواهد.
+  `--other <path>` برابری ساختاری با checkout ی برنچ دیگر را مقایسه می‌کند
+  (فایل‌های یکسان، تعداد code block برابر).
+- `python3 -m unittest tests.test_validate_course` — تست اسکریپت‌های ریپو.
+- چیزی بیرون از این ریپو را دستکاری نکن (کانفیگ Hermes در `~/.hermes/` فقط مرجعِ
+  read-only است، هرگز برای نگارش دوره تغییر داده نمی‌شود).
 
-## Git & Delivery
+## Git و تحویل
 
-- Work on a branch; one chapter (or one structural change) per commit series.
-- Before pushing the `farsi` branch, run the parity check against `english`.
-- Never commit secrets, API keys, tokens, or personal `.env` content. Research files must
-  be free of credentials.
+- روی branch کار کن؛ هر فصل (یا یک تغییر ساختاری) یک سری commit.
+- قبل از push کردن برنچ `farsi`، چک parity را در برابر `english` اجرا کن.
+- هرگز secret، API key، token یا محتوای شخصی `.env` را commit نکن. فایل‌های تحقیق باید
+  عاری از credential باشند.

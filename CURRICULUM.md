@@ -1,115 +1,115 @@
-# LearningHermes Curriculum
+# CURRICULUM.md — سرفصل کامل LearningHermes
 
-The canonical syllabus for LearningHermes — a project-based course that takes a working
-engineer from "agent user" to **Senior Applied AI Engineer** using Hermes Agent as the
-vehicle. Every chapter maps to (a) competencies extracted from real job postings and
-(b) Hermes features verified against the official docs and live CLI.
+سرفصل مرجع (canonical) برای LearningHermes — دوره‌ای پروژه‌محور که یک مهندس کارآزموده را از
+«کاربر agent» به **Senior Applied AI Engineer** می‌رساند و Hermes Agent وسیلهٔ این مسیر است.
+هر فصل به (الف) شایستگی‌هایی که از آگهی‌های شغلی واقعی استخراج شده و (ب) قابلیت‌های Hermes
+که در برابر مستندات رسمی و CLI زنده راستی‌آزمایی شده، نگاشت می‌شود.
 
-- Job-market evidence: `docs/research/jobs/` (postings, searches, extraction ledger)
-- Hermes feature evidence: `docs/research/hermes/` (llms.txt snapshot, verified CLI outputs)
-- Update rule: any structural change to chapters must be reflected here, in the root
-  `README.md`, and validated by `scripts/validate_course.py`.
+- شواهد بازار کار: `docs/research/jobs/` (آگهی‌ها، سرچ‌ها، ledger)
+- شواهد قابلیت‌های Hermes: `docs/research/hermes/` (snapshot ای از llms.txt، خروجی‌های verified از CLI)
+- قانون به‌روزرسانی: هر تغییر ساختاری در فصل‌ها باید هم‌زمان در این فایل، `README.md` ریشه و
+  `scripts/validate_course.py` اعمال شود.
 
-## Target Role Profile
+## پروفایل نقش هدف (Target Role)
 
-Compiled from 20+ postings across five job families (see `docs/research/jobs/`):
-Senior Applied AI Engineer, AI/Automation Engineer, AI Agent Engineer, Forward Deployed
-Engineer, LLM Quality/Evaluation Engineer.
+جمع‌بندی از بیش از ۲۰ آگهی در پنج خانوادهٔ شغلی (ببینید `docs/research/jobs/`):
+Senior Applied AI Engineer، AI/Automation Engineer، AI Agent Engineer،
+Forward Deployed Engineer، LLM Quality/Evaluation Engineer.
 
-Recurring requirement clusters, ordered by observed frequency:
+خوشه‌های تکرارشوندهٔ نیازمندی‌ها به ترتیب فراوانی مشاهده‌شده:
 
-1. **Shipping & DevOps** — deploy production systems, Docker/K8s, CI/CD.
-2. **Evaluation & observability** — evals, regression tracking, metrics, tracing, monitoring.
-3. **Agentic orchestration** — build/operate LLM agents, multi-step workflows, tool use.
-4. **API & systems integration** — REST APIs, enterprise platforms, data pipelines.
-5. **RAG & context engineering** — embeddings, chunking, retrieval, grounding, context windows.
-6. **Security & governance** — secrets handling, approval flows, data privacy, compliance.
-7. **Cost & performance optimization** — model routing, caching, latency budgets.
-8. **Prompt & context engineering** — system prompts, context files, structured output.
-9. **Stakeholder/product skills** — translate business needs into agent capabilities.
-10. **Workflow automation platforms** — scheduled jobs, event triggers, integration hubs.
+1. **Shipping و DevOps** — deploy سیستم‌های production، Docker/K8s، CI/CD.
+2. **Evaluation و observability** — evals، ردیابی regression، metrics، tracing، monitoring.
+3. **Orchestration ای agentic** — ساخت و بهره‌برداری از LLM agentها، workflowهای چندمرحله‌ای، tool use.
+4. **یکپارچه‌سازی API و سیستم‌ها** — REST API، پلتفرم‌های enterprise، data pipeline.
+5. **RAG و context engineering** — embedding، chunking، retrieval، grounding، context window.
+6. **امنیت و governance** — مدیریت secrets، جریان‌های approval، حریم داده، compliance.
+7. **بهینه‌سازی هزینه و کارایی** — model routing، caching، بودجهٔ latency.
+8. **Prompt و context engineering** — system prompt، context file، structured output.
+9. **مهارت‌های stakeholder و محصول** — تبدیل نیاز کسب‌وکار به قابلیت agent.
+10. **پلتفرم‌های workflow automation** — jobهای زمان‌بندی‌شده، triggerهای رویدادی، hubهای یکپارچه‌سازی.
 
-The course teaches each cluster hands-on: you do the work *with* an agent, on a real
-machine, with evidence saved under `docs/research/`.
+این دوره هر خوشه را عملی تدریس می‌کند: کار را *با* یک agent، روی ماشین واقعی و با ذخیرهٔ
+شواهد در `docs/research/` انجام می‌دهید.
 
-## Course Structure — 5 parts, 16 chapters
+## ساختار دوره — ۵ بخش، ۱۶ فصل
 
-### Part I — Foundations (know the machine)
+### بخش I — Foundations (شناخت ماشین)
 
-| Ch | Directory | Scope | Primary job competency |
+| فصل | دایرکتوری | دامنه | شایستگی شغلی اصلی |
 |----|-----------|-------|------------------------|
-| 01 | `chapters/01-agent-foundations/` | What an AI agent is; Hermes architecture (agent loop, tools, gateway); install; first sessions; `hermes doctor` | Agent orchestration |
-| 02 | `chapters/02-configuration-models/` | `config.yaml` vs `.env`; providers & models; aliases; Mixture of Agents; fallback providers; credential pools; local models | Cost optimization, model routing |
-| 03 | `chapters/03-context-memory/` | Context files (AGENTS.md, SOUL.md, USER.md, MEMORY.md); memory system & providers; context references; compression & caching | Prompt/context engineering, RAG-adjacent context skills |
+| 01 | `chapters/01-agent-foundations/` | agent چیست؛ معماری Hermes (agent loop، tools، gateway)؛ install؛ اولین sessionها؛ `hermes doctor` | Agent orchestration |
+| 02 | `chapters/02-configuration-models/` | `config.yaml` در برابر `.env`؛ providerها و modelها؛ aliasها؛ Mixture of Agents؛ fallback providerها؛ credential poolها؛ local modelها | بهینه‌سازی هزینه، model routing |
+| 03 | `chapters/03-context-memory/` | Context fileها (AGENTS.md، SOUL.md، USER.md، MEMORY.md)؛ سیستم memory و providerهای آن؛ context referenceها؛ compression و caching | Prompt/context engineering، مهارت‌های مجاور RAG |
 
-### Part II — Operating the Agent (daily driver)
+### بخش II — Operating the Agent (استفادهٔ روزمره)
 
-| Ch | Directory | Scope | Primary job competency |
+| فصل | دایرکتوری | دامنه | شایستگی شغلی اصلی |
 |----|-----------|-------|------------------------|
-| 04 | `chapters/04-cli-sessions-surfaces/` | CLI & slash commands; TUI; desktop app; dashboard; session lifecycle (resume, search, export); checkpoints & rollback | Developer productivity, incident handling |
-| 05 | `chapters/05-tools-capabilities/` | Toolsets; web search/extract; browser automation; computer use; vision; document extraction; media (image gen, TTS, voice) | Tool-calling & integration |
-| 06 | `chapters/06-messaging-gateway/` | Gateway architecture; Telegram/Discord/Slack/WhatsApp setups; deliverable mode; voice mode; multi-profile gateways | Integration, stakeholder-facing delivery |
+| 04 | `chapters/04-cli-sessions-surfaces/` | CLI و slash commandها؛ TUI؛ desktop app؛ dashboard؛ چرخهٔ session (resume، search، export)؛ checkpoint و rollback | بهره‌وری توسعه‌دهنده، مدیریت incident |
+| 05 | `chapters/05-tools-capabilities/` | Toolsetها؛ web search/extract؛ browser automation؛ computer use؛ vision؛ document extraction؛ رسانه (image generation، TTS، voice) | Tool-calling و integration |
+| 06 | `chapters/06-messaging-gateway/` | معماری gateway؛ راه‌اندازی Telegram/Discord/Slack/WhatsApp؛ deliverable mode؛ voice mode؛ gatewayهای multi-profile | Integration، تحویل رو به ذی‌نفعان |
 
-### Part III — Automation Engineering (make it run itself)
+### بخش III — Automation Engineering (کاری که خودش اجرا می‌شود)
 
-| Ch | Directory | Scope | Primary job competency |
+| فصل | دایرکتوری | دامنه | شایستگی شغلی اصلی |
 |----|-----------|-------|------------------------|
-| 07 | `chapters/07-cron-scheduled-workflows/` | Cron jobs (LLM & script-only); schedules; delivery targets; notepads & continuity; cron internals & troubleshooting; heartbeats & recurring loops | Workflow automation platforms |
-| 08 | `chapters/08-event-driven-automation/` | Webhooks (GitHub & generic); hooks system; `hermes send` from scripts/CI; Microsoft Graph listener; automation blueprints | Event-driven integration |
-| 09 | `chapters/09-multi-agent-orchestration/` | `delegate_task` subagents; subagent lifecycle API; kanban multi-agent; bot mode rosters; A2A; git worktrees; batch processing | Agentic orchestration (multi-agent) |
+| 07 | `chapters/07-cron-scheduled-workflows/` | Cron jobها (LLM دار و script-only)؛ scheduleها؛ targetهای تحویل؛ notepad و continuity؛ cron internals و troubleshooting؛ heartbeat و recurring loop | پلتفرم‌های workflow automation |
+| 08 | `chapters/08-event-driven-automation/` | Webhookها (GitHub و generic)؛ سیستم hooks؛ `hermes send` از script/CI؛ Microsoft Graph listener؛ automation blueprintها | یکپارچه‌سازی event-driven |
+| 09 | `chapters/09-multi-agent-orchestration/` | subagentهای `delegate_task`؛ subagent lifecycle API؛ kanban multi-agent؛ rosterهای bot mode؛ A2A؛ git worktree؛ batch processing | Agentic orchestration (چند agentی) |
 
-### Part IV — Building & Extending (make it yours)
+### بخش IV — Building & Extending (شخصی‌سازی پلتفرم)
 
-| Ch | Directory | Scope | Primary job competency |
+| فصل | دایرکتوری | دامنه | شایستگی شغلی اصلی |
 |----|-----------|-------|------------------------|
-| 10 | `chapters/10-skills-engineering/` | SKILL.md format; progressive disclosure; project skills (`.hermes/skills` + trust); curator; publishing; skill audit/diff | Knowledge engineering, internal tooling |
-| 11 | `chapters/11-mcp-integration/` | MCP add/config/filter; catalog installs; `hermes mcp serve`; OAuth MCP; building & testing MCP servers | Tool-calling, MCP, integration |
-| 12 | `chapters/12-plugins-and-apis/` | Plugin system (tools, hooks, secret sources, provider plugins); OpenAI-compatible API server; ACP for editors; `hermes proxy`; Python library embedding | API & platform engineering |
-| 13 | `chapters/13-shipping-agent-products/` | Terminal backends (local, Docker, SSH, Daytona, Modal); GitHub PR workflow via agent; CI/CD integration; profile distributions; deployment checklist | Shipping & DevOps |
+| 10 | `chapters/10-skills-engineering/` | فرمت SKILL.md؛ progressive disclosure؛ skillهای پروژه‌ای (`.hermes/skills` + trust)؛ curator؛ publish؛ audit/diff ای skill | مهندسی دانش، tooling داخلی |
+| 11 | `chapters/11-mcp-integration/` | افزودن/config/فیلتر MCP؛ نصب از catalog؛ `hermes mcp serve`؛ MCP ای OAuth؛ ساخت و تست MCP server | Tool-calling، MCP، integration |
+| 12 | `chapters/12-plugins-and-apis/` | سیستم plugin (tool، hook، secret source، provider plugin)؛ API server سازگار با OpenAI؛ ACP برای editorها؛ `hermes proxy`؛ embed کردن به‌صورت Python library | API و platform engineering |
+| 13 | `chapters/13-shipping-agent-products/` | Terminal backendها (local، Docker، SSH، Daytona، Modal)؛ workflow ی GitHub PR با agent؛ یکپارچگی CI/CD؛ profile distribution؛ checklist ی deploy | Shipping و DevOps |
 
-### Part V — Production Engineering (make it senior)
+### بخش V — Production Engineering (رسیدن به سطح senior)
 
-| Ch | Directory | Scope | Primary job competency |
+| فصل | دایرکتوری | دامنه | شایستگی شغلی اصلی |
 |----|-----------|-------|------------------------|
-| 14 | `chapters/14-evals-observability/` | Evaluating agent work; trajectory format & replay; `hermes insights`/`monitoring`; logs; regression testing agent behavior; LLM-as-judge patterns | Evaluation & observability |
-| 15 | `chapters/15-security-cost-governance/` | Security model & approvals; secrets (Bitwarden, 1Password, .env discipline); egress iron-proxy; managed scope; provider routing & cost control | Security & governance, cost optimization |
-| 16 | `chapters/16-capstone-senior-portfolio/` | Capstone: end-to-end enterprise workflow automation built with Hermes; portfolio packaging; competency-to-evidence mapping for interviews | Everything above, synthesized |
+| 14 | `chapters/14-evals-observability/` | ارزیابی کارِ agent؛ trajectory format و replay؛ `hermes insights`/`monitoring`؛ logها؛ regression testing ی رفتار agent؛ الگوهای LLM-as-judge | Evaluation و observability |
+| 15 | `chapters/15-security-cost-governance/` | مدل امنیتی و approvalها؛ secrets (Bitwarden، 1Password، انضباط `.env`)؛ egress iron-proxy؛ managed scope؛ provider routing و کنترل هزینه | امنیت و governance، بهینه‌سازی هزینه |
+| 16 | `chapters/16-capstone-senior-portfolio/` | Capstone: اتوماسیون یک workflow ی enterprise از ابتدا تا انتها با Hermes؛ بسته‌بندی portfolio؛ نگاشت شایستگی به شواهد برای interview | همهٔ موارد بالا، در کنار هم |
 
-## Progression Model
+## مدل پیشرفت (Progression)
 
 ```
-Part I   -> Agent Operator      (you can run and steer a production-grade agent)
-Part II  -> Agent Power User    (you operate it across surfaces, tools, and chat platforms)
-Part III -> Automation Engineer (workflows run without you in the loop)
-Part IV  -> Agent Developer     (you extend the platform: skills, MCP, plugins, APIs)
-Part V   -> Senior Applied AI Engineer (you ship, measure, secure, and defend the system)
+بخش I   -> Agent Operator       (یک agent در سطح production را می‌توانی اجرا و هدایت کنی)
+بخش II  -> Agent Power User     (آن را روی همهٔ surfaceها، toolها و پلتفرم‌های پیام‌رسان بهره‌برداری می‌کنی)
+بخش III -> Automation Engineer (workflowها بدون حضور تو در حلقه اجرا می‌شوند)
+بخش IV  -> Agent Developer     (پلتفرم را گسترش می‌دهی: skill، MCP، plugin، API)
+بخش V   -> Senior Applied AI Engineer (سیستم را ship، اندازه‌گیری، امن و پشتیبانی می‌کنی)
 ```
 
-## Chapter Contract
+## قرارداد فصل (Chapter Contract)
 
-Every chapter follows the same contract (enforced by `scripts/validate_course.py`):
+هر فصل همین قرارداد را دنبال می‌کند (با `scripts/validate_course.py` چک می‌شود):
 
-1. `README.md` with sections: `## Why this matters (job link)`, `## Concepts`,
-   `## Verified commands`, `## Common pitfalls`, `## Exercises` (pointer to the exercise file).
-2. One exercise file per chapter: `exercises/chNN-<slug>.md` with objective, tasks, and a
-   verification checklist.
-3. Commands in chapters must be verified against real Hermes behavior; raw evidence is
-   saved under `docs/research/hermes/` and referenced from the chapter.
-4. No filler prose. Concept → exact commands → exercise.
+1. `README.md` با این سکشن‌ها: `## Why this matters (job link)`، `## Concepts`،
+   `## Verified commands`، `## Common pitfalls`، `## Exercises` (اشاره به فایل تمرین).
+2. یک فایل تمرین برای هر فصل: `exercises/exNN-<slug>.md` شامل هدف، taskها و
+   checklist ی راستی‌آزمایی.
+3. دستورات فصل باید در برابر رفتار واقعی Hermes راستی‌آزمایی شوند؛ شواهد خام زیر
+   `docs/research/hermes/` ذخیره و از داخل فصل به آن ارجاع داده شود.
+4. بدون نثر پرکننده. مفهوم ← دستور دقیق ← تمرین.
 
-## Bilingual Branch Model
+## مدل برنچ دوزبانه
 
-- `english` — base branch, authoritative content, English only.
-- `farsi` — full translation; Persian prose with standard English technical terms
-  (agent, tool, skill, session, cron, webhook, eval, …) left untranslated; code blocks,
-  commands, paths, and frontmatter keys stay English.
-- Both branches carry identical file trees; `scripts/validate_course.py --root X --other Y`
-  checks structural parity (same files, same code-block counts per file).
-- Branch-specific `AGENTS.md` rules: on `english`, all repo files are English only;
-  on `farsi`, Persian prose is required for `.md` teaching content.
+- `english` — برنچ مبنا، محتوای مرجع، فقط انگلیسی.
+- `farsi` — ترجمهٔ کامل؛ نثر فارسی با حفظ اصطلاحات متداول و تخصصی انگلیسی
+  (agent، tool، skill، session، cron، webhook، eval، ...)؛ بلوک‌های کد، دستورات،
+  pathها و کلیدهای frontmatter انگلیسی می‌مانند.
+- هر دو برنچ درخت فایل یکسان دارند؛ `scripts/validate_course.py --root X --other Y`
+  برابری ساختاری را چک می‌کند (فایل‌های یکسان، تعداد code block برابر در هر فایل).
+- قواعد `AGENTS.md` ی مخصوص هر برنچ: در `english` همهٔ فایل‌ها فقط انگلیسی؛ در `farsi`
+  نثر فارسی برای محتوای آموزشی `.md` الزامی است.
 
-## Sources of Truth
+## منابع اصلی (Sources of Truth)
 
-- Hermes docs index: https://hermes-agent.nousresearch.com/docs/llms.txt
-- Hermes repo: https://github.com/NousResearch/hermes-agent
-- Job evidence: `docs/research/jobs/ledger.json` and sibling files
+- ایندکس مستندات Hermes: https://hermes-agent.nousresearch.com/docs/llms.txt
+- ریپوی Hermes: https://github.com/NousResearch/hermes-agent
+- شواهد بازار کار: `docs/research/jobs/ledger.json` و فایل‌های هم‌مسیر
