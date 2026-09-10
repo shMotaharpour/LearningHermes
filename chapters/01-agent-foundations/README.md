@@ -78,6 +78,38 @@ Three capabilities separate it from a chat app, and they organize this whole cou
 3. **Gateway** — the same agent core serving 21+ messaging platforms, cron, webhooks
    (Chapters 06–08).
 
+### Hermes vs the peer tools
+
+Before choosing a tool, know the families that exist. Five well-known tools in this space
+fall into two families (all quotes from official documentation, verified in
+`docs/research/hermes/tool-landscape-evidence-2026-09-10.txt`):
+
+| Tool | Family | Model access | Key point |
+|---|---|---|---|
+| Claude Code | Coding-agent CLI | Anthropic models; IDE/CLI also take third-party providers | terminal + IDE + desktop + web; GitHub/Slack ecosystem |
+| Codex CLI | Coding-agent CLI | OpenAI models (ChatGPT plans) | open source, Rust; terminal-first |
+| OpenCode | Coding-agent CLI | any provider (API key) | open source; TUI + desktop + IDE extension |
+| Gemini CLI | Coding-agent CLI | Gemini models (Code Assist quotas) | open source; ReAct loop with MCP |
+| OpenClaw | Gateway agent | any provider (API key) | self-hosted gateway on 10+ messaging platforms |
+| Hermes | Gateway agent | 20+ providers; fallback chains and credential pools | gateway on 21+ platforms + built-in cron/webhooks |
+
+The split between these two families is an architecture decision, not a marketing label:
+
+- **Coding-agent CLIs** (Claude Code, Codex, OpenCode, Gemini CLI) are terminal-first and
+  repo-centric: the best fit for code work inside one repository. Their automation story is
+  mostly CI/CD integration or scheduled desktop tasks, not a built-in scheduler.
+- **Gateway agents** (Hermes, OpenClaw) are a resident process that bridges messaging
+  platforms to the agent core; sessions, cron, webhooks, and multi-agent routing are
+  first-class citizens. Hermes's difference from OpenClaw is self-improvement depth:
+  agent-created skills, persistent memory, and profile export (Chapters 03, 10, 13) versus
+  static instruction files the user maintains (like `CLAUDE.md`).
+
+A practical migration note: if a team already invested in Claude Code or Codex,
+`hermes import-agent claude-code|codex` (verified, Chapter 13) imports that setup into
+Hermes in one command. When a coding agent alone is enough, the simple test is: work
+inside one repo → coding-agent CLI; work on the real machine, from messaging, with
+scheduled automation → gateway agent.
+
 ### The subcommand map
 
 `hermes --help` (verified, evidence batch 1) exposes 60+ subcommands. You do not memorize
@@ -158,6 +190,11 @@ hermes --version
   dependency surfaces there, not at first real use.
 - **One-shot vs interactive confusion.** `hermes chat -q` exits after answering and has
   no slash commands; interactive `hermes` supports `/model`, `/skills`, `/new`.
+- **Confusing the tool families.** Comparing Hermes to Claude Code as "which is better" is
+  meaningless; they are different families (coding-agent CLI vs gateway agent). The right
+  question: is your work repo-centric or machine-and-messaging-centric? The comparison
+  table is in Concepts; evidence in
+  `docs/research/hermes/tool-landscape-evidence-2026-09-10.txt`.
 - **Piping interactive UIs.** Verified: `hermes tools` (config UI) refuses non-TTY stdin —
   "requires an interactive terminal". Scripts use `hermes tools list/enable/disable`.
 - **Ignoring `-t` toolset scoping.** Loading every toolset for a trivial question wastes
@@ -167,4 +204,5 @@ hermes --version
 
 Work through `exercises/ex01-agent-foundations.md`. Verification: `hermes doctor` clean,
 one tool-using run observed and explained in loop terms, three config surfaces located,
-model identity confirmed.
+model identity confirmed, and one peer tool from the "Hermes vs the peer tools" table
+picked and its family stated in one sentence.

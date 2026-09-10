@@ -19,6 +19,11 @@ run the agent loop with and without tools, and locate every configuration surfac
 5. **Locate the three surfaces.** Run `hermes config path` and `hermes config env-path`.
    Confirm on disk: `config.yaml` (settings), `.env` (secrets), `hermes-agent/` (code).
 6. **Check current model.** `hermes config get model` — record provider and model name.
+7. **Place Hermes in the tool landscape.** From the comparison table in Chapter 01
+   (Concepts → "Hermes vs the peer tools"), pick one coding-agent CLI and one gateway
+   agent. In one sentence each, state which family it belongs to and what its docs list
+   as its primary surface. Cross-check your sentence against
+   `docs/research/hermes/tool-landscape-evidence-2026-09-10.txt`.
 
 ## Verification checklist
 
@@ -27,3 +32,5 @@ run the agent loop with and without tools, and locate every configuration surfac
 - [ ] `hermes config get model` output matches the model you expect to be billed for.
 - [ ] You know which file you would edit to change a setting (and which one you must never
       put an API key into).
+- [ ] You can name the two agent families (coding-agent CLI vs gateway agent) and one
+      example of each, with the evidence file that documents the claim.
