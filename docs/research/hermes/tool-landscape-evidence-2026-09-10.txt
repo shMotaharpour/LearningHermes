@@ -1,0 +1,76 @@
+# Tool landscape evidence — official documentation extracts — 2026-09-10
+# Purpose: Chapter 01 "how Hermes compares" section. Every claim in the chapter maps to a
+# quoted line here or to docs/research/hermes/llms.txt (in-repo snapshot). Sources fetched
+# live from official docs on 2026-09-10.
+
+=== Claude Code — https://docs.claude.com/en/docs/claude-code/overview (fetched 2026-09-10) ===
+
+"Claude Code is an agentic coding tool that reads your codebase, edits files, runs
+commands, and integrates with your development tools. Available in your terminal, IDE,
+desktop app, and browser."
+
+"Most surfaces require a Claude subscription or Anthropic Console account. The Terminal
+CLI, VS Code, and JetBrains also support third-party providers."
+
+Surfaces listed on the overview page: Terminal, VS Code, JetBrains, Desktop app, Web.
+Ecosystem hooks listed: GitHub Actions/GitLab CI/CD, Slack, Chrome, Agent SDK.
+
+=== OpenAI Codex CLI — https://developers.openai.com/codex/cli/ (fetched 2026-09-10) ===
+
+"Codex CLI is OpenAI's coding agent that you can run locally from your terminal. It can
+read, change, and run code on your machine in the selected directory."
+
+"ChatGPT Plus, Pro, Business, Edu, and Enterprise plans include Codex."
+
+=== OpenCode — https://opencode.ai/docs/ (fetched 2026-09-10) ===
+
+"OpenCode is an open source AI coding agent. It's available as a terminal-based interface,
+desktop app, or IDE extension."
+
+"With OpenCode you can use any LLM provider by configuring their API keys."
+
+=== Gemini CLI — https://developers.google.com/gemini-code-assist/docs/gemini-cli (fetched 2026-09-10) ===
+
+"The Gemini command line interface (CLI) is an open source AI agent that provides access to
+Gemini directly in your local or Cloud Shell terminal. The Gemini CLI uses a reason and act
+(ReAct) loop with your built-in tools and local or remote MCP servers to complete complex
+use cases like fixing bugs, creating new features, and improving test coverage."
+
+"Each Gemini Code Assist edition provides quotas for using the Gemini CLI."
+
+=== OpenClaw — https://openclaw.ai/docs (fetched 2026-09-10) ===
+
+"Any OS gateway for AI agents across Discord, Google Chat, iMessage, Matrix, Microsoft
+Teams, Signal, Slack, Telegram, WhatsApp, Zalo, and more."
+
+"OpenClaw is a self-hosted gateway that connects your favorite chat apps ... to AI coding
+agents. You run a single Gateway process on your own machine (or a server), and it becomes
+the bridge between your messaging apps and an always-available AI assistant."
+
+Node runtime required: "Node 26 (recommended), or another supported release."
+
+=== Hermes Agent — docs/research/hermes/llms.txt (in-repo snapshot, official docs index) ===
+
+"A terminal-native autonomous coding and task agent with persistent memory, agent-created
+skills, and a messaging gateway that lives on 21+ messaging platforms — 19 native to the
+gateway plus IRC and Microsoft Teams via plugins (Telegram, Discord, Slack, SMS, Matrix,
+...). Runs on local, Docker, SSH, Daytona, Modal, or Singularity backends. Works with Nous
+Portal, OpenRouter, OpenAI, Anthropic, Google, or any OpenAI-compatible endpoint."
+
+=== Interpretation notes (chapter-draft material; prose in README.md cites this file) ===
+
+1. Five compared tools fall into two families:
+   - Coding-agent CLIs (Claude Code, Codex CLI, OpenCode, Gemini CLI): terminal-first,
+     repo-centric, best at code tasks. Claude Code extends furthest (IDE + desktop + web).
+   - Gateway agents (Hermes, OpenClaw): a resident gateway process bridges messaging
+     platforms to the agent core; sessions, cron, webhooks are first-class.
+2. Model access: vendor CLIs are built around their maker's models (Claude/GPT/Gemini);
+   OpenCode and Hermes are provider-agnostic (any provider / OpenAI-compatible endpoint);
+   Hermes adds provider fallback chains and credential pools (Chapter 02).
+3. Automation: Hermes exposes cron, webhooks, hooks, and multi-agent orchestration as
+   subcommands (verified: hermes --help in cli-evidence-2026-09-07.txt); the coding CLIs'
+   docs position automation as CI/CD integration or scheduled desktop tasks, not a
+   built-in scheduler. OpenClaw has cron/webhooks listed under capabilities.
+4. Identity/self-modification: agent-created skills + persistent memory + profile export
+   are documented Hermes differentiators (llms.txt); coding CLIs use static instruction
+   files (CLAUDE.md/AGENTS.md) maintained by the user.

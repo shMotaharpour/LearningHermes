@@ -18,6 +18,11 @@ agent loop با و بدون tool، و پیدا کردن هر سه سطح کان�
 5. **یافتن سه سطح.** `hermes config path` و `hermes config env-path`. روی دیسک تأیید
    کنید: `config.yaml` (تنظیمات)، `.env` (secretها)، `hermes-agent/` (کد).
 6. **مدل فعلی.** `hermes config get model` — provider و نام مدل را یادداشت کنید.
+7. **جای‌گذاری هیرمس در landscape ابزارها.** از جدول مقایسه در فصل ۰۱ (Concepts ←
+   «Hermes در برابر ابزارهای هم‌خانواده») یک coding-agent CLI و یک gateway agent انتخاب
+   کنید. برای هرکدام در یک جمله بگویید به کدام خانواده تعلق دارد و مستنداتش چه surface
+   اصلی‌ای فهرست کرده. جمله‌تان را با
+   `docs/research/hermes/tool-landscape-evidence-2026-09-10.txt` چک صحرایی کنید.
 
 ## Verification checklist
 
@@ -26,3 +31,5 @@ agent loop با و بدون tool، و پیدا کردن هر سه سطح کان�
 - [ ] خروجی `hermes config get model` با مدلی که انتظار هزینه‌اش را دارید یکی است.
 - [ ] می‌دانید برای تغییر یک تنظیم کدام فایل را ویرایش می‌کنید (و کلید API هرگز در کدام
       نمی‌رود).
+- [ ] می‌توانید دو خانوادهٔ agent (coding-agent CLI و gateway agent) را نام ببرید و از هر
+      کدام یک مثال بزنید، همراه با فایل شواهدی که این ادعا را مستند می‌کند.

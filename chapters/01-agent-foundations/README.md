@@ -76,6 +76,38 @@ Profile ها (`~/.hermes/profiles/<name>/`) همین چیدمان را برای 
 2. **Memory ی ماندگار** — هویت و factهایی که از session عبور می‌کنند (فصل ۰۳).
 3. **Gateway** — همان هستهٔ agent روی ۲۱+ پلتفرم پیام‌رسان، cron و webhook (فصل‌های ۰۶–۰۸).
 
+### Hermes در برابر ابزارهای هم‌خانواده
+
+قبل از انتخاب ابزار، خانواده‌های موجود را بشناسید. پنج ابزار شناخته‌شدهٔ این دسته را می‌توان
+در دو خانواده دسته‌بندی کرد (همهٔ نقل‌قول‌ها از مستندات رسمی، راستی‌آزمایی‌شده در
+`docs/research/hermes/tool-landscape-evidence-2026-09-10.txt`):
+
+| ابزار | خانواده | دسترسی مدل | نکتهٔ کلیدی |
+|---|---|---|---|
+| Claude Code | Coding-agent CLI | مدل‌های Anthropic؛ IDE/CLI از third-party provider هم | terminal + IDE + desktop + web؛ اکوسیستم GitHub/Slack |
+| Codex CLI | Coding-agent CLI | مدل‌های OpenAI (اشتراک ChatGPT) | open source، Rust؛ terminal-محور |
+| OpenCode | Coding-agent CLI | هر provider (API key) | open source؛ TUI + desktop + IDE extension |
+| Gemini CLI | Coding-agent CLI | مدل‌های Gemini (سهمیهٔ Code Assist) | open source؛ loop از نوع ReAct با MCP |
+| OpenClaw | Gateway agent | هر provider (API key) | self-hosted gateway روی ۱۰+ پلتفرم پیام‌رسان |
+| Hermes | Gateway agent | ۲۰+ provider؛ fallback chain و credential pool | gateway روی ۲۱+ پلتفرم + cron/webhook داخلی |
+
+جداسازی این دو خانواده تصمیمِ معماری است، نه برچسب بازاریابی:
+
+- **Coding-agent CLIها** (Claude Code، Codex، OpenCode، Gemini CLI) terminal-first و
+  repo-محورند: بهترین ابزار برای کار کد در یک مخزن. اتوماسیونشان عمدتاً یعنی یکپارچگی با
+  CI/CD یا task زمان‌بندی‌شدهٔ desktop، نه scheduler داخلی.
+- **Gateway agentها** (هیرمس، OpenClaw) یک process ماندگارند که پیام‌رسان‌ها را به هستهٔ
+  agent وصل می‌کنند؛ session، cron، webhook و multi-agent routing شهروند درجه‌یک‌اند.
+  تفاوت هیرمس با OpenClaw در عمق خود-بهبودی است: skillهای agent-ساخته، memory ماندگار و
+  export پروفایل (فصل‌های ۰۳، ۱۰، ۱۳) در مقابل فایل‌های دستورالعمل ثابت که کاربر نگه
+  می‌دارد (مثل `CLAUDE.md`).
+
+نکتهٔ عملی برای مهاجرت: اگر تیمی روی Claude Code یا Codex سرمایه‌گذاری کرده،
+`hermes import-agent claude-code|codex` (verified، فصل ۱۳) setup موجود را یک‌فرمانی به
+هیرمس می‌آورد. برای زمانی که ابزار coding-agent به‌تنهایی کافی است، معیار ساده این است:
+کار در یک repo ← coding-agent CLI؛ کار روی ماشین واقعی، از پیام‌رسان، با اتوماسیون
+زمان‌بندی‌شده ← gateway agent.
+
 ### نقشهٔ subcommand ها
 
 `hermes --help` (verified در evidence batch 1) بیش از ۶۰ subcommand دارد. حفظ نکنید؛
@@ -155,6 +187,10 @@ hermes --version
   همان‌جا ظاهر می‌شود، نه در اولین استفادهٔ واقعی.
 - **اشتباه one-shot با تعاملی.** `hermes chat -q` بعد از جواب خارج می‌شود و slash command
   ندارد؛ `hermes` تعاملی `/model`، `/skills`، `/new` را پشتیبانی می‌کند.
+- **خلط کردن خانواده‌های ابزار.** مقایسهٔ هیرمس با Claude Code در حد «کدام بهتر است»
+  بی‌معناست؛ آن‌ها خانواده‌های متفاوتی‌اند (coding-agent CLI در برابر gateway agent). سؤال
+  درست: کار شما repo-محور است یا ماشین-و-پیام‌رسان-محور؟ جدول مقایسه در بخش Concepts و
+  شواهد در `docs/research/hermes/tool-landscape-evidence-2026-09-10.txt`.
 - **پایپ‌کردن UIهای تعاملی.** verified: رابط کانفیگ `hermes tools` ورودی non-TTY را رد
   می‌کند. در اسکریپت از `hermes tools list/enable/disable` استفاده کنید.
 - **بی‌توجهی به scope ی `-t`.** لودکردن همهٔ toolsetها برای یک سؤال ساده، بودجهٔ prompt را
@@ -164,4 +200,5 @@ hermes --version
 
 تمرین `exercises/ex01-agent-foundations.md` را انجام دهید. راستی‌آزمایی: `hermes doctor`
 بدون خطای بازدارنده، یک اجرای tool-دار دیده و به زبان loop توضیح‌داده‌شده، سه سطح کانفیگ
-پیدا‌شده، هویت مدل تأییدشده.
+پیدا‌شده، هویت مدل تأییدشده، و یک ابزار هم‌خانواده از جدول «Hermes در برابر ابزارهای
+هم‌خانواده» انتخاب و جایگاهش در یک جمله توصیف شده.
