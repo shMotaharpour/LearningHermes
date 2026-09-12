@@ -1,5 +1,7 @@
 # Chapter 02 — Configuration and Models
 
+> **Verified:** 2026-09-12 · Hermes Agent v0.20.6 (2026.8.27) · recheck: `python3 scripts/verify_chapters.py`
+
 ## Why this matters (job link)
 
 Cost and performance optimization appears in most senior postings — Paramount wants
@@ -35,6 +37,10 @@ aliases:
   vertex-pro: vertex/gemini-2.5-pro
   vertex-flash: vertex/gemini-2.5-flash
 ```
+
+Both the values and the aliases are a 2026-09-07 snapshot: `hermes config get model` reports
+whatever *your* machine is configured for. The three-layer shape (default / provider / aliases)
+is the lesson — not the model names.
 
 Aliases are the routing vocabulary you will use everywhere: `/model gemini-flash` in
 sessions, `model: gemini-pro` in cron prompts, `-m $FAST` in scripts. Define once, rename

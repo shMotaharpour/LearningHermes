@@ -1,5 +1,7 @@
 # Chapter 01 — Agent Foundations
 
+> **Verified:** 2026-09-12 · Hermes Agent v0.20.6 (2026.8.27) · recheck: `python3 scripts/verify_chapters.py`
+
 ## Why this matters (job link)
 
 Every "Senior Applied AI Engineer" posting assumes you can *operate* an autonomous agent,
@@ -66,8 +68,8 @@ own config, own sessions, own memory (Chapters 04, 09).
 
 One conversation = one session: own context, model, working directory. Sessions persist in
 `~/.hermes/state.db` (SQLite + full-text search). A live store inspected for this chapter
-(evidence b3): `21 sessions, 5972 messages, 29.5 MB` — CLI and Telegram sessions side by
-side in one store, resumable from any surface.
+(evidence b3): `21 sessions, 5972 messages, 29.5 MB` (2026-09-07 snapshot; your store will
+differ) — CLI and Telegram sessions side by side in one store, resumable from any surface.
 
 ### What makes Hermes an *applied* platform
 

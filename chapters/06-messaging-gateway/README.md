@@ -1,5 +1,7 @@
 # Chapter 06 — Messaging Gateway
 
+> **Verified:** 2026-09-12 · Hermes Agent v0.20.6 (2026.8.27) · recheck: `python3 scripts/verify_chapters.py`
+
 ## Why this matters (job link)
 
 Integration with the systems people actually use is the applied engineer's bread and
@@ -89,8 +91,7 @@ $ hermes send --list
 Available messaging targets:
 Telegram:
   telegram:Hermes / topic 1178 (group)
-  telegram:Hermes / topic 1 (group)
-  ...
+  telegram:Hermes / topic 1 (group)...
 ```
 
 ```bash

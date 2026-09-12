@@ -1,5 +1,7 @@
 # Chapter 07 — Cron and Scheduled Workflows
 
+> **Verified:** 2026-09-12 · Hermes Agent v0.20.6 (2026.8.27) · recheck: `python3 scripts/verify_chapters.py`
+
 ## Why this matters (job link)
 
 "AI & Automation Engineer" postings are, at their core, this chapter: Minted — "design and
@@ -83,20 +85,18 @@ hermes cron tick              # fire due jobs once, exit — safe testing
 Create (the CLI mirrors what the in-agent cron tool does):
 
 ```bash
-hermes cron create \
+hermes cron create "0 6 * * *" \
   --name "daily-briefing" \
-  --schedule "0 6 * * *" \
-  --prompt "Research AI engineering news since yesterday. Summarize top 5 with links. Persian ZWNJ characters are forbidden in automated prompts." \
   --deliver "telegram" \
-  --skills grounded-citations
+  --skill grounded-citations \
+  "Research AI engineering news since yesterday. Summarize top 5 with links. Persian ZWNJ characters are forbidden in automated prompts."
 ```
 
 Script-only job (no LLM):
 
 ```bash
-hermes cron create \
+hermes cron create "every 1h" \
   --name "disk-watchdog" \
-  --schedule "every 1h" \
   --script /path/to/disk_check.sh \
   --deliver "telegram"          # stdout delivered; empty stdout = silence
 ```

@@ -1,5 +1,7 @@
 # Chapter 03 — Context and Memory
 
+> **Verified:** 2026-09-12 · Hermes Agent v0.20.6 (2026.8.27) · recheck: `python3 scripts/verify_chapters.py`
+
 ## Why this matters (job link)
 
 RAG and context engineering appear in nearly every applied AI posting: Paramount wants
@@ -41,6 +43,10 @@ memory           3,556 chars   <- MEMORY.md + USER.md injection
 user_profile     1,426 chars
 tools (count 21) + JSON schemas
 ```
+
+Those figures are a 2026-09-07 snapshot of one machine; re-run `hermes prompt-size --json` on
+yours. The shape — one fixed prompt assembled from identity, skills index, memory, profile, and
+tool schemas — is the lesson, not the magnitudes.
 
 Platform matters: telegram measures ~280 chars less system prompt than CLI (platform
 layer differs). Two consequences:

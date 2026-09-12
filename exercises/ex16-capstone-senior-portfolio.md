@@ -5,7 +5,7 @@
 Deliver a complete, evidence-backed automation of one real workflow — the portfolio piece
 that maps to the Senior Applied AI Engineer profile.
 
-## Objective scope
+### Scope
 
 Choose one workflow you will actually keep running (reporting pipeline, repo maintenance,
 personal-business process, research digest). It must involve at least: one external system,
@@ -34,7 +34,7 @@ one unattended trigger, and one deliverable to humans.
    (`docs/research/capstone/`), the competency-to-evidence mapping table (10 rows from
    CURRICULUM.md), and a 5-minute demo script you can deliver in an interview.
 
-### Defense checklist (the bar)
+## Verification checklist (the bar)
 
 - [ ] Workflow ran unattended 14 consecutive days; incident log exists with resolutions.
 - [ ] External integration live through a documented contract (MCP config or plugin).
