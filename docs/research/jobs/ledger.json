@@ -1,41 +1,327 @@
 {
-  "version": 1,
-  "sources": [
+  "version": 2,
+  "generated_by": "scripts/rebuild_job_ledger.py",
+  "note": "Entries are discovered from the evidence JSON plus source-*.md files, using the same rules as scripts/job_evidence_stats.py. `source_file` is the file a chapter citation resolves to; null means the posting contributed search metadata only, or the fetch failed.",
+  "counts": {
+    "entries": 39,
+    "with_body": 18,
+    "title_only": 21,
+    "source_files": 5,
+    "skipped_non_postings": 3
+  },
+  "entries": [
     {
-      "id": 1,
-      "url": "https://careers.paramount.com/job/Burbank-Senior-Applied-AI-Engineer-CA-91505/1387513800",
-      "title": "",
-      "accessed": "2026-09-06"
-    },
-    {
-      "id": 2,
-      "url": "https://www.databricks.com/company/careers/engineering---pipeline/senior-applied-ai-engineer-8091041002",
-      "title": "",
-      "accessed": "2026-09-06"
-    },
-    {
-      "id": 3,
-      "url": "https://jobs.lever.co/truezerotech/69f748f9-f6af-4ed4-bddb-05c138102c47",
-      "title": "",
-      "accessed": "2026-09-06"
-    },
-    {
-      "id": 4,
       "url": "https://jobs.ashbyhq.com/reflectionai/8b97b583-3cc6-4834-ae2c-d5aecf22ed7d",
-      "title": "",
-      "accessed": "2026-09-06"
+      "title": "Forward Deployed Engineer - AI Engineer @ Reflection",
+      "company": "ashbyhq",
+      "source_file": "docs/research/jobs/source-04.md",
+      "body_chars": 2411,
+      "has_body": true
     },
     {
-      "id": 5,
+      "url": "https://builtin.com/job/senior-ai-engineer/10397125",
+      "title": "Senior AI Engineer - mcpk. | Built In",
+      "company": "Built In",
+      "source_file": null,
+      "body_chars": 399,
+      "has_body": false
+    },
+    {
+      "url": "https://career.intellias.com/vacancy/python-mcp-engineer-30400/",
+      "title": "N/A",
+      "company": "career",
+      "source_file": null,
+      "body_chars": 350,
+      "has_body": false
+    },
+    {
+      "url": "https://careers-stagwellglobal.icims.com/jobs/8318/ai-forward-deployed-engineer/job",
+      "title": "AI Forward Deployed Engineer in United States | Careers at United States",
+      "company": "Careers at United States",
+      "source_file": null,
+      "body_chars": 400,
+      "has_body": true
+    },
+    {
+      "url": "https://www.databricks.com/company/careers/engineering---pipeline/senior-applied-ai-engineer-8091041002",
+      "title": "Senior Applied AI Engineer - Databricks",
+      "company": "databricks",
+      "source_file": "docs/research/jobs/source-02.md",
+      "body_chars": 3147,
+      "has_body": true
+    },
+    {
+      "url": "https://www.devopsschool.com/blog/llm-quality-engineer-role-blueprint-responsibilities-skills-kpis-and-career-path",
+      "title": "LLM Quality Engineer: Role Blueprint, Responsibilities ...",
+      "company": "devopsschool",
+      "source_file": null,
+      "body_chars": 159,
+      "has_body": false
+    },
+    {
+      "url": "https://educativ.net/jobs/job/6022725-senior-ai-software-engineer-mcp-agentic-systems-112265-nj-metropark-iselin/",
+      "title": "Senior AI Software Engineer - MCP & Agentic Systems - 112265-NJ-MetroPark, Iselin - Others - EduCativ",
+      "company": "educativ",
+      "source_file": null,
+      "body_chars": 400,
+      "has_body": true
+    },
+    {
+      "url": "http://job-boards.greenhouse.io/eclinicalsolutions/jobs/5067845007",
+      "title": "Job Application for Principal AI Engineer – Automation & AI at eClinical Solutions",
+      "company": "greenhouse",
+      "source_file": null,
+      "body_chars": 1194,
+      "has_body": true
+    },
+    {
+      "url": "https://job-boards.greenhouse.io/bluevineus/jobs/7728256003",
+      "title": "Job Application for Senior AI Solutions Engineer at Bluevine - US",
+      "company": "greenhouse",
+      "source_file": null,
+      "body_chars": 407,
+      "has_body": true
+    },
+    {
+      "url": "https://job-boards.greenhouse.io/divergent/jobs/5251730008",
+      "title": "Job Application for AI Solutions Engineer at Divergent - Greenhouse",
+      "company": "greenhouse",
+      "source_file": null,
+      "body_chars": 75,
+      "has_body": false
+    },
+    {
+      "url": "https://job-boards.greenhouse.io/natera/jobs/5766365004",
+      "title": "Sr. Forward Deployed AI Solutions Engineer - Greenhouse",
+      "company": "greenhouse",
+      "source_file": null,
+      "body_chars": 161,
+      "has_body": false
+    },
+    {
       "url": "https://job-boards.greenhouse.io/symbolica/jobs/4893316008",
-      "title": "",
-      "accessed": "2026-09-06"
+      "title": null,
+      "company": "greenhouse",
+      "source_file": null,
+      "body_chars": 0,
+      "has_body": false,
+      "note": "Fetch failed: no body text was ever captured (the empty source file was removed in favour of this entry). Not cited by any chapter."
     },
     {
-      "id": 6,
+      "url": "https://job-boards.greenhouse.io/tebra/jobs/4700274005",
+      "title": "Job Application for Senior AI Automation Engineer at Tebra",
+      "company": "greenhouse",
+      "source_file": null,
+      "body_chars": 1410,
+      "has_body": true
+    },
+    {
+      "url": "https://job-boards.greenhouse.io/torq/jobs/6127217004",
+      "title": "Job Application for AI Solutions Engineer at Torq - Greenhouse",
+      "company": "greenhouse",
+      "source_file": null,
+      "body_chars": 200,
+      "has_body": false
+    },
+    {
+      "url": "https://hiring.camp/job/5DqGgQ",
+      "title": "ML Engineer at TEC Partners Limited | Hiring.Camp",
+      "company": "Hiring.Camp",
+      "source_file": null,
+      "body_chars": 400,
+      "has_body": true
+    },
+    {
+      "url": "https://jobs.ashbyhq.com/eliseai/866d9768-9a9e-4e7d-aa2a-da977c5b5dde",
+      "title": "Solutions Engineer (Product Expert) | Housing @ EliseAI - Jobs",
+      "company": "Housing @ EliseAI - Jobs",
+      "source_file": null,
+      "body_chars": 165,
+      "has_body": false
+    },
+    {
+      "url": "https://www.hubmub.com/jobs/1013779/python-mcp-engineer",
+      "title": "Python MCP Engineer | HubMub",
+      "company": "HubMub",
+      "source_file": null,
+      "body_chars": 350,
+      "has_body": false
+    },
+    {
+      "url": "https://jobdescription.org/jobs/artificial-intelligence/ai-agent-engineer",
+      "title": "AI Agent Engineer Job Description, Salary & Career Outlook",
+      "company": "jobdescription",
+      "source_file": null,
+      "body_chars": 340,
+      "has_body": false
+    },
+    {
+      "url": "https://jobicy.com/jobs/147582-software-engineer-ai-agent-platform",
+      "title": "N/A",
+      "company": "jobicy",
+      "source_file": null,
+      "body_chars": 400,
+      "has_body": true
+    },
+    {
+      "url": "https://jobright.ai/jobs/info/690edc12d046ab6061d01c03",
+      "title": "Staff Platform Engineer, Agents @ Apple | Jobright.ai",
+      "company": "jobright",
+      "source_file": null,
+      "body_chars": 400,
+      "has_body": true
+    },
+    {
+      "url": "https://justjoin.it/job-offer/epam-systems-senior-python-mcp-engineer-wroclaw-python",
+      "title": "Senior Python MCP Engineer - EPAM Systems",
+      "company": "justjoin",
+      "source_file": null,
+      "body_chars": 350,
+      "has_body": false
+    },
+    {
       "url": "https://jobs.lever.co/100ms/4c9f19c7-4432-4394-ba93-167319c68adc",
-      "title": "",
-      "accessed": "2026-09-06"
+      "title": "100MS - AI Engineer – AI Agents (Healthcare)",
+      "company": "lever",
+      "source_file": "docs/research/jobs/source-05.md",
+      "body_chars": 3636,
+      "has_body": true
+    },
+    {
+      "url": "https://jobs.lever.co/adventus/58e97d3e-a01f-49a4-80d2-155972373145",
+      "title": "Adventus - AI Automation Engineer / Developer",
+      "company": "lever",
+      "source_file": null,
+      "body_chars": 5542,
+      "has_body": true
+    },
+    {
+      "url": "https://jobs.lever.co/dadavidson/2d7d0c4b-f0fc-4a93-993f-1952d364767e",
+      "title": "D.A. Davidson - AI & Automation Engineer",
+      "company": "lever",
+      "source_file": null,
+      "body_chars": 1263,
+      "has_body": true
+    },
+    {
+      "url": "https://jobs.lever.co/jobgether/6997f750-65f3-4f9c-9cb5-db4a05dc5cc0",
+      "title": "Jobgether - AI Engineer / AI Automation Specialist",
+      "company": "lever",
+      "source_file": null,
+      "body_chars": 1242,
+      "has_body": true
+    },
+    {
+      "url": "https://jobs.lever.co/minted/b8d10bb5-b8f4-4d3c-95d7-34342ea01df5",
+      "title": "Minted - AI & Automation Engineer",
+      "company": "lever",
+      "source_file": null,
+      "body_chars": 8775,
+      "has_body": true
+    },
+    {
+      "url": "https://jobs.lever.co/truezerotech/69f748f9-f6af-4ed4-bddb-05c138102c47",
+      "title": "True Zero Technologies - AI/ML Engineer (R-00194)",
+      "company": "lever",
+      "source_file": "docs/research/jobs/source-03.md",
+      "body_chars": 3133,
+      "has_body": true
+    },
+    {
+      "url": "https://www.linkedin.com/jobs/view/ai-evaluation-engineer-remote-at-jobs-ai-4408267123",
+      "title": "AI Evaluation Engineer (Remote) at Jobs Ai — United States",
+      "company": "linkedin",
+      "source_file": null,
+      "body_chars": 155,
+      "has_body": false
+    },
+    {
+      "url": "https://mindpal.co/jobs/77504",
+      "title": "Senior â¢ Python MCP Engineer â¢ KrakÃ³w, Poland | MindPal Jobs",
+      "company": "MindPal Jobs",
+      "source_file": null,
+      "body_chars": 350,
+      "has_body": false
+    },
+    {
+      "url": "https://openai.com/careers/forward-deployed-engineer-(fde)-sf-san-francisco",
+      "title": "Forward Deployed Engineer (FDE) - SF - OpenAI",
+      "company": "openai",
+      "source_file": null,
+      "body_chars": 399,
+      "has_body": false
+    },
+    {
+      "url": "https://outscal.com/job/senior-software-developer-mcp-and-agentic-ai-at-autodesk-in-toronto-ontario-",
+      "title": null,
+      "company": "outscal",
+      "source_file": null,
+      "body_chars": 0,
+      "has_body": false
+    },
+    {
+      "url": "https://outscal.com/job/senior-software-developer-mcp-and-agentic-ai-at-autodesk-in-toronto-ontario-canada",
+      "title": "Senior Software Developer - MCP and Agentic AI - Autodesk | Job Details",
+      "company": "outscal",
+      "source_file": null,
+      "body_chars": 400,
+      "has_body": true
+    },
+    {
+      "url": "https://careers.paramount.com/job/Burbank-Senior-Applied-AI-Engineer-CA-91505/1387513800",
+      "title": "Senior Applied AI Engineer Job Details | Paramount",
+      "company": "Paramount",
+      "source_file": "docs/research/jobs/source-01.md",
+      "body_chars": 3140,
+      "has_body": true
+    },
+    {
+      "url": "https://salesforce.wd12.myworkdayjobs.com/en-US/External_Career_Site/job/AI-Engineer---Forward-Deployed-Engineer_JR350182",
+      "title": "AI Engineer - Forward Deployed Engineer - Myworkdayjobs.com",
+      "company": "salesforce",
+      "source_file": null,
+      "body_chars": 160,
+      "has_body": false
+    },
+    {
+      "url": "https://careers.servicenow.com/jobs/744000137502479/senior-engineering-manager-agentic-generative-ai-benchmarking-and-evaluations",
+      "title": "Senior Engineering Manager, Agentic & Generative AI Benchmarking and Evaluations, Santa Clara | ServiceNow Careers",
+      "company": "ServiceNow Careers",
+      "source_file": null,
+      "body_chars": 349,
+      "has_body": false
+    },
+    {
+      "url": "https://jobs.smartrecruiters.com/NCS3/6000000000955545--eg-llm-ai-quality-engineer",
+      "title": "NCS #EG LLM / AI Quality Engineer",
+      "company": "smartrecruiters",
+      "source_file": null,
+      "body_chars": 158,
+      "has_body": false
+    },
+    {
+      "url": "https://www.sniconsulting.net/job/senior-fs-software-engineer-mcp-ai-agents/",
+      "title": "Senior FS Software Engineer (MCP & AI Agents) | SNI",
+      "company": "SNI",
+      "source_file": null,
+      "body_chars": 350,
+      "has_body": false
+    },
+    {
+      "url": "https://sundeepteki.org/uploads/3/8/2/4/38242873/preview_-_ai-automation-engineer-career-guide-2026_sundeepteki.pdf",
+      "title": "AI-Automation-Engineer-Career-Guide-2026_SundeepTeki",
+      "company": "sundeepteki",
+      "source_file": null,
+      "body_chars": 398,
+      "has_body": false
+    },
+    {
+      "url": "https://www.tealhq.com/job/senior-applied-ai-engineer_7ea1a2b8e7fab208ca620f1d7458505d347d2",
+      "title": "Senior Applied AI Engineer @ Paramount - Teal",
+      "company": "tealhq",
+      "source_file": null,
+      "body_chars": 144,
+      "has_body": false
     }
   ]
 }
