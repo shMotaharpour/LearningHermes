@@ -1,5 +1,7 @@
 # Chapter 10 — Skills Engineering
 
+> **Verified:** 2026-09-12 · Hermes Agent v0.20.6 (2026.8.27) · recheck: `python3 scripts/verify_chapters.py`
+
 ## Why this matters (job link)
 
 Hiring posts keep asking for people who build *internal tooling and knowledge systems*:

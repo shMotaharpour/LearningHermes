@@ -1,14 +1,16 @@
 # Chapter 11 — MCP Integration
 
+> **Verified:** 2026-09-12 · Hermes Agent v0.20.6 (2026.8.27) · recheck: `python3 scripts/verify_chapters.py`
+
 ## Why this matters (job link)
 
 MCP is now a named requirement in postings: "Senior AI Software Engineer - MCP & Agentic
-Systems", "Senior Python MCP Engineer", "Senior Software Developer - MCP and Agentic AI —
-Autodesk" (`docs/research/jobs/search-round3-mcp-evals.json`). Tool calling got you here;
-MCP is the standardized tool economy on top of it. Hermes treats MCP as first-class:
-client (consume external servers), filter (control which tools load), and server (`hermes
-mcp serve` — expose your agent to other agents). This chapter makes you fluent in all
-three, which is precisely what those postings screen for.
+Systems", "Senior Python MCP Engineer", "Senior Software Developer - MCP and Agentic AI -
+Autodesk" (`docs/research/jobs/search-round2.json` — search-result title only, no body
+extract). Tool calling got you here; MCP is the standardized tool economy on top of it. Hermes
+treats MCP as first-class: client (consume external servers), filter (control which tools
+load), and server (`hermes mcp serve` — expose your agent to other agents). This chapter makes
+you fluent in all three, which is precisely what those postings screen for.
 
 ## Concepts
 

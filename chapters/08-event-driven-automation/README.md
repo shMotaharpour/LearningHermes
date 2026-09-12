@@ -1,5 +1,7 @@
 # Chapter 08 — Event-Driven Automation
 
+> **Verified:** 2026-09-12 · Hermes Agent v0.20.6 (2026.8.27) · recheck: `python3 scripts/verify_chapters.py`
+
 ## Why this matters (job link)
 
 Event-driven integration is the second half of every automation role: Adventus — "API

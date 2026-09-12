@@ -11,7 +11,7 @@ operate them: test, edit, incident-check.
    jobs, their schedules and deliver targets.
 2. **Script-only watchdog.** Write `disk_check.sh`: prints disk usage summary, exits
    silent-on-ok is FORBIDDEN — print "all clear" on the good path too. Create the job
-   (`--schedule "every 1h" --script ... --deliver <target>`), then
+   (`hermes cron create "every 1h" --script ... --deliver <target>`), then
    `hermes cron tick` to fire it now. Confirm delivery.
 3. **Agent job.** Create a daily research/briefing agent job: self-contained prompt,
    explicit output format (5 bullets max + links), delivery to your platform. Test with

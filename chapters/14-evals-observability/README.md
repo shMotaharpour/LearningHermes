@@ -1,16 +1,16 @@
 # Chapter 14 — Evals and Observability
 
+> **Verified:** 2026-09-12 · Hermes Agent v0.20.6 (2026.8.27) · recheck: `python3 scripts/verify_chapters.py`
+
 ## Why this matters (job link)
 
-Evaluation is the fastest-growing requirement in the corpus — 81 mentions, an entire job
-family (LLM Quality/Evaluation Engineer): 100ms — "Run systematic LLM evaluations, track
-regressions, and ensure models meet quality bars... define and implement LLM performance
-metrics (correctness, latency, hallucination control, safety)"
-(`docs/research/jobs/source-05.md`); Paramount — "enhance defect detection, and deliver
-predictive quality insights" (`docs/research/jobs/source-01.md`). Agents fail quietly: no
-stack trace, just worse answers. Observability is how you notice; evals are how you prove
-a change made things better. This chapter builds both habits on Hermes' native
-instrumentation.
+Evaluation and observability language appears in 8 of 18 postings with extracted body text (31 mentions; `docs/research/jobs/stats-2026-09-12.txt`) — including a named job family (LLM Quality/Evaluation Engineer, 1 posting in this corpus): 100ms — "Run systematic LLM evaluations, track regressions, and
+ensure models meet quality bars... define and implement LLM performance metrics (e.g.,
+correctness, latency, hallucination control, safety)" (`docs/research/jobs/source-05.md`);
+Paramount — "enhance defect detection, and deliver predictive quality insights"
+(`docs/research/jobs/source-01.md`). Agents fail quietly: no stack trace, just worse answers.
+Observability is how you notice; evals are how you prove a change made things better. This
+chapter builds both habits on Hermes' native instrumentation.
 
 ## Concepts
 
@@ -81,7 +81,7 @@ hermes sessions stats          # population overview
 Judge harness (script-only cron from Ch 07 keeps it cheap):
 
 ```bash
-hermes cron create --name "nightly-eval" --schedule "0 3 * * *" \
+hermes cron create "0 3 * * *" --name nightly-eval \
   --script eval_runner.sh --deliver telegram   # stdout only on regressions
 ```
 

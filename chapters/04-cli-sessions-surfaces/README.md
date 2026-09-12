@@ -1,5 +1,7 @@
 # Chapter 04 — CLI, Sessions, and Surfaces
 
+> **Verified:** 2026-09-12 · Hermes Agent v0.20.6 (2026.8.27) · recheck: `python3 scripts/verify_chapters.py`
+
 ## Why this matters (job link)
 
 "Developer productivity" and "incident handling" are the quiet differentiators in senior
@@ -30,11 +32,12 @@ the same SQLite store (`~/.hermes/state.db`) and resume from any surface.
 
 ### Session identity and the store
 
-Verified from the live store (evidence b3): each session has a title, workspace,
-last-active time, and ID `20260906_231510_f4298797` (UTC date, time, random suffix).
-`hermes sessions stats` reports store totals — on this machine: `21 sessions, 5972
-messages, 29.5 MB` with a per-platform split (16 telegram, 2 cli). The store is FTS5
-indexed: titles and content are searchable.
+Verified from the live store (evidence b3): each session has a title, workspace, last-active
+time, and ID `20260906_231510_f4298797` (UTC date, time, random suffix).
+`hermes sessions stats` reports store totals — on this machine at evidence time (2026-09-07):
+`21 sessions, 5972 messages, 29.5 MB` with a per-platform split (16 telegram, 2 cli). Your
+totals differ — the per-platform split is the part that generalises. The store is FTS5 indexed:
+titles and content are searchable.
 
 ### Checkpoints — the filesystem safety net
 
@@ -110,7 +113,7 @@ hermes logs --level error --since 1h     # filtered incident view
 ## Common pitfalls
 
 - **Sessions are not free.** Unpruned experiment sessions make search noisy and the DB
-  grows (29.5 MB here is small; heavy users hit GBs). Pin what matters, archive the rest,
+  grows (29.5 MB was small; heavy users hit GBs). Pin what matters, archive the rest,
   prune on a schedule (Chapter 07 automates it).
 - **Rollback is not git.** Checkpoints cover agent mutations between snapshots. Your repos
   still need normal git discipline.

@@ -1,14 +1,16 @@
 # Chapter 09 — Multi-Agent Orchestration
 
+> **Verified:** 2026-09-12 · Hermes Agent v0.20.6 (2026.8.27) · recheck: `python3 scripts/verify_chapters.py`
+
 ## Why this matters (job link)
 
 Multi-agent work is the 2026 frontier of applied AI postings: 100ms builds "the systems,
-metrics, and feedback loops that make agents better over time" (`docs/research/jobs/source-05.md`);
-Reflection ships "agentic systems... orchestrating LLM workflows" at enterprise customers
-(`docs/research/jobs/source-04.md`). Orchestrating several specialized agents — parallel
-research, code review lanes, worker swarms — is the senior-level version of Chapter 01's
-loop. Hermes provides the full ladder: in-session subagents, durable multi-profile task
-boards, bot rosters, peer gateways, and batch processing.
+metrics, and feedback loops that make those agents better over time"
+(`docs/research/jobs/source-05.md`); Reflection ships "agentic systems... orchestrating LLM
+workflows" at enterprise customers (`docs/research/jobs/source-04.md`). Orchestrating several
+specialized agents — parallel research, code review lanes, worker swarms — is the senior-level
+version of Chapter 01's loop. Hermes provides the full ladder: in-session subagents, durable
+multi-profile task boards, bot rosters, peer gateways, and batch processing.
 
 ## Concepts
 
@@ -69,10 +71,11 @@ Subagents (in-session, via the agent's own tools):
 Kanban:
 
 ```bash
-hermes kanban init && hermes kanban boards
-hermes kanban create --title "Port CLI tests" --board main
+hermes kanban init && hermes kanban boards list
+hermes kanban --board default create "Port CLI tests" --assignee coder
 hermes kanban link <parent> <child>          # dependency
-hermes kanban swarm --spec swarm.md          # workers → verifier → synthesizer
+hermes kanban swarm "Ship the CLI test suite" \
+  --worker coder:"Port CLI tests" --verifier reviewer --synthesizer writer
 hermes kanban claim                          # atomic claim (prints workspace path)
 hermes kanban stats / diagnostics            # queue health
 hermes kanban daemon / watch / dispatch      # execution modes

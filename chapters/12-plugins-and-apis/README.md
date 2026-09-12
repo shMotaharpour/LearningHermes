@@ -1,5 +1,7 @@
 # Chapter 12 — Plugins and APIs
 
+> **Verified:** 2026-09-12 · Hermes Agent v0.20.6 (2026.8.27) · recheck: `python3 scripts/verify_chapters.py`
+
 ## Why this matters (job link)
 
 Platform engineering is the senior tier of applied AI: Reflection expects "deploying
