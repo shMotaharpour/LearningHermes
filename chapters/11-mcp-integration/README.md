@@ -1,6 +1,6 @@
 # Chapter 11 — MCP Integration
 
-> **Verified:** 2026-09-12 · Hermes Agent v0.20.6 (2026.8.27) · recheck: `python3 scripts/verify_chapters.py`
+> **Verified:** 2026-09-13 · Hermes Agent v0.21.2 (2026.9.11) · recheck: `python3 scripts/verify_chapters.py`
 
 ## Why this matters (job link)
 
@@ -29,6 +29,23 @@ servers, `--command <cmd> --args` for local stdio servers, plus `list/test/confi
 login/reauth`. Tool filtering is per-server: enable a server, then disable noisy tools —
 `hermes tools disable github:create_issue` style scoping from Chapter 05 works on MCP
 tools too.
+
+**`--args` must be the last option on the line.** Its help text says so literally, and the
+reason is argparse: `--args` takes the remainder, so everything after it belongs to the
+*spawned server process*, not to `hermes mcp add`. That makes
+`hermes mcp add notes --command ./notes-mcp --args --port 8321   # --args goes last` correct — `--port 8321`
+reaches `notes-mcp` — while moving a Hermes flag after it silently hands that flag to the
+child instead:
+
+```bash
+hermes mcp add notes --command ./notes-mcp --connect-timeout 20 --args --port 8321   # right
+hermes mcp add notes --command ./notes-mcp --args --port 8321   # --args goes last --connect-timeout 20   # wrong
+```
+
+The second line does not error. It configures a server with the default timeout and passes
+`--connect-timeout 20` to `notes-mcp`, which probably does not understand it. Environment
+for stdio servers goes through `--env KEY=VALUE` for the same reason — put it before
+`--args`.
 
 ### The catalog path
 
@@ -69,7 +86,7 @@ Client lifecycle:
 
 ```bash
 hermes mcp list                          # configured servers (verified empty-state text)
-hermes mcp add notes --command ./notes-mcp --args --port 8321
+hermes mcp add notes --command ./notes-mcp --args --port 8321   # --args goes last
 hermes mcp add github --url https://mcp.github.dev/sse
 hermes mcp test notes                    # synthetic connection check
 hermes mcp configure notes               # toggle per-tool selection
@@ -111,7 +128,11 @@ hermes tools disable github:create_issue # scope one tool off
 - **OAuth expiry mysteries.** A tool that "stopped working" after weeks is often a stale
   token: `hermes mcp reauth --all` before debugging code.
 - **stdio server env confusion.** Local servers inherit the launch environment — secrets
-  belong in `.env` and explicit env config, not interactive shell state.
+  belong in `.env` and explicit env config, not interactive shell state. Pass them with
+  `--env KEY=VALUE` *before* `--args`.
+- **A Hermes flag written after `--args`.** It is consumed by the spawned server, not by
+  Hermes, and nothing complains. If a flag you passed appears to have been ignored, check
+  its position relative to `--args` first.
 - **Skipping `mcp test`.** A server can be configured and still broken (wrong path, dead
   process). Test is the cheapest check.
 - **Confusing MCP with plugins.** MCP = external tools over protocol (cross-language,

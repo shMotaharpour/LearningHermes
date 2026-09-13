@@ -1,6 +1,6 @@
 # Chapter 01 — Agent Foundations
 
-> **Verified:** 2026-09-12 · Hermes Agent v0.20.6 (2026.8.27) · recheck: `python3 scripts/verify_chapters.py`
+> **Verified:** 2026-09-13 · Hermes Agent v0.21.2 (2026.9.11) · recheck: `python3 scripts/verify_chapters.py`
 
 ## Why this matters (job link)
 
@@ -114,22 +114,33 @@ scheduled automation → gateway agent.
 
 ### The subcommand map
 
-`hermes --help` (verified, evidence batch 1) exposes 60+ subcommands. You do not memorize
-them; you navigate by group:
+`hermes --help` exposes 73 subcommands on v0.21.2 (the top-level parser's own choices
+list — reproduce it with `hermes --help`). You do not memorize them; you navigate by group:
 
-- **Core:** `chat`, `model`, `moa`, `fallback`, `config`, `doctor`, `status`
+- **Core:** `chat`, `model`, `moa`, `fallback`, `config`, `doctor`, `status`, `migrate`
 - **Sessions/data:** `sessions`, `checkpoints`, `backup`, `insights`
 - **Automation:** `cron`, `webhook`, `hooks`, `send`, `gateway`
-- **Multi-agent:** `kanban`, `peer`, `delegate` (in-session), `profile`
-- **Extension:** `skills`, `plugins`, `mcp`, `serve`, `acp`, `proxy`
-- **Security:** `security`, `approvals`, `secrets`, `egress`, `auth`
+- **Multi-agent:** `kanban`, `peer`, `delegate` (in-session), `profile`, `project`
+- **Extension:** `skills`, `bundles`, `sync`, `plugins`, `mcp`, `serve`, `acp`, `proxy`
+- **Security:** `security`, `approvals`, `secrets`, `egress`, `auth`, `vault`, `portal`
+- **Operations:** `pause`/`resume` (global stop), `verify`, `logs`, `debug`, `dump`,
+  `console`
 
 Each group gets its own chapter(s) ahead.
 
+Two of these are worth knowing on day one even though their chapter is far off. `hermes
+pause` is the global emergency stop — it halts *new* cron dispatch, kanban dispatch, and
+gateway turns while leaving in-flight work alone, and `hermes resume` lifts it. `hermes
+dump` prints a copy-pasteable summary of your setup, which is what you attach when you ask
+for help. Both are verified in
+`docs/research/hermes/cli-evidence-2026-09-13-v0.21.2-surface.txt`.
+
 **Evidence for this chapter:** `docs/research/hermes/cli-evidence-2026-09-07.txt`,
 `docs/research/hermes/cli-evidence-2026-09-07-b1-foundations-core.txt`,
-`docs/research/hermes/cli-evidence-2026-09-07-b3-sessions-tools.txt` (raw CLI outputs,
-Hermes v0.20.6, live store).
+`docs/research/hermes/cli-evidence-2026-09-07-b3-sessions-tools.txt` (raw CLI outputs on a
+live store, captured against v0.20.6) and
+`docs/research/hermes/cli-evidence-2026-09-13-v0.21.2-surface.txt` (the v0.21.2
+re-verification pass: `--help` surfaces only, no machine state).
 
 ## Verified commands
 
@@ -164,10 +175,11 @@ usage: hermes [-h] [--version] [-z PROMPT] [-m MODEL] [--provider PROVIDER]
               [-t TOOLSETS] [--resume SESSION] [--continue [SESSION_NAME]]
               [--worktree] [--skills SKILLS] [--safe-mode] [--tui] [--cli] ...
 {chat,model,moa,fallback,worktree,browser,secrets,egress,migrate,gateway,
- proxy,lsp,setup,send,auth,status,cron,sync,webhook,peer,portal,kanban,
- project,hooks,doctor,security,approvals,backup,checkpoints,import,config,
- skills,plugins,curator,memory,tools,computer-use,mcp,sessions,insights,
- monitoring,dashboard,desktop,logs,prompt-size, ...}
+ proxy,lsp,setup,send,login,logout,auth,status,pause,resume,cron,sync,
+ webhook,peer,portal,kanban,project,hooks,doctor,verify,security,approvals,
+ dump,debug,backup,checkpoints,import,config,console,skills,bundles,plugins,
+ curator,memory,tools,computer-use,mcp,sessions,insights,monitoring,vault,
+ update,acp,profile,dashboard,serve,desktop,logs,prompt-size, ...}
 ```
 
 Model selection and identity:
@@ -179,7 +191,7 @@ hermes config get model     # verified live output:
 # provider: openrouter
 # aliases: gemini-pro, gemini-flash, vertex-pro, vertex-flash ...
 hermes --version
-# Hermes Agent v0.20.6 (2026.8.27) · upstream 25fcc8ad · local 7d1c9aea
+# Hermes Agent v0.21.2 (2026.9.11) · upstream 422bc9bd
 ```
 
 ## Common pitfalls

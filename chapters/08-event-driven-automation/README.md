@@ -1,6 +1,6 @@
 # Chapter 08 — Event-Driven Automation
 
-> **Verified:** 2026-09-12 · Hermes Agent v0.20.6 (2026.8.27) · recheck: `python3 scripts/verify_chapters.py`
+> **Verified:** 2026-09-13 · Hermes Agent v0.21.2 (2026.9.11) · recheck: `python3 scripts/verify_chapters.py`
 
 ## Why this matters (job link)
 

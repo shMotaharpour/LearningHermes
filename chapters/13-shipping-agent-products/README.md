@@ -1,6 +1,6 @@
 # Chapter 13 — Shipping Agent Products
 
-> **Verified:** 2026-09-12 · Hermes Agent v0.20.6 (2026.8.27) · recheck: `python3 scripts/verify_chapters.py`
+> **Verified:** 2026-09-13 · Hermes Agent v0.21.2 (2026.9.11) · recheck: `python3 scripts/verify_chapters.py`
 
 ## Why this matters (job link)
 
@@ -53,15 +53,45 @@ OpenAI Codex CLI setup into Hermes — instructions, allowlists, MCP servers, sk
 memories") — the on-ramp for existing agent users, and your migration tool when standardizing
 a team on one agent runtime.
 
+### Machine-checkable project bootstrap (`hermes verify`)
+
+Every item so far is a habit. `hermes verify` is the one that a machine can enforce: it
+detects how the project is built, tested and started, then runs the pass
+**bootstrap → build → test → start in background → poll readiness → teardown** and reports
+the result.
+
+```bash
+hermes verify --detect-only            # print the detected recipe as JSON, run nothing
+hermes verify --save                   # write it to .hermes/environment.json
+hermes verify --phase test --json      # run one phase, machine-readable result (CI)
+hermes verify --skip-start             # command phases only, no readiness poll
+```
+
+Two things make this more than a convenience. First, `--save` turns detection into a
+**committed manifest** (`.hermes/environment.json`): the project now states how it is
+built rather than having each agent re-guess, which is the same argument Chapter 03 makes
+for `AGENTS.md`, applied to the build. Second, the `start → poll readiness → teardown`
+phases test the thing CI usually skips — that the app actually comes up. `--port` and
+`--ready-timeout` tune the poll; `--timeout` bounds each phase (default 600s).
+
+Run it before you hand an agent a repo it has never seen. A green `hermes verify` is the
+difference between "the agent can edit this project" and "the agent can tell whether its
+edit worked".
+
 ### The deployment checklist (senior habit)
 
 Before any agent automation goes live: toolset scope minimal (Ch 05), fallback chain set
-(Ch 02), delivery target verified (Ch 07), approvals/egress reviewed (Ch 15), logs and
-incidents observable (Ch 04/14), rollback path known (Ch 04).
+(Ch 02), delivery target verified (Ch 07), failure notices routed away from the audience
+(Ch 07's `--failure-deliver`), approvals/egress reviewed (Ch 15), logs and incidents
+observable (Ch 04/14), rollback path known (Ch 04), build/test/start verified
+(`hermes verify`), and the global stop understood by whoever is on call
+(`hermes pause`/`hermes resume`, Ch 07/15).
 
 **Evidence:** `docs/research/hermes/cli-evidence-2026-09-07-b7-multiagent-shipping.txt`
 (backup/profile/portal/project help), `docs/research/hermes/cli-evidence-2026-09-07.txt`
-(gateway/run/send for CI paths), `docs/research/hermes/cli-evidence-2026-09-07-b1-foundations-core.txt` (import-agent).
+(gateway/run/send for CI paths), `docs/research/hermes/cli-evidence-2026-09-07-b1-foundations-core.txt` (import-agent),
+`docs/research/hermes/cli-evidence-2026-09-13-v0.21.2-surface.txt` (`verify` and `backup` on
+v0.21.2 — `backup -k/--keep` is new since v0.20.6).
 
 ## Verified commands
 
@@ -87,6 +117,15 @@ hermes profile export my-setup -o my-setup.tar
 hermes profile install https://github.com/org/team-agent-setup
 hermes profile update
 hermes backup -o ~/hermes-$(date +%F).zip
+hermes backup -o ~/backups --keep 7    # prune older hermes-backup-*.zip beyond the newest 7
+```
+
+Project verification:
+
+```bash
+hermes verify --detect-only        # detected build/test/start recipe as JSON
+hermes verify --save               # commit it as .hermes/environment.json
+hermes verify --phase test --json  # one phase, machine-readable (CI)
 ```
 
 Migration:
@@ -108,6 +147,13 @@ hermes import-agent claude-code
   distributions ship skills+rules, not your conversation history.
 - **Skipping the dry-run on import.** `--dry-run` exists (verified) — use it before
   overwriting an existing setup.
+- **Unbounded backup directories.** Full backups accumulate until the disk says no.
+  `hermes backup --keep N` prunes older `hermes-backup-*.zip` in the output directory
+  (default 3; `0` keeps everything) — but note it prunes *after* a full backup, so a
+  scheduled backup job is where it belongs, not a one-off run.
+- **Handing an agent a repo you never verified.** `hermes verify` takes a minute and tells
+  you whether test and start even work. Without it, the agent's first failure is
+  indistinguishable from the project's.
 
 ## Exercises
 

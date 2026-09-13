@@ -14,6 +14,42 @@ translation (English technical terms preserved). Content is identical across bra
 - **Path:** Agent Operator → Agent Power User → Automation Engineer → Agent Developer →
   Senior Applied AI Engineer.
 
+## Before You Start
+
+**What you need to already know.** This is not a first programming course; it assumes a
+working engineer:
+
+| | Level assumed | Where it bites if you are below it |
+|---|---|---|
+| Python | Read and write scripts; virtualenvs; `pip` | Parts IV–V (plugins, embedding, eval harnesses) |
+| Linux / CLI | Comfortable in a shell; paths, pipes, exit codes, `systemd --user` basics | Part II onward; the gateway is a systemd service |
+| Git | Branches, commits, pull requests | Chapter 09 (worktrees) and Chapter 13 (agent PR workflow) |
+| Docker | Can run and inspect a container | Chapter 13's isolation backends; optional elsewhere |
+| HTTP / APIs | REST, JSON, tokens, webhooks | Chapters 08, 11, 12 |
+
+You do **not** need prior agent, LLM, or ML experience — that is what the course teaches.
+
+**What you need on the machine.** A Linux, macOS, or WSL2 box you control (the gateway
+and cron chapters need a host that stays up), a Hermes Agent install, and at least one
+model provider API key. Python 3.11+ for the repo's own tooling.
+
+**Time.** The estimate below is *hands-on* time — reading a chapter and actually doing its
+exercise on a real machine — for the audience described above. Parts III and V are where
+unattended runs mean wall-clock time exceeds working time.
+
+| Part | Chapters | Estimated hands-on time |
+|---|---|---|
+| I — Foundations | 01–03 | 6–9 h |
+| II — Operating the Agent | 04–06 | 7–11 h |
+| III — Automation Engineering | 07–09 | 9–14 h |
+| IV — Building & Extending | 10–13 | 12–18 h |
+| V — Production Engineering | 14–15 | 6–10 h |
+| Capstone | 16 | 30–50 h over ~6 weeks (incl. a 14-day unattended run) |
+| **Total** | | **~70–110 h**, plus the capstone's calendar time |
+
+The capstone is deliberately calendar-bound, not effort-bound: `exercises/ex16-capstone-senior-portfolio.md`
+requires an automation that runs unattended for 14 days, and that cannot be compressed.
+
 ## Repository Layout (agent-based)
 
 ```
@@ -33,6 +69,7 @@ docs/
     hermes/                # Verified Hermes CLI outputs + llms.txt snapshot (evidence base)
     jobs/                  # Job posting research: postings, searches, generated stats, ledger
 scripts/                   # Course tooling (validators, evidence stats, chapter re-verification)
+  check.sh                 # the whole pre-PR gate in one command
 tests/                     # Tests for repo scripts (standard library only)
 .github/workflows/         # CI: structure + evidence checks on every push and pull request
 LICENSE                    # MIT — the code in scripts/, tests/, .github/
@@ -64,7 +101,15 @@ verification requirements, commit conventions, and the bilingual branch rules.
   output under `docs/research/hermes/`.
 - Keep chapters tight: concept → exact commands → exercise. No marketing prose.
 - Commits: `chNN: <short description>` (e.g. `ch07: add cron notepad reference`).
-- Checks before a pull request:
+- Checks before a pull request — all of them, in one command:
+
+  ```bash
+  scripts/check.sh
+  ```
+
+  It runs the four checks CI runs plus the one CI cannot (`verify_chapters.py` needs a
+  real `hermes` on PATH, and is skipped with a notice when the CLI is absent). Every check
+  runs even after one fails, so you get the whole list. Individually:
 
   ```bash
   python3 scripts/validate_course.py --root .      # structure, citations, exercise pairing
@@ -73,6 +118,9 @@ verification requirements, commit conventions, and the bilingual branch rules.
   python3 -m unittest discover -s tests -v         # repo tests (no third-party deps)
   python3 scripts/verify_chapters.py               # re-run the quoted commands (needs the CLI)
   ```
+
+  The repo's own tooling has **no third-party dependencies** — standard library only, on
+  Python 3.11+. There is nothing to `pip install` to run the checks.
 
 - Add `--other <path>` to the validator to compare two branch checkouts (structural parity).
 - See `CONTRIBUTING.md` for the full chapter contract and evidence rules.

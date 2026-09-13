@@ -1,6 +1,6 @@
 # Chapter 02 — Configuration and Models
 
-> **Verified:** 2026-09-12 · Hermes Agent v0.20.6 (2026.8.27) · recheck: `python3 scripts/verify_chapters.py`
+> **Verified:** 2026-09-13 · Hermes Agent v0.21.2 (2026.9.11) · recheck: `python3 scripts/verify_chapters.py`
 
 ## Why this matters (job link)
 
@@ -68,9 +68,41 @@ rate-limited provider is a silent missed deliverable.
 
 ### Credential pools
 
-`hermes auth add|list|remove|reset|status` (verified): multiple API keys or OAuth tokens
-per provider, rotated automatically to recover from per-key rate limits. Use when RPM/TPM
-caps — not model quality — are the bottleneck.
+`hermes auth add|list|remove|reset|priority|refresh|status|logout|upgrade` (verified on
+v0.21.2): multiple API keys or OAuth tokens per provider, rotated automatically to recover
+from per-key rate limits. Use when RPM/TPM caps — not model quality — are the bottleneck.
+
+Three of those subcommands are pool *operations* rather than setup, and they are what you
+reach for when a pool misbehaves:
+
+- `hermes auth priority <provider> <target> <priority>` — reorder the pool. Priority 0 is
+  tried first under `fill_first` rotation, so this is how you put the paid key in front of
+  the free one (or demote a key that is throttling). The other entries are renumbered.
+- `hermes auth refresh <provider> [target]` — refresh a pooled **OAuth** credential's
+  tokens and clear its cooldown. An expired OAuth token in a pool presents as "the pool is
+  smaller than it looks"; refresh is the fix, not remove-and-re-add.
+- `hermes auth reset <provider> [target]` — clear exhaustion status. On v0.21.2 it takes an
+  optional target, so you can un-exhaust one credential instead of the whole pool.
+
+`target` is a credential index, an entry id, or the exact label — the same three forms
+`hermes auth list` prints.
+
+### Nous Portal and account auth
+
+`hermes portal` (subcommands `login|info|status|open|tools`) is the one-shot onboarding
+path: log in to Nous Portal, pick a model, set Nous as the provider, and optionally enable
+the Tool Gateway. `hermes portal info` prints the auth + Tool Gateway routing summary, and
+`hermes portal tools` lists which tools are routed via Nous — useful when you are debugging
+*where* a tool call actually went. `hermes auth upgrade` signs you in with a Nous account
+while keeping existing connectors.
+
+### Retiring models
+
+Models get retired, and a config that names a dead model fails at run time, not at edit
+time. `hermes migrate` diagnoses the active `config.yaml` for retired models and deprecated
+settings; `hermes migrate xai --apply` rewrites xAI references to their official
+replacements (dry-run by default, with a timestamped backup before any write). Run the
+dry-run before every upgrade — it is the cheapest config check there is.
 
 ### Auxiliary models
 
@@ -86,7 +118,10 @@ session history. Routing decisions should be made against this, not vibes.
 
 **Evidence:** `docs/research/hermes/cli-evidence-2026-09-07-b2-config-models.txt`
 (subcommand trees for config/model/moa/fallback/auth + live `config get model` output),
-`docs/research/hermes/cli-evidence-2026-09-07-b6-security-observability.txt` (insights).
+`docs/research/hermes/cli-evidence-2026-09-07-b6-security-observability.txt` (insights),
+`docs/research/hermes/cli-evidence-2026-09-13-v0.21.2-surface.txt` (`auth`, `auth
+priority/refresh/upgrade`, `migrate`, `portal` on v0.21.2 — the `auth` subcommand list grew
+between v0.20.6 and v0.21.2).
 
 ## Verified commands
 
@@ -111,6 +146,18 @@ hermes fallback list                     # current chain
 hermes fallback add openrouter/meta-llama/llama-3.3-70b-instruct
 hermes auth list                         # pooled credentials per provider
 hermes auth status                       # pool health
+hermes auth priority openrouter 2 0      # promote credential #2 to first-tried
+hermes auth refresh nous                 # refresh a pooled OAuth token, clear its cooldown
+hermes auth reset openrouter 3           # un-exhaust one credential (omit target for all)
+```
+
+Account auth and config migration:
+
+```bash
+hermes portal info          # Portal auth + Tool Gateway routing summary
+hermes portal tools         # which tools route via Nous
+hermes migrate xai          # dry-run: retired xAI models referenced in config.yaml
+hermes migrate xai --apply  # rewrite them (backs config.yaml up first)
 ```
 
 Cost awareness:
@@ -132,6 +179,11 @@ hermes insights --days 7     # tokens, cost trends, tool usage patterns
   never git, never screenshots in docs.
 - **Aux model neglect.** Unreviewed aux models quietly burn tokens on every compression
   and title operation.
+- **Treating a pool as self-healing.** Rotation recovers from rate limits, not from expiry.
+  An OAuth credential whose token has lapsed stays in the pool and is skipped — `hermes auth
+  status` shows it, `hermes auth refresh` fixes it. Nothing does it for you.
+- **Upgrading Hermes without `hermes migrate`.** A retired model in `config.yaml` is a
+  runtime failure on the next scheduled job, not a startup error. The dry-run is free.
 
 ## Exercises
 
