@@ -127,6 +127,25 @@ observability, and reversibility — and they are the cheapest to fix: decide in
 you will always say what you are *not* building, how you would find out it broke, and how
 you would undo it.
 
+### The general pattern
+
+The capstone is Hermes-shaped; what it demonstrates is not, and that distinction is the
+whole point of packaging it. An interviewer is checking four things, none of which name a
+vendor:
+
+- **Did you ship something that runs without you?** Unattended operation is the claim that
+  cannot be faked, which is why the 14 days are the gate rather than the feature list.
+- **Do you know whether it works?** A gate wired into your change process, not a test suite
+  you ran once.
+- **Do you know what it costs, and where?** Not the total — the dominant term, and which
+  lever moves it.
+- **Do you know what you chose not to do?** Accepted risks, rejected alternatives, scope you
+  cut. This is the one that separates having built a system from having run one.
+
+Describe your capstone to someone who has never heard of Hermes. If the description survives
+with the product names removed, you have built the portfolio piece. If it does not, you have
+built a demo of somebody's CLI.
+
 ### Where the course's own repo is the worked example
 
 This repository *is* a capstone of its own rules: AGENTS.md contracts, evidence files

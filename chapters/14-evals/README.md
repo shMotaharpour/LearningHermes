@@ -138,6 +138,28 @@ Two rules keep a taxonomy from becoming decoration:
    the hallucination would fix nothing.
 2. **A class with no fix is not a class** — it is a synonym for "it was bad".
 
+### The general pattern
+
+Offline evaluation is a measurement problem wearing a machine-learning costume, and an
+interviewer probes it at that level. Five things transfer intact to any stack:
+
+- **Deterministic assertions before expensive judgement.** Cheap checks are cheap enough to
+  run at the sample sizes honesty requires; judge tokens are not. Spend the judge only on
+  what a check cannot express.
+- **Intervals, not point estimates.** A pass rate without a sample size is a number with no
+  claim attached. This is the single most common flaw in homegrown eval work, and it is
+  arithmetic rather than opinion.
+- **A judge is an instrument, so calibrate it.** Against human labels, before first use, and
+  again after any change to it. An uncalibrated judge produces scores indistinguishable from
+  a calibrated one, which is what makes it dangerous rather than merely imprecise.
+- **A frozen set, under version control.** A baseline regenerated when it disagreed with you
+  is a ratchet that only turns one way.
+- **A taxonomy converts failures into work.** A pass rate says how often; only a class says
+  what to fix.
+
+Hermes supplies the trajectories, the cost view and a scheduler. The discipline is the
+transferable part, and it is what you are actually being asked about.
+
 ### The regression discipline
 
 Any change to the system — model, system prompt, memory, skill, MCP toolset — can silently
