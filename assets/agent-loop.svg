@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 350" width="760" height="350" role="img" aria-label="The agent loop: assemble context, model turn, tool execution, repeat until the model answers.">
+  <title>The agent loop</title>
+  <desc>A user message enters context assembly. The model turn either emits tool calls, which are executed and whose results are appended back into the conversation before another model turn, or it answers, which ends the loop. A step budget bounds the cycle.</desc>
+  <style>
+    .box { fill: none; stroke: #6e7781; stroke-width: 1.5; }
+    .accent { stroke: #2f81f7; }
+    .lbl { font: 600 13px system-ui, -apple-system, Segoe UI, sans-serif; fill: #6e7781; }
+    .sub { font: 11px system-ui, -apple-system, Segoe UI, sans-serif; fill: #8b949e; }
+    .edge { fill: none; stroke: #6e7781; stroke-width: 1.5; marker-end: url(#a); }
+    .edge-accent { fill: none; stroke: #2f81f7; stroke-width: 1.5; marker-end: url(#b); }
+    .tag { font: 600 11px system-ui, -apple-system, Segoe UI, sans-serif; fill: #2f81f7; }
+    .warn { font: 11px system-ui, -apple-system, Segoe UI, sans-serif; fill: #bf8700; }
+  </style>
+  <defs>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#6e7781"/>
+    </marker>
+    <marker id="b" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#2f81f7"/>
+    </marker>
+  </defs>
+
+  <text x="20" y="26" class="lbl">The agent loop</text>
+  <text x="20" y="44" class="sub">A chat completion returns text. An agent returns actions — and then reads what they produced.</text>
+
+  <rect x="20" y="76" width="120" height="52" rx="6" class="box"/>
+  <text x="80" y="98" class="lbl" text-anchor="middle">user</text>
+  <text x="80" y="115" class="sub" text-anchor="middle">message</text>
+
+  <rect x="186" y="76" width="150" height="52" rx="6" class="box"/>
+  <text x="261" y="98" class="lbl" text-anchor="middle">1 · assemble</text>
+  <text x="261" y="115" class="sub" text-anchor="middle">prompt + tools + history</text>
+
+  <rect x="382" y="76" width="150" height="52" rx="6" class="box accent"/>
+  <text x="457" y="98" class="lbl" text-anchor="middle">2 · model turn</text>
+  <text x="457" y="115" class="sub" text-anchor="middle">answer, or tool calls</text>
+
+  <rect x="382" y="216" width="150" height="52" rx="6" class="box"/>
+  <text x="457" y="238" class="lbl" text-anchor="middle">3 · execute tools</text>
+  <text x="457" y="255" class="sub" text-anchor="middle">real side effects</text>
+
+  <rect x="600" y="76" width="140" height="52" rx="6" class="box"/>
+  <text x="670" y="98" class="lbl" text-anchor="middle">answer</text>
+  <text x="670" y="115" class="sub" text-anchor="middle">loop ends</text>
+
+  <path d="M140 102 L180 102" class="edge"/>
+  <path d="M336 102 L376 102" class="edge"/>
+  <path d="M532 102 L594 102" class="edge"/>
+  <text x="563" y="92" class="sub" text-anchor="middle">no tool calls</text>
+
+  <path d="M457 128 L457 210" class="edge-accent"/>
+  <text x="467" y="172" class="tag">tool calls</text>
+
+  <path d="M382 242 L300 242 L300 128 L376 116" class="edge-accent"/>
+  <text x="300" y="262" class="tag" text-anchor="middle">4 · results appended, ask again</text>
+
+  <line x1="20" y1="300" x2="740" y2="300" stroke="#6e7781" stroke-width="0.5" stroke-dasharray="3 3"/>
+  <text x="20" y="320" class="warn">Two properties of this cycle drive the rest of the course:</text>
+  <text x="20" y="337" class="sub">compounding state — step 3 mutates real systems (checkpoints, approvals) · growing cost — every pass re-sends a longer transcript (caching, routing)</text>
+</svg>

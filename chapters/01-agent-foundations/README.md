@@ -30,6 +30,8 @@ A chat completion returns text; an agent returns *actions*. Hermes runs this loo
 4. **Repeat until answer.** The model sees each result and decides again. One user message
    can drive dozens of tool calls.
 
+![The agent loop](../../assets/agent-loop.svg)
+
 Two properties of this loop matter for everything that follows:
 
 - **Compounding state.** Tool calls mutate real systems (files, repos, servers). Mistakes
@@ -37,6 +39,68 @@ Two properties of this loop matter for everything that follows:
 - **Cost per loop iteration.** Every iteration re-sends context. Long loops on expensive
   models cost real money; prompt caching (Chapter 03) and routing (Chapter 02) exist
   because of this.
+
+### Build it yourself — the loop is ~40 lines
+
+Reading about the loop and having written one are different kinds of knowing, and the
+second is what an interview probes. `examples/agent-loop/miniagent.py` is a complete agent
+in ~120 lines of standard-library Python. Run it before you continue:
+
+```bash
+cd examples/agent-loop
+python3 miniagent.py --demo     # scripted transcript: offline, no API key, no cost
+```
+
+Strip the file to its argument and this is all of it:
+
+```python
+messages = [{"role": "system", "content": SYSTEM},
+            {"role": "user", "content": prompt}]
+
+for step in range(1, max_steps + 1):
+    message = transport(messages)          # ask the model
+    messages.append(message)
+    calls = message.get("tool_calls") or []
+    if not calls:                          # no tool calls -> this is the answer
+        return message["content"]
+    for call in calls:                     # run what it asked for
+        result = TOOLS[name](**args)       # ... and hand the result back
+        messages.append({"role": "tool", "tool_call_id": call["id"],
+                         "name": name, "content": result})
+```
+
+Four things in that fragment are the whole chapter:
+
+1. **A tool result re-enters the conversation as a message.** The model does not "receive
+   a return value"; it reads a transcript that now contains what happened. That is why an
+   agent can reason about a failed command, and why Chapter 03's context budget is the
+   binding constraint on everything.
+2. **Termination is the model choosing to stop.** The loop ends when a turn comes back with
+   no tool calls. Nothing else ends it — which is why `max_steps` is not optional. An agent
+   without a cap is an unbounded bill with a plausible explanation attached.
+3. **The transcript only grows.** Each pass re-sends everything before it plus the new
+   results. Cost per iteration rises through the run; this is the mechanical reason caching
+   (Chapter 03) and routing (Chapter 02) are cost levers rather than micro-optimisations.
+4. **Tool errors are returned, not raised.** A hallucinated tool name becomes
+   `error: no such tool 'send_email'. Available: ...` and the model recovers on the next
+   turn. A traceback ends the run. This single choice is most of the difference between a
+   loop that demos and a loop that finishes work.
+
+The example also shows where containment has to live. `_safe()` refuses a path outside the
+working directory, because the **model** chooses that argument and `../../.ssh/id_rsa` is a
+normal-looking string. Prompting is not a security boundary; the tool is.
+
+What `miniagent.py` deliberately omits is the map of the rest of this course: streaming,
+retries and provider failover (Ch 02), context compression (Ch 03), approval gates (Ch 15),
+persistence and checkpoints (Ch 04), cost accounting (Ch 14), delegation (Ch 09). Every one
+is a modification of `run()`.
+
+**The general pattern.** This loop is not Hermes'. It is the shape every tool-calling agent
+has — LangGraph, an OpenAI Assistants run, a homegrown `while` loop — and interviews test it
+at that level: what ends the loop, what happens when a tool fails, where the cost goes, and
+where you put the guardrail. Hermes' contribution is not a different loop; it is everything
+around it (gateway, scheduler, skills, memory). Knowing which is which is what lets you talk
+to a team running something else.
 
 ### Toolsets, not just tools
 
@@ -144,6 +208,15 @@ re-verification pass: `--help` surfaces only, no machine state).
 
 ## Verified commands
 
+Build and run the loop from scratch before running the real one — it costs nothing and
+it is the fastest way to understand what `hermes chat` is doing:
+
+```bash
+cd examples/agent-loop
+python3 miniagent.py --demo           # scripted: watch the trajectory, no API key
+python3 -m unittest discover -s ../../tests -k agent_loop
+```
+
 Install (Linux/macOS/WSL2):
 
 ```bash
@@ -202,6 +275,14 @@ hermes --version
   The leverage is tool access — always think "which toolset does this task need?"
 - **Skipping `hermes doctor` after install.** A broken provider key or missing optional
   dependency surfaces there, not at first real use.
+- **Reading about the loop instead of writing one.** The concepts in this chapter are
+  forty lines of code. `examples/agent-loop/miniagent.py --demo` takes a minute and makes
+  every later chapter land differently.
+- **Assuming the agent stops on its own.** Termination is the model declining to call a
+  tool. There is no other exit; a step budget is a requirement, not a tuning knob.
+- **Treating the system prompt as a security boundary.** The model picks tool arguments.
+  Containment belongs in the tool, where it cannot be argued with — see `_safe()` in the
+  example, and Chapter 15 for the real thing.
 - **One-shot vs interactive confusion.** `hermes chat -q` exits after answering and has
   no slash commands; interactive `hermes` supports `/model`, `/skills`, `/new`.
 - **Confusing the tool families.** Comparing Hermes to Claude Code as "which is better" is
@@ -220,3 +301,25 @@ Work through `exercises/ex01-agent-foundations.md`. Verification: `hermes doctor
 one tool-using run observed and explained in loop terms, three config surfaces located,
 model identity confirmed, and one peer tool from the "Hermes vs the peer tools" table
 picked and its family stated in one sentence.
+
+### Senior interview probes
+
+"Implement a minimal agent loop" is one of the most common live exercises for this role.
+These are the follow-up questions, and the exercise has you answer them from code you wrote
+rather than from memory:
+
+1. Write the agent loop on a whiteboard. What is the exit condition, and what happens if
+   the model never satisfies it?
+2. A tool raises an exception mid-run. Walk through two designs — propagate, or return the
+   error as the tool result — and say which you ship and why.
+3. Why does the cost of a single user request grow superlinearly with the number of tool
+   calls it triggers?
+4. The model asks to read `../../.ssh/id_rsa`. Where do you stop it, and why is "tell it not
+   to in the system prompt" the wrong answer?
+5. The model emits a call to a tool you never defined. What does your loop do?
+6. How would you test an agent loop without a model, a key, or a network? What does that
+   force you to change about its design?
+7. What is the difference between a toolset and a tool, and what does the distinction buy
+   you at runtime?
+8. Where would you add streaming, retries, and an approval gate to the loop you just wrote,
+   and which of the three changes the loop's control flow?

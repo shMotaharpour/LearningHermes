@@ -233,6 +233,16 @@ class ValidatorTests(unittest.TestCase):
         result = self.run_cli()
         self.assertEqual(result.returncode, 0, result.stderr)
 
+    def test_inline_span_with_an_intentional_space_is_not_welded(self):
+        """A span like `examples/x/run.py --demo` is a path plus a flag, not one path."""
+        self.put(self.root, "examples/agent-loop/miniagent.py", "print('hi')\n")
+        text = CHAPTER_README.format(num=1).replace(
+            "Body.", "Run `examples/agent-loop/miniagent.py --demo` first.", 1)
+        self.rewrite_chapter(text)
+        result = self.run_cli()
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertNotIn("miniagent.py--demo", result.stderr)
+
     def test_dangling_reference_inside_a_fence_is_still_caught(self):
         text = CHAPTER_README.format(num=1).replace(
             "```bash\nhermes doctor\n```",

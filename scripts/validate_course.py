@@ -100,7 +100,11 @@ def _refs(text: str, backtick_re: re.Pattern[str], bare_re: re.Pattern[str]) -> 
     def collect(chunk: str, *, join_wrapped: bool) -> None:
         if join_wrapped:
             for m in backtick_re.finditer(chunk):
-                inner = re.sub(r"\s+", "", m.group(1))
+                # Join across NEWLINES only. Collapsing every space also welds a span with
+                # an intentional one — `examples/x/run.py --demo` became a reference to
+                # "examples/x/run.py--demo" — so only the line wrap the formatter inserted
+                # is undone.
+                inner = re.sub(r"\s*\n\s*", "", m.group(1))
                 for hit in bare_re.findall(inner):
                     refs.add(hit.rstrip(".,;:"))
             chunk = backtick_re.sub("`x`", chunk)
