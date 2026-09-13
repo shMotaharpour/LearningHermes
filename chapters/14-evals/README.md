@@ -1,4 +1,4 @@
-# Chapter 14 — Evals and Observability
+# Chapter 14 — Evaluating Agent Work
 
 > **Verified:** 2026-09-13 · Hermes Agent v0.21.2 (2026.9.11) · recheck: `python3 scripts/verify_chapters.py`
 
@@ -9,25 +9,14 @@ ensure models meet quality bars... define and implement LLM performance metrics 
 correctness, latency, hallucination control, safety)" (`docs/research/jobs/source-05.md`);
 Paramount — "enhance defect detection, and deliver predictive quality insights"
 (`docs/research/jobs/source-01.md`). Agents fail quietly: no stack trace, just worse answers.
-Observability is how you notice; evals are how you prove a change made things better. This
-chapter builds both habits on Hermes' native instrumentation.
+Evals are how you prove a change made things better — before it ships. Chapter 14b is the
+other half: how you find out what is happening to the system you already shipped.
 
 ## Concepts
 
-### What to observe on an agent
-
-Four layers, each with a native tool:
-
-| Layer | Question | Hermes tool |
-|---|---|---|
-| Runtime | is the service healthy? | `hermes monitoring status`, `hermes logs` |
-| Cost/usage | what is it spending? | `hermes insights --days N` |
-| Behavior | what did it actually do? | session transcripts, `hermes sessions export` |
-| Quality | was the work *good*? | evals (you build, this chapter) |
-
-Verified: `hermes monitoring` exports redacted, content-free health metrics over OTLP —
-built for operators, safe by construction. `hermes logs` filters by level/component/time —
-the incident view. `hermes insights` aggregates tokens/costs/tool patterns — the spend view.
+This chapter is about **offline** evaluation: a frozen set, run on demand, before you
+ship. Chapter 14b covers the online half — what the running system tells you, and the loop
+that turns a production failure back into a frozen task here.
 
 ### Trajectories: the eval artifact
 
@@ -149,28 +138,6 @@ Two rules keep a taxonomy from becoming decoration:
    the hallucination would fix nothing.
 2. **A class with no fix is not a class** — it is a synonym for "it was bad".
 
-### Offline, online, and the loop between them
-
-Everything so far is **offline**: a frozen set, run on demand, before you ship. Offline
-evals can only ever measure what you thought to freeze, so they need a counterpart:
-
-- **Online / shadow.** Run the candidate alongside production on real traffic without its
-  output reaching anyone, and compare. This is where the tasks you never thought of show
-  up. For an agent this is cheap in a way it is not for a service: a second cron job on
-  the same schedule, delivering to `local` instead of the real target (Chapter 07).
-- **Production feedback.** `hermes cron incidents`, `hermes logs --level error`, and the
-  complaints that arrive over the gateway are unlabelled eval data. The loop that matters:
-  **every production failure becomes a frozen task**, so the same failure cannot ship
-  twice. An eval set that never grows is one that stopped learning.
-- **The split in practice.** Offline gates the change; online tells you whether the gate
-  was measuring the right thing.
-
-**The general pattern.** None of this is Hermes-specific, and interviewers ask it that
-way: offline suites and online experiments, deterministic assertions before expensive
-judgement, calibrating a judge against human labels, intervals rather than point
-estimates, and a taxonomy that converts failures into work. Hermes supplies the
-trajectories, the cost view, and a scheduler — the discipline is the transferable part.
-
 ### The regression discipline
 
 Any change to the system — model, system prompt, memory, skill, MCP toolset — can silently
@@ -179,29 +146,7 @@ covers completion *and* cost (as much "did it finish the task" as "tokens and to
 spent"), a diff, and a go/no-go. Your `docs/research/hermes/` evidence files *are*
 regression baselines for this course's own tooling claims.
 
-### Cost as a quality metric
-
-Latency and token spend belong in every eval: a "better" answer that doubles cost needs a
-reason. `hermes insights` before/after a routing change quantifies it.
-
-**Evidence:** `docs/research/hermes/cli-evidence-2026-09-07-b6-security-observability.txt`
-(insights/monitoring/logs help), `docs/research/hermes/cli-evidence-2026-09-07-b3-sessions-tools.txt`
-(export surface), plus the course's own research files as worked examples. The harness in
-`examples/evals/` is covered by `tests/test_eval_harness.py`, which runs offline — the
-statistics and every check are pinned, so the numbers this chapter asks you to trust are
-themselves tested.
-
 ## Verified commands
-
-Observability:
-
-```bash
-hermes monitoring status       # gateway health metrics (OTLP-exportable)
-hermes logs -n 100 --level warning          # incident sweep
-hermes logs --component gateway --since 30m
-hermes insights --days 7       # tokens, costs, tool patterns
-hermes insights --days 30 --source telegram # per-source breakdown
-```
 
 Eval material:
 
@@ -244,8 +189,6 @@ hermes cron create "0 3 * * *" --name nightly-eval \
   pass bar, count.
 - **Judging with the same model.** Self-grading inflates scores; judge with a different
   (usually stronger) model than the one under test.
-- **Observing only the happy path.** `hermes logs --level error` and `cron incidents`
-  are where failures live; reviews that read only transcripts miss runtime failures.
 - **No baseline before change.** A regression test without a *pre-change* run is
   theater. Capture before/after, always.
 - **Cost-blind quality.** Track tokens per task next to pass rate; regressions hide in
@@ -270,7 +213,7 @@ hermes cron create "0 3 * * *" --name nightly-eval \
 
 ## Exercises
 
-Work through `exercises/ex14-evals-observability.md`. Verification: a 5-task eval set
+Work through `exercises/ex14-evals.md`. Verification: a 5-task eval set
 with deterministic checks + LLM judge, one before/after regression run, cost delta
 recorded, nightly eval job created.
 

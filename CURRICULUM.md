@@ -26,7 +26,7 @@ Recurring requirement clusters, ordered by observed frequency in the stored evid
 |---------|---------:|---------:|----------|
 | Agentic orchestration | 13/18 | 44 | 01, 05, 09 |
 | Shipping & DevOps | 13/18 | 42 | 13 |
-| Evaluation & observability | 8/18 | 31 | 14 |
+| Evaluation & observability | 8/18 | 31 | 14, 14b |
 | Stakeholder/product skills | 8/18 | 11 | 06, 08, 16 |
 | RAG & context engineering | 6/18 | 15 | 03, 03b |
 | Security & governance | 5/18 | 23 | 15 |
@@ -40,7 +40,7 @@ Postings counted = the 18 with extracted body text; a posting can cite several c
 The course teaches each cluster hands-on: you do the work *with* an agent, on a real
 machine, with evidence saved under `docs/research/`.
 
-## Course Structure — 5 parts, 17 chapters
+## Course Structure — 5 parts, 18 chapters
 
 ### Part I — Foundations (know the machine)
 
@@ -80,7 +80,8 @@ machine, with evidence saved under `docs/research/`.
 
 | Ch | Directory | Scope | Primary job competency |
 |----|-----------|-------|------------------------|
-| 14 | `chapters/14-evals-observability/` | Evaluating agent work; trajectory format & replay; `hermes insights`/`monitoring`; logs; regression testing agent behavior; LLM-as-judge patterns | Evaluation & observability |
+| 14 | `chapters/14-evals/` | Offline evaluation: frozen task sets; deterministic checks; statistical significance (Wilson intervals, sample size); LLM-as-judge with calibration and bias handling; trajectory-level metrics; failure taxonomy; regression gates | Evaluation |
+| 14b | `chapters/14b-observability-feedback/` | The running system: four observability layers; alerting on absence; learned cadences; percentiles; cost as an operational signal; offline/online/shadow; the incident-to-eval-task loop | Observability & production feedback |
 | 15 | `chapters/15-security-cost-governance/` | Security model & approvals; secrets (Bitwarden, 1Password, .env discipline); egress iron-proxy; managed scope; provider routing & cost control | Security & governance, cost optimization |
 | 16 | `chapters/16-capstone-senior-portfolio/` | Capstone: end-to-end enterprise workflow automation built with Hermes; portfolio packaging; competency-to-evidence mapping for interviews | Everything above, synthesized |
 
@@ -100,11 +101,11 @@ Part V   -> Senior Applied AI Engineer (you ship, measure, secure, and defend th
 | II | 04–06 | 7–11 h | Operate it across surfaces, tools, and chat platforms |
 | III | 07–09 | 9–14 h | Ship workflows that run unattended |
 | IV | 10–13 | 12–18 h | Extend the platform and distribute what you built |
-| V | 14–15 | 6–10 h | Measure, secure, and govern it |
+| V | 14–15 | 9–14 h | Measure, secure, and govern it |
 | 16 | Capstone | 30–50 h over ~6 weeks | Defend all of the above with evidence |
 
 Estimates are *hands-on* time for the audience in `README.md`'s prerequisites — reading the
-chapter and doing its exercise on a real machine. Total: **~73–114 h** plus the capstone's
+chapter and doing its exercise on a real machine. Total: **~76–118 h** plus the capstone's
 calendar time, which is bounded by a 14-day unattended run rather than by effort.
 
 ### A note on chapter numbering

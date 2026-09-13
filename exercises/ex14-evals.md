@@ -1,9 +1,12 @@
-# Exercise 14 — Evals and Observability
+# Exercise 14 — Evaluating Agent Work
 
 ## Objective
 
-Build the observability habit, then run a real regression experiment with the harness in
-`examples/evals/` — including the part that decides whether your result means anything.
+Run a real regression experiment with the harness in `examples/evals/` — including the part
+that decides whether your result means anything.
+
+The observability half moved to `exercises/ex14b-observability-feedback.md`; do this one
+first, because it is what the loop there feeds back into.
 
 You finish with a baseline in version control, one defended go/no-go decision, a
 calibrated judge, and a nightly gate that is silent until it is not.
@@ -12,12 +15,7 @@ Budget: 3–4 hours, most of it waiting on runs.
 
 ## Tasks
 
-1. **Observability sweep.** Run all four layers: `hermes monitoring status`,
-   `hermes logs --level warning --since 24h`, `hermes insights --days 7`,
-   `hermes sessions stats`. Write one sentence per layer about *your* usage — not what the
-   command does, what it told you.
-
-2. **Prove the harness before you trust it.**
+1. **Prove the harness before you trust it.**
 
    ```bash
    cd examples/evals
@@ -29,17 +27,17 @@ Budget: 3–4 hours, most of it waiting on runs.
    five tasks, write down the property it pins. Identify which one would fail a run that
    produced the **correct answer**, and why that is the right behaviour.
 
-3. **Baseline.** `python3 eval_runner.py --out baseline.json` on your current config, then
+2. **Baseline.** `python3 eval_runner.py --out baseline.json` on your current config, then
    **commit `baseline.json`**. Record `hermes insights --days 1` alongside it: the harness
    does not collect cost, and a quality baseline without a cost baseline is half a
    measurement.
 
-4. **Read the intervals before you change anything.** Run `compare.py baseline.json
+3. **Read the intervals before you change anything.** Run `compare.py baseline.json
    baseline.json`. Every delta is zero, and the Wilson intervals are still wide. Write down
    the width of the interval on one task. That width is the smallest change you could
    possibly detect at this sample size — everything smaller is invisible to you.
 
-5. **Regression experiment.** Make one real change — switch the default model with
+4. **Regression experiment.** Make one real change — switch the default model with
    `hermes config set model ...` — then:
 
    ```bash
@@ -53,7 +51,7 @@ Budget: 3–4 hours, most of it waiting on runs.
    worth 82 runs per arm to resolve" is a legitimate senior answer. "It looked better" is
    not.
 
-6. **Calibrate a judge, then use it.**
+5. **Calibrate a judge, then use it.**
 
    ```bash
    python3 judge.py --judge-model <different model> --calibrate
@@ -70,17 +68,17 @@ Budget: 3–4 hours, most of it waiting on runs.
    break it: run `judge.py --results after.json --judge-model <the model under test>` and
    record what happens and why that refusal exists.
 
-7. **Tag the failures.** Take every failing run in `after.json` and assign exactly one
+6. **Tag the failures.** Take every failing run in `after.json` and assign exactly one
    class from `failure-taxonomy.md`, at the earliest point in the trajectory. Add one class
    of your own from a failure the list does not cover, with its fix column filled in.
    A class you cannot write a fix for is not a class.
 
-8. **Grow the set.** Turn one real failure — from `hermes cron incidents`,
+7. **Grow the set.** Turn one real failure — from `hermes cron incidents`,
    `hermes logs --level error`, or your own week — into a sixth frozen task with a
    deterministic check. This is the loop: production failures become eval tasks, so the
    same failure cannot ship twice.
 
-9. **Nightly gate.** Wire `eval_runner.sh` as a script-only cron job with failures routed
+8. **Nightly gate.** Wire `eval_runner.sh` as a script-only cron job with failures routed
    away from the success target (Chapter 07):
 
    ```bash
@@ -94,7 +92,6 @@ Budget: 3–4 hours, most of it waiting on runs.
 
 ## Verification checklist
 
-- [ ] Four-layer observability sweep completed, one written observation per layer.
 - [ ] Dry run and harness tests pass; the five tasks' purposes written down, including
       which one fails a correct answer and why.
 - [ ] `baseline.json` committed, with a cost baseline from `hermes insights` beside it.
