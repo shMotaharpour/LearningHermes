@@ -116,6 +116,24 @@ leak: a 300B main model titling sessions burns money invisibly. Check them in
 `hermes insights --days 7` (verified) aggregates token usage, costs, tool patterns from
 session history. Routing decisions should be made against this, not vibes.
 
+### The general pattern
+
+Nothing in this chapter is Hermes-specific, and interviews ask it at the general level. Any
+system that calls more than one model provider ends up building the same four things, in
+roughly this order:
+
+1. **A capability tier**, so a request is routed by what it needs rather than by what is
+   configured. Aliases are the cheap version of a routing table.
+2. **A failover path**, because providers have incidents and your scheduled work does not
+   care. The design question is always *what counts as failure* — a 429 is retryable, a 400
+   is not, and treating them the same produces either a stall or a storm.
+3. **Credential rotation**, which recovers from rate limits and — the part people miss —
+   does *not* recover from expiry. Rotation and refresh are different mechanisms.
+4. **A cost view**, because without one every routing decision is taste.
+
+If you can name those four and say which failure each one addresses, the vendor is a
+detail. The reverse is the trap: "we use OpenRouter" is not a routing strategy.
+
 **Evidence:** `docs/research/hermes/cli-evidence-2026-09-07-b2-config-models.txt`
 (subcommand trees for config/model/moa/fallback/auth + live `config get model` output),
 `docs/research/hermes/cli-evidence-2026-09-07-b6-security-observability.txt` (insights),
@@ -189,3 +207,20 @@ hermes insights --days 7     # tokens, cost trends, tool usage patterns
 
 Work through `exercises/ex02-configuration-models.md`. Verification: fallback chain has a
 backup, MoA slots inspected, insights reviewed, config hygiene checks pass.
+
+### Senior interview probes
+
+1. You have three models available and one workload. Design the routing policy. What
+   decides which model a given request gets?
+2. A provider starts returning 429s at 09:00 every weekday. Walk through what your fallback
+   chain does, and what it should do differently from a 500.
+3. What does credential rotation protect you from, and what does it explicitly *not*
+   protect you from?
+4. Your scheduled jobs cost 4x what you expected and the output looks the same. Name three
+   candidate causes and how you would tell them apart.
+5. When is Mixture-of-Agents worth its cost multiple, and how would you decide rather than
+   assert?
+6. What is an auxiliary model, and what is the classic failure mode of ignoring it?
+7. Someone proposes hand-editing `config.yaml` on a running gateway. What is your objection?
+8. You inherit a system where every job runs on the strongest model. What do you measure
+   before changing anything?

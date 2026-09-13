@@ -76,6 +76,29 @@ demand. Internalize this pattern here; Chapter 10 exploits it.
 `@`-syntax attaches material inline — files, folders, git diffs, URLs — instead of hoping
 the agent re-reads the right file. Explicit beats ambient: reference the exact thing.
 
+### The general pattern
+
+Strip the filenames and this chapter is about one thing every agent platform has to solve:
+**the prompt is a fixed budget, and everything you add is spent on every future turn.** The
+transferable moves:
+
+- **Split index from payload.** One line per capability in the prompt, the body loaded on
+  demand. Skills do it here; RAG does it with chunks; a tool registry does it with schemas.
+  The economics are identical and so is the failure — an index that grows without bound
+  quietly starves the task.
+- **Separate durable facts from working state.** Compression is lossy emergency relief
+  inside a session; memory is what survives it. Systems that conflate the two lose facts
+  precisely when the conversation got interesting enough to compress.
+- **Scope by ownership.** Repo conventions in the repo, identity globally, facts in memory.
+  The rule generalises to any layered configuration system, and so does the bug: a
+  project-specific rule placed globally misbehaves everywhere else.
+- **Prefix stability is a cost lever.** Caching rewards a prompt whose beginning does not
+  move. That is an argument for putting volatile content last, and it applies to any
+  provider with prefix caching.
+
+"My agent got dumber" is usually arithmetic, and being the person who reaches for a
+measurement rather than a theory is most of the signal here.
+
 ### Prompt caching
 
 Providers cache unchanged prompt prefixes; Hermes preserves cache stability by not
@@ -143,3 +166,21 @@ hermes sessions export     # JSONL/Markdown export for analysis
 Work through `exercises/ex03-context-memory.md`. Verification: prompt-size JSON explained
 layer by layer, a project AGENTS.md authored and obeyed, one memory write + one prune
 measured.
+
+### Senior interview probes
+
+1. An agent that worked well last month now misses obvious instructions. Nothing about the
+   model changed. What do you measure first, and what are you expecting to find?
+2. Explain the difference between compression and memory to someone who thinks they are the
+   same feature.
+3. You install an MCP server with 40 tools. What happens to every unrelated session, and
+   how would you quantify it?
+4. Where do you put a rule that applies only to one repository, and what breaks if you put
+   it in the global identity file?
+5. Why does a skills index scale differently from skill bodies, and what does that buy you?
+6. Your provider charges less for cached input. What does that imply about how you order
+   the parts of your prompt?
+7. When would you write a fact to memory rather than leave it in the transcript? Give the
+   test you would apply.
+8. What is the equivalent of this chapter's "index small, payload on demand" in a retrieval
+   system?

@@ -47,6 +47,23 @@ Three escalating ways to touch the web (all verified in this course's own workfl
 Decision rule: search first, extract second, browser last (browser is the slow, expensive
 escalation for JS-walled content).
 
+### The general pattern
+
+The escalation ladder above is the reusable idea, and it is not about the web. **Order your
+capabilities by cost and blast radius, and make the agent climb.** Cheap and read-only
+first; expensive, stateful or destructive last, and only when the cheaper rung demonstrably
+failed. Every capable agent platform needs the same discipline, and the failure is always
+the same shape: a tool that is available gets used, whether or not it was the right rung.
+
+Two corollaries worth stating out loud in an interview:
+
+- **Tool scoping is blast-radius control, not just prompt economy.** A run that cannot reach
+  the browser cannot lock a profile; a run without `terminal` cannot delete anything. The
+  cheapest security control in any agent system is the tool you did not enable.
+- **Tool descriptions are part of the model's decision procedure.** Wrong-tool selection is
+  usually a documentation bug rather than a reasoning failure. If two tools are ambiguous to
+  a careful human reading only their schemas, they are ambiguous to the model.
+
 ### Computer use
 
 `hermes computer-use install|status|doctor|permissions` (verified) manages the cua-driver
@@ -135,3 +152,19 @@ hermes chat -q "Fix the failing test" -t terminal,memory
 Work through `exercises/ex05-tools-capabilities.md`. Verification: scoped run executed,
 escalation ladder demonstrated (search→extract→browser), one document extracted, one
 vision read.
+
+### Senior interview probes
+
+1. Design the capability ladder for an agent that has to read information from the internet.
+   What does it try first, and what makes it escalate?
+2. Your agent keeps choosing the browser when extraction would have worked. Where is the
+   bug, and how do you verify the fix?
+3. A run needs to read a PDF, check a file and post a summary. Which toolsets do you enable,
+   and what have you just prevented?
+4. What is the highest-risk toolset in a general-purpose agent, and what has to be true
+   before you enable it unattended?
+5. Two of your tools do similar things. How would you find out whether the model can tell
+   them apart, before a user does?
+6. When is OS-level control the right answer rather than an API, and what do you give up?
+7. How does enabling a toolset change the cost of every unrelated request in that session?
+8. You must give an agent a capability that cannot be undone. Describe the guard rails.
