@@ -59,6 +59,9 @@ VERIFIED_RE = re.compile(
 )
 DEFAULT_MAX_AGE_DAYS = 180
 
+# Splits on fenced blocks: re.split with one group yields prose, body, prose, body, ...
+FENCE_SPLIT_RE = re.compile(r"^```[^\n]*\n(.*?)^```", re.M | re.S)
+
 BACKTICK_EVIDENCE_RE = re.compile(r"`([^`]*docs/research/[^`]*)`")
 BARE_EVIDENCE_RE = re.compile(r"docs/research/[A-Za-z0-9._/\-]+")
 BACKTICK_MATERIAL_RE = re.compile(r"`([^`]*(?:examples|assets)/[^`]*)`")
@@ -84,15 +87,33 @@ def exercise_files(root: Path) -> list[Path]:
 
 
 def _refs(text: str, backtick_re: re.Pattern[str], bare_re: re.Pattern[str]) -> set[str]:
-    """Collect path-like references, tolerating line-wrapped code spans."""
+    """Collect path-like references, tolerating line-wrapped inline code spans.
+
+    Fenced blocks are scanned separately and WITHOUT the whitespace-joining, because
+    joining is only correct for an inline span wrapped by the formatter. Applied to a
+    fenced block it welds consecutive shell lines into one nonexistent path — e.g.
+    `cd examples/evals` followed by `python3 eval_runner.py ...` became a reference to
+    "examples/evalspython3eval_runner.py...", reported as a missing file.
+    """
     refs: set[str] = set()
-    for m in backtick_re.finditer(text):
-        inner = re.sub(r"\s+", "", m.group(1))
-        for hit in bare_re.findall(inner):
+
+    def collect(chunk: str, *, join_wrapped: bool) -> None:
+        if join_wrapped:
+            for m in backtick_re.finditer(chunk):
+                # Join across NEWLINES only. Collapsing every space also welds a span with
+                # an intentional one — `examples/x/run.py --demo` became a reference to
+                # "examples/x/run.py--demo" — so only the line wrap the formatter inserted
+                # is undone.
+                inner = re.sub(r"\s*\n\s*", "", m.group(1))
+                for hit in bare_re.findall(inner):
+                    refs.add(hit.rstrip(".,;:"))
+            chunk = backtick_re.sub("`x`", chunk)
+        for hit in bare_re.findall(chunk):
             refs.add(hit.rstrip(".,;:"))
-    masked = backtick_re.sub("`x`", text)
-    for hit in bare_re.findall(masked):
-        refs.add(hit.rstrip(".,;:"))
+
+    # Odd segments are fenced-block bodies, even segments are ordinary prose.
+    for index, segment in enumerate(FENCE_SPLIT_RE.split(text)):
+        collect(segment, join_wrapped=(index % 2 == 0))
     return refs
 
 
