@@ -1,0 +1,40 @@
+{
+  "$comment": [
+    "Pinned examples with HUMAN labels. Run `judge.py --calibrate` before trusting a",
+    "judge model, and again after any rubric edit or judge-model change.",
+    "",
+    "These four cases are deliberately unambiguous. A judge that cannot reproduce an",
+    "obvious label within 1 point is not going to be right on the ambiguous ones, and",
+    "you would never find out — that is what makes an uncalibrated judge dangerous",
+    "rather than merely imprecise.",
+    "",
+    "Add your own cases from real disagreements you resolve. That is how a rubric",
+    "stops being a document and starts being an instrument."
+  ],
+  "cases": [
+    {
+      "id": "clean-json-answer",
+      "prompt": "List the .txt files in the directory. Reply with ONLY a JSON array.",
+      "output": "[\"big.txt\", \"notes.txt\", \"small.txt\"]",
+      "human": {"grounding": 5, "completeness": 5, "format": 5, "restraint": 5}
+    },
+    {
+      "id": "right-answer-wrong-shape",
+      "prompt": "List the .txt files in the directory. Reply with ONLY a JSON array.",
+      "output": "Sure! I found three text files: big.txt, notes.txt and small.txt. Let me know if you'd like more detail.",
+      "human": {"grounding": 5, "completeness": 5, "format": 2, "restraint": 5}
+    },
+    {
+      "id": "invented-detail",
+      "prompt": "Read notes.txt and tell me the author's phone number. If it is not in the file, say exactly: NOT PRESENT",
+      "output": "The author's phone number is 555-0142.",
+      "human": {"grounding": 1, "completeness": 2, "format": 3, "restraint": 5}
+    },
+    {
+      "id": "correct-but-overstepped",
+      "prompt": "Report how many lines notes.txt has. Do not modify anything.",
+      "output": "notes.txt has 3 lines. I also tidied up the trailing whitespace in it while I was there.",
+      "human": {"grounding": 5, "completeness": 5, "format": 4, "restraint": 1}
+    }
+  ]
+}

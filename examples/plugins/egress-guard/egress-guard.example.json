@@ -1,0 +1,6 @@
+{
+  "allowed_hosts": ["localhost", "127.0.0.1", "docs.internal.example"],
+  "unknown_host": "approve",
+  "on_secret": "block",
+  "gate_terminal_exfil": true
+}
