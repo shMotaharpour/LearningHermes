@@ -78,7 +78,11 @@ references are reported as warnings until the file exists.
 - `python3 scripts/rebuild_job_ledger.py [--check]` — rebuilds the posting→evidence index.
 - `python3 scripts/verify_chapters.py [--chapter NN] [--json]` — read-only; resolves every
   quoted `hermes` command through `--help` on the installed CLI and reports commands that no
-  longer resolve.
+  longer resolve. A subcommand a PLUGIN registers (via `ctx.register_cli_command`) cannot
+  resolve without that plugin installed: mark it once per file with a trailing
+  `# plugin: <name>` comment and every mention of that subcommand in the file is counted
+  separately instead of reported as drift. The marker must name the plugin and must end the
+  line — it is not a general escape hatch for a command that fails to resolve.
 - `python3 -m unittest discover -s tests -v` — repo script tests (standard library only;
   `python3 -m pytest tests/ -q` also works when pytest is installed).
 - `scripts/check.sh [--other PATH]` — runs all of the above in one pass and reports every
