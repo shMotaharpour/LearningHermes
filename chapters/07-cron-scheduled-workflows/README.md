@@ -100,6 +100,28 @@ the blast radius is "everything scheduled", not "this job" — a provider outage
 config rollout, a runaway spend — and treat leaving it engaged as an incident of its own,
 because nothing scheduled runs while it is on.
 
+### The general pattern
+
+Strip the command names and this chapter is a scheduler, which means it has the same four
+problems every scheduler has — and an interviewer will ask them in exactly these terms:
+
+- **What does a missed window mean?** A job that could not run at 06:00 either runs late,
+  runs twice, or is skipped. All three are defensible and they are different products.
+  Deciding by default is how you find out at 06:00 on a Monday.
+- **At-least-once, and therefore idempotency.** Anything that can retry will eventually run
+  twice. A job that appends is not safe to retry; a job that reconciles is.
+- **Where does failure go?** Success routing and failure routing are different questions,
+  and answering them with one target means the audience learns your job is broken before
+  you do. This is the cheapest reliability feature in the chapter and the most commonly
+  skipped.
+- **What stops everything?** Per-job pausing handles a bad job. A global stop handles a bad
+  *day* — a provider outage, a config rollout, a runaway spend — and it is only useful if
+  somebody has rehearsed it.
+
+The fifth, which is specific to agents rather than to schedulers: **an unattended prompt has
+no reader.** It cannot ask a question, so every branch it can take — including the empty
+case — has to be written down in advance.
+
 **Evidence:** `docs/research/hermes/cli-evidence-2026-09-07-b4-gateway-cron-events.txt`
 (full cron command tree, live job listing with real IDs/schedules/targets, cron status),
 `docs/research/hermes/cli-evidence-2026-09-07.txt` (cron help),
@@ -199,3 +221,21 @@ hermes resume                            # lift it; dispatch resumes on the next
 Work through `exercises/ex07-cron-scheduled-workflows.md`. Verification: one script-only
 job and one agent job live, both tested via tick, incidents view clean, one job edited
 without recreate.
+
+### Senior interview probes
+
+1. Your 06:00 job did not run because the machine was asleep until 09:00. Should it run now,
+   skip, or run three times? Defend your answer as a product decision.
+2. A webhook-triggered job can fire twice for one event. What has to be true about the job
+   for that to be safe?
+3. Where do failure notices go, and why is "the same place as the output" a bug rather than
+   a simplification?
+4. When do you reach for a global stop instead of pausing a job, and what has to exist
+   before that is a usable control at 3am?
+5. A scheduled job runs fine and delivers nothing. Give two causes and how you tell them
+   apart.
+6. Write the first three sentences of a prompt for an unattended job. What must they
+   contain that an interactive prompt need not?
+7. When is a script the right answer instead of an agent? Give the test.
+8. You need a job to be able to see what it reported yesterday. What are your options and
+   what does each cost?

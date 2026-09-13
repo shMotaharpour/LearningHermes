@@ -87,6 +87,25 @@ observable (Ch 04/14), rollback path known (Ch 04), build/test/start verified
 (`hermes verify`), and the global stop understood by whoever is on call
 (`hermes pause`/`hermes resume`, Ch 07/15).
 
+### The general pattern
+
+Shipping an agent is shipping a system that acts, and the questions are the ones any
+production system faces — with one addition that catches people out.
+
+- **Where does the code run, and what can it reach from there?** The backend choice is a
+  blast-radius choice before it is a performance one. An agent on the local backend has your
+  real credentials in reach; that is fine for your own repo and wrong for a stranger's.
+- **Can a newcomer tell whether it works?** A committed build/test/start manifest is the
+  difference between "the agent can edit this project" and "the agent can tell whether its
+  edit worked". It is the same argument as a README that is actually runnable.
+- **What do you ship — outputs, or the setup that produces them?** Distributing a profile
+  rather than a result is how an agent capability becomes a team capability, and it carries
+  the same hazards as any artifact distribution: sanitise it, version it, and know what is
+  inside the archive.
+- **The addition:** your artifact is non-deterministic. Everything above is necessary and
+  none of it is sufficient, which is why the deployment checklist ends at an eval gate
+  (Chapter 14) rather than at a green build.
+
 **Evidence:** `docs/research/hermes/cli-evidence-2026-09-07-b7-multiagent-shipping.txt`
 (backup/profile/portal/project help), `docs/research/hermes/cli-evidence-2026-09-07.txt`
 (gateway/run/send for CI paths), `docs/research/hermes/cli-evidence-2026-09-07-b1-foundations-core.txt` (import-agent),
@@ -160,3 +179,19 @@ hermes import-agent claude-code
 Work through `exercises/ex13-shipping-agent-products.md`. Verification: one feature
 shipped repo→PR by agent, one profile distribution installed elsewhere (or exported +
 manifest reviewed), CI notification wired, deployment checklist written for a real job.
+
+### Senior interview probes
+
+1. An agent must run a stranger's repository. Which backend, and what have you prevented?
+2. What is the first thing you do before handing an agent a codebase it has never seen?
+3. You are putting an agent in CI. What do you scope, and what would an unscoped run cost
+   you at 2am?
+4. How do you ship an agent capability to five teammates so that it keeps working next
+   month?
+5. `hermes backup` includes the environment file. What follows from that for retention and
+   for storage?
+6. Your deployment checklist has ten items. Which one is agent-specific, and why do the
+   other nine not suffice?
+7. A team wants to migrate from another agent CLI. What moves, what does not, and how do you
+   find out before committing?
+8. What does "done" mean for an agent feature, and how is that different from a service?

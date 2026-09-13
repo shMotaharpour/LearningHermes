@@ -59,6 +59,25 @@ of this chapter's three planes composed together.
 - **Fan-out discipline.** One event → one agent run → one deliverable. Chain deeper
   reasoning via delegation (Chapter 09), not by stuffing the prompt.
 
+### The general pattern
+
+The three planes above are inbound, internal, and outbound — and every event-driven system
+has all three, whatever it calls them. What transfers:
+
+- **An event is untrusted input.** A webhook payload is written by someone else, and a
+  PR body or an issue title is a place a stranger can put text your agent will read. Treat
+  it as data, never as instruction — the same rule as any other injection surface.
+- **Delivery is at-least-once, so handlers must be idempotent.** Providers retry on
+  timeouts, and a review agent that double-posts has made retries visible to your users. Key
+  the work on something stable from the event itself, not on the time you received it.
+- **A hook is remote code execution with better manners.** Lifecycle hooks run arbitrary
+  shell at internal events, which is why consent is explicit, the allowlist is a file, and
+  drift is checked. Any extension point that executes code needs those three; if yours does
+  not, you have the capability without the gate.
+- **The plane that reports failure should not be the plane that failed.** Outbound notify
+  works without the agent or the gateway, which is what makes it usable from CI and from a
+  dying process.
+
 **Evidence:** `docs/research/hermes/cli-evidence-2026-09-07-b4-gateway-cron-events.txt`
 (webhook + hooks command trees with full semantics),
 `docs/research/hermes/cli-evidence-2026-09-07.txt` (hermes send help + exit codes).
@@ -113,3 +132,20 @@ echo "err" | hermes send --to telegram --subject "[CI]"   # subject header
 Work through `exercises/ex08-event-driven-automation.md`. Verification: webhook subscribed
 + tested, one hook wired with doctor-clean status, one CI/script notification delivered
 with exit-code handling.
+
+### Senior interview probes
+
+1. GitHub delivers the same webhook twice. Walk through what your handler does, and what
+   makes that safe.
+2. An issue body contains text instructing the agent to ignore previous instructions and
+   post a secret. Where does your defence live?
+3. What is the difference between a webhook-triggered run and a cron run, from the agent's
+   point of view?
+4. A lifecycle hook is arbitrary shell at an internal event. What has to be true before you
+   enable one, and what does drift checking protect against?
+5. Your CI needs to notify a channel that a deploy failed. Why not route it through the
+   agent?
+6. A webhook subscription has been firing for a month and nobody noticed it stopped. How
+   would you have known?
+7. How do you test an event-driven automation before pointing a real service at it?
+8. Design the idempotency key for a PR-review agent. What makes a bad one?
