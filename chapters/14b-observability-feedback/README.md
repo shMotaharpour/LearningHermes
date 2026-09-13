@@ -140,12 +140,6 @@ evals can only ever measure what you thought to freeze, so they need a counterpa
 - **The split in practice.** Offline gates the change; online tells you whether the gate
   was measuring the right thing.
 
-**The general pattern.** None of this is Hermes-specific, and interviewers ask it that
-way: offline suites and online experiments, deterministic assertions before expensive
-judgement, calibrating a judge against human labels, intervals rather than point
-estimates, and a taxonomy that converts failures into work. Hermes supplies the
-trajectories, the cost view, and a scheduler — the discipline is the transferable part.
-
 ### The loop, stated plainly
 
 1. Something fails in production, or a number moves in the weekly review.

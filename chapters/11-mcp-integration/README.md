@@ -106,9 +106,27 @@ responses to stdout. The handshake Hermes performs is `initialize` →
    its next turn. A JSON-RPC error (`-32601`, `-32700`) means the *request* was malformed.
    Confusing the two turns a recoverable situation into a dead connection.
 
+### The general pattern
+
 Rule 4 is Chapter 01's loop lesson wearing a different costume: an error the model can read
 is recoverable; an error that kills the channel is not. It recurs at every layer of this
 course, which is a sign it is the real rule rather than a Hermes convention.
+
+The rest of MCP generalises just as plainly, and this is the level an interviewer works at:
+
+- **A protocol is a contract, not a library.** MCP is JSON-RPC over a pipe or a URL. Any
+  language can speak it, nothing is imported, and "we need an SDK for that" is usually a
+  preference. Being able to implement a client or a server from the spec is the difference
+  between integrating and waiting.
+- **Capability negotiation exists so the absent case is explicit.** A server that does not
+  declare tools gets no `tools/list`, which is why forgetting the declaration produces
+  silence rather than an error. Every protocol with optional features needs this, and every
+  one of them has the same failure mode when you skip it.
+- **Tool count is a context cost, not a feature count.** Forty tools from one server tax
+  every unrelated request in that session (Chapter 03). Filtering is not tidying.
+- **Cross-process versus in-process is an ownership decision.** MCP buys language freedom
+  and isolation; a plugin (Chapter 12) buys lifecycle access and speed. Choose by who
+  maintains it and what it must reach, not by what is quicker to start.
 
 **Test it at two layers.** `tests/test_mcp_notes_server.py` covers the handlers in-process,
 *and* runs the server as a subprocess over a real pipe — because stdout pollution, an extra
