@@ -92,6 +92,27 @@ dispatch, daemon, watch, stats, gc, repair`. That last column matters: reclaim (
 died), block/unblock (dependencies), diagnostics — this is durable orchestration, not a
 sticky-note board.
 
+### The general pattern, beyond the ladder
+
+The orchestration ladder is a cost argument, not a capability one: **coordination is
+overhead you pay for isolation and parallelism, so it has to buy something.** Single-session
+with good tool scoping beats a swarm for most work, and being able to say *when* to escalate
+is the senior half of the answer.
+
+Three distributed-systems ideas are doing the real work here, and they are the ones worth
+being able to discuss platform-agnostically:
+
+- **Atomic claiming.** A durable queue where multiple workers take tasks needs a claim that
+  cannot be granted twice, or two agents do the same job and disagree. This is why the board
+  is SQLite and not a file — and why `reclaim` exists at all: a worker that dies mid-task
+  has to give the task back.
+- **Nothing is shared unless you share it.** Subagents, profiles and peers have separate
+  memory, separate context, separate state. Every "why didn't the other agent know that?"
+  bug is this assumption, and the fix is always an explicit handoff rather than a hope.
+- **Long calls need handles, not sockets.** The `peer dm` / `peer run` split is
+  request-response versus submit-and-poll, and the idempotency key is what makes the retry
+  safe. Temporal calls it a workflow handle; a job queue calls it a job id.
+
 **Evidence:** `docs/research/hermes/cli-evidence-2026-09-07-b7-multiagent-shipping.txt`
 (full peer help with examples, full kanban command set incl. swarm), plus
 `hermes profile --help` and worktree commands in evidence batches 1/b7;
@@ -164,3 +185,20 @@ hermes worktree prune      # reclaim (never deletes uncommitted/unpushed work �
 Work through `exercises/ex09-multi-agent-orchestration.md`. Verification: a 3-way parallel
 delegation observed, one kanban task driven through claim→complete, one peer round-trip
 (or documented plan), worktree hygiene done.
+
+### Senior interview probes
+
+1. When should work move from one agent to several? Give a test that would tell you it was
+   the wrong call.
+2. Two workers claim the same task from a shared board. What went wrong, and what does a
+   correct claim look like?
+3. A worker dies holding a task. What happens next, and who decides?
+4. Your subagent produced an answer that contradicts what the parent session knew. Explain
+   the mechanism.
+5. `peer dm` versus `peer run`: when does the choice matter, and what breaks if you pick the
+   blocking one for a ten-minute task?
+6. Your CI step retries a peer call. Without an idempotency key, what have you just done?
+7. Three agents need to edit one repository. Describe the isolation, and what you check
+   afterwards.
+8. What is the cheapest way to make a multi-agent system slower and more expensive than a
+   single agent? Answer from experience, not theory.

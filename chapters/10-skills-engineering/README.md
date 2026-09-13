@@ -103,6 +103,26 @@ inspect <id>` previews content without installing — read skills like you read 
 3. Linked files for references/templates/scripts; keep SKILL.md lean.
 4. Name = lowercase-hyphen, stable; rename = break every reference.
 
+### The general pattern
+
+A skill is a document the agent loads on demand, which makes this chapter about **knowledge
+as a maintained artifact** rather than about a file format. Four ideas transfer intact:
+
+- **Index/payload economics.** One line in every prompt, the body only when used. The same
+  trade as retrieval (Chapter 03b), tool schemas, and lazy imports — and the same failure:
+  an index that grows without bound taxes every unrelated request.
+- **A description is a retrieval query.** The agent chooses a skill by reading its first
+  line. Writing that line as a trigger ("Use when X") rather than a title is the difference
+  between a skill that fires and a skill that sits there. This is the same lesson as tool
+  descriptions in Chapter 05, and it recurs because it is the real rule.
+- **Loaded content is executed instruction.** A third-party skill is injected context that
+  steers the agent, which is why repo-local skills load only for repos you trust. Read them
+  like code from a stranger, because functionally that is what they are.
+- **Opt-in beats opt-out for sharing, and proposals beat pushes.** A skill can carry
+  machine-specific paths or a customer's procedure, so "sync everything" is a leak; and a
+  shared registry anyone can write to rots. Both defaults are worth copying into any
+  internal tooling you build.
+
 **Evidence:** `docs/research/hermes/cli-evidence-2026-09-07-b5-skills-mcp-plugins.txt`
 (live skills list table incl. Trust/Status columns, inspect help),
 `docs/research/hermes/cli-evidence-2026-09-07.txt` (full skills command tree with
@@ -179,3 +199,18 @@ hermes sync now                 # pull then push
 
 Work through `exercises/ex10-skills-engineering.md`. Verification: one skill authored,
 loaded on demand, one registry skill inspected-then-installed, trust model exercised.
+
+### Senior interview probes
+
+1. What is the difference between a skill and a prompt you paste, and when does that
+   difference start to matter?
+2. Your team has 90 skills installed. What has that cost, and how would you measure it?
+3. A skill you wrote never fires. Where do you look first?
+4. Why do repo-local skills require a trust step, and what attack does that prevent?
+5. When does a procedure belong in a skill rather than in memory or in the system prompt?
+6. You are designing skill sharing for a company. Push or propose? Everything or opt-in?
+   Defend both choices.
+7. A bundled skill was edited locally and an update is available. What happens, and what
+   should happen?
+8. What is the equivalent of "index small, payload on demand" in a retrieval system, and why
+   is it the same problem?
