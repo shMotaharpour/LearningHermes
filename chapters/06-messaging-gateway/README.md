@@ -91,6 +91,25 @@ from any script or CI: `hermes send --to telegram "deploy finished"`,
 for bot-token platforms — it reuses the configured credentials. Chapters 08 uses it as the
 universal notification primitive.
 
+### The general pattern
+
+A messaging gateway looks like an integration problem and is really a **routing and state**
+problem. These are the questions every such system answers, whatever it is built on:
+
+- **What is a session, in platform terms?** A thread, a channel, a user, a customer? Get it
+  wrong and two people share context they should not, or one person loses continuity
+  mid-conversation. It is a product decision wearing an engineering costume.
+- **Delivery is not receipt.** An accepted message can be muted, filtered or deleted by the
+  platform. A system that treats a 200 as "the human knows" will be wrong at the worst
+  moment — which is exactly why failure notices need their own target (Chapter 07).
+- **Ingress and egress are separable.** `hermes send` needs no agent and no gateway, which
+  is what makes it usable from CI. Keeping the notification primitive independent of the
+  conversational runtime is worth copying: **the thing that tells you the system is down
+  should not require the system to be up.**
+- **One process or many?** The multiplex-versus-standalone trade is the isolation question
+  every multi-tenant service faces: shared resources and one blast radius, or separate ones
+  and n times the operations.
+
 **Evidence:** `docs/research/hermes/cli-evidence-2026-09-07-b4-gateway-cron-events.txt`
 (live `gateway status` systemd output incl. real 429 retry logs, `send --list` targets),
 `docs/research/hermes/cli-evidence-2026-09-07.txt` (full `send --help`),
@@ -161,3 +180,19 @@ hermes sessions repair-routing            # fix lost routing identity
 Work through `exercises/ex06-messaging-gateway.md`. Verification: one platform connected,
 thread↔session mapping demonstrated, `hermes send` delivered from a script, gateway logs
 read after a live message.
+
+### Senior interview probes
+
+1. Three people talk to your agent in one group chat, about two different customers. What is
+   a session here? Defend the boundary you chose.
+2. `hermes send` returns exit code 0. What do you actually know, and what do you not?
+3. Your gateway delivers successful output and failure notices to the same channel. Describe
+   the incident that eventually causes.
+4. When would you run one multiplexed gateway rather than one per profile, and what is the
+   first thing you would check before migrating?
+5. A bot token is rotated. What has to happen, and what breaks if you forget it?
+6. Sustained 429s from a platform at peak hour, with retries already in place. What now?
+7. The notification path that tells you the agent is down runs on the agent. What is wrong
+   with that, and what would you change?
+8. How would you let an agent in a chat platform hand a user a file, and what are the
+   failure modes of the path you chose?

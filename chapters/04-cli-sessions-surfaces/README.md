@@ -89,6 +89,22 @@ The habit worth forming: `hermes dump` for "what is my setup", `hermes debug sha
 --local` to read the bundle, and only then a share — public with redaction on, or `--nous`
 when the logs are sensitive at all.
 
+### The general pattern
+
+Three ideas here outlive the CLI they are demonstrated on:
+
+- **A session is an identity, not a window.** The moment the same conversation can be
+  resumed from a terminal, a phone and a web page, "most recent" stops being well defined
+  and IDs become the only reliable handle. Every multi-surface system rediscovers this,
+  usually after an incident.
+- **Snapshots before mutation are a different guarantee from version control.** Checkpoints
+  cover what the agent changed between two moments; git covers what you intended to change.
+  Neither substitutes for the other, and a system that offers one while people assume the
+  other is how work gets lost.
+- **The transcript and the runtime log answer different questions.** One says what the agent
+  decided; the other says what happened to the process. An incident needs both, and a team
+  that reads only transcripts will keep concluding the model was at fault.
+
 **Evidence:** `docs/research/hermes/cli-evidence-2026-09-07-b3-sessions-tools.txt`
 (live `sessions list` with real IDs, `sessions stats`, checkpoints help, TTY constraint),
 `docs/research/hermes/cli-evidence-2026-09-07-b7-multiagent-shipping.txt` (dashboard/backup),
@@ -171,3 +187,21 @@ hermes console                   # curated Hermes REPL — not a shell
 
 Work through `exercises/ex04-cli-sessions-surfaces.md`. Verification: session resumed by
 ID, one checkpoint rollback performed, one export produced, logs read during a real task.
+
+### Senior interview probes
+
+1. The same conversation is reachable from a terminal, a phone and a web dashboard. What is
+   the identity of that conversation, and what goes wrong if you address it by "most
+   recent"?
+2. An agent wrote files you did not want. Walk through the recovery, and say where
+   checkpoints stop helping and git starts.
+3. A user says "the agent broke". What do you look at first, what second, and why are they
+   different artifacts?
+4. Why does a full-featured admin dashboard need a deployment conversation before it needs a
+   feature conversation?
+5. You script something against the agent and it hangs in CI. What is the likely cause?
+6. Your session store is 4 GB. What has been happening, what does it cost you, and what is
+   your retention policy?
+7. You need to share a debug bundle with a vendor. What do you check before uploading it?
+8. What is the difference between pinning a session and archiving one, and when does that
+   distinction matter operationally?
