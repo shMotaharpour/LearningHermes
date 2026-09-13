@@ -1,11 +1,22 @@
-# Chapter 03b authoring rules
+# Chapter 03b — authoring delta
 
-Scope for this chapter is defined in CURRICULUM.md (Part mapping table).
-- Verify every Hermes command live before writing it here; append raw output to
-  docs/research/hermes/ and cite the file in README.md.
-- Keep the five required sections in order; do not add extra top-level sections.
-- Exercises for this chapter live at exercises/ex03b-retrieval-grounding.md.
-- This chapter ships runnable code in examples/retrieval/. Any claim about how the pipeline
-  behaves must be covered by tests/test_retrieval.py, not asserted in prose.
-- The numbering suffix is deliberate: the chapter was inserted between 03 and 04 rather than
-  renumbering the course. Do not "fix" it.
+Shared rules: `chapters/AGENTS.md`. Only what is specific to this chapter belongs here.
+
+## Scope boundary
+
+External retrieval: chunking, ranking, fusion, abstention, grounded citations. Context
+assembly and memory stay in 03.
+
+## Ships
+
+`examples/retrieval/` — chunkers, BM25, a hashing embedder, RRF, the abstention gate,
+grounding with citation checking, and the eval. Pinned by `tests/test_retrieval.py`.
+
+## Care
+
+- The embedder is not semantic and the chapter says so. Do not claim semantic gains it
+  cannot demonstrate.
+- `qa.json` must keep its answerless cases: without them the eval cannot measure the
+  failure this chapter exists to teach.
+- On a corpus this small every configuration ties, and the tools say so. Never replace that
+  with a picked winner.

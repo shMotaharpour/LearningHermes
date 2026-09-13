@@ -1,9 +1,13 @@
-# Chapter 08 authoring rules
+# Chapter 08 — authoring delta
 
-Scope for this chapter is defined in CURRICULUM.md (Part mapping table).
-- Verify every Hermes command live before writing it here; append raw output to
-  docs/research/hermes/ and cite the file in README.md.
-- Keep the five required sections in order; do not add extra top-level sections.
-- Exercises for this chapter live at exercises/ex08-event-driven-automation.md.
-- Relevant docs pages: start from https://hermes-agent.nousresearch.com/docs/llms.txt
-  and pick the feature pages listed in CURRICULUM.md for chapter 08.
+Shared rules: `chapters/AGENTS.md`. Only what is specific to this chapter belongs here.
+
+## Scope boundary
+
+Inbound webhooks, lifecycle hooks, outbound notify. Schedules are 07; the multi-agent
+consumers of these events are 09.
+
+## Care
+
+Every webhook example treats the payload as untrusted input. Hook examples show the consent
+model rather than assuming `--accept-hooks`.

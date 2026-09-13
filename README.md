@@ -56,10 +56,11 @@ requires an automation that runs unattended for 14 days, and that cannot be comp
 AGENTS.md                  # Root agent instructions (what any agent working in this repo must know)
 CURRICULUM.md              # Canonical syllabus: parts, chapters, competency clusters
 chapters/                  # 18 chapters, 5 parts — one directory per chapter
+  AGENTS.md                # Shared chapter contract: the rules every chapter obeys
   NN[x]-slug/              # a letter suffix (03b) marks a chapter inserted between two others
   NN-slug/
     README.md              # Chapter content: concepts -> verified commands -> pitfalls -> exercises
-    AGENTS.md              # Per-chapter authoring rules for agents
+    AGENTS.md              # That chapter's delta only (scope, what it ships, local rules)
     notes.md               # (optional) drafting notes; removed on publication
 exercises/                 # One hands-on exercise file per chapter (exNN-<slug>.md)
 examples/                  # Runnable configs, prompts, and scripts referenced by chapters

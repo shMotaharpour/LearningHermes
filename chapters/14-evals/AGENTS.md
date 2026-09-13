@@ -1,9 +1,20 @@
-# Chapter 14 authoring rules
+# Chapter 14 — authoring delta
 
-Scope for this chapter is defined in CURRICULUM.md (Part mapping table).
-- Verify every Hermes command live before writing it here; append raw output to
-  docs/research/hermes/ and cite the file in README.md.
-- Keep the five required sections in order; do not add extra top-level sections.
-- Exercises for this chapter live at exercises/ex14-evals.md.
-- Relevant docs pages: start from https://hermes-agent.nousresearch.com/docs/llms.txt
-  and pick the feature pages listed in CURRICULUM.md for chapter 14.
+Shared rules: `chapters/AGENTS.md`. Only what is specific to this chapter belongs here.
+
+## Scope boundary
+
+**Offline evaluation only**: frozen sets, significance, judges, trajectory metrics, the
+failure taxonomy. Alerting, cost review, silence detection and the incident-to-task loop all
+belong to 14b. This boundary is the reason the chapter was split — keep it.
+
+## Ships
+
+`examples/evals/` — runner, comparison with Wilson intervals and sample size, a calibrated
+judge, rubric, taxonomy. Pinned by `tests/test_eval_harness.py`.
+
+## Care
+
+The harness refuses three things (self-judging, comparing dry runs, generating a missing
+baseline). Those are refusals, not warnings, because each otherwise produces a number that
+looks fine. Keep them refusals.

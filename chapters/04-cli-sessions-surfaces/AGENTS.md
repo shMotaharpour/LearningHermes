@@ -1,9 +1,13 @@
-# Chapter 04 authoring rules
+# Chapter 04 — authoring delta
 
-Scope for this chapter is defined in CURRICULUM.md (Part mapping table).
-- Verify every Hermes command live before writing it here; append raw output to
-  docs/research/hermes/ and cite the file in README.md.
-- Keep the five required sections in order; do not add extra top-level sections.
-- Exercises for this chapter live at exercises/ex04-cli-sessions-surfaces.md.
-- Relevant docs pages: start from https://hermes-agent.nousresearch.com/docs/llms.txt
-  and pick the feature pages listed in CURRICULUM.md for chapter 04.
+Shared rules: `chapters/AGENTS.md`. Only what is specific to this chapter belongs here.
+
+## Scope boundary
+
+Surfaces, session lifecycle, checkpoints, and incident reporting on *your own* machine.
+Platform-facing delivery is 06; what runs unattended is 07.
+
+## Care
+
+`debug share` examples must keep showing `--local` first. The chapter teaches reading the
+bundle before publishing it, so no example may upload as its first step.

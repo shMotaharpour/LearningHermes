@@ -1,9 +1,19 @@
-# Chapter 11 authoring rules
+# Chapter 11 — authoring delta
 
-Scope for this chapter is defined in CURRICULUM.md (Part mapping table).
-- Verify every Hermes command live before writing it here; append raw output to
-  docs/research/hermes/ and cite the file in README.md.
-- Keep the five required sections in order; do not add extra top-level sections.
-- Exercises for this chapter live at exercises/ex11-mcp-integration.md.
-- Relevant docs pages: start from https://hermes-agent.nousresearch.com/docs/llms.txt
-  and pick the feature pages listed in CURRICULUM.md for chapter 11.
+Shared rules: `chapters/AGENTS.md`. Only what is specific to this chapter belongs here.
+
+## Scope boundary
+
+MCP in both directions: consuming servers, and writing one. In-process extension is 12.
+
+## Ships
+
+`examples/mcp-notes-server/notes_mcp.py` — a complete stdio server, no SDK. Pinned by
+`tests/test_mcp_notes_server.py`, which tests in-process *and* over a real pipe.
+
+## Care
+
+- No SDK, deliberately: the point is that nothing hides what the protocol requires.
+- The subprocess layer is not optional. Stdout pollution, an extra frame, and a missing
+  capability are all invisible to an in-process test.
+- `hermes egress-guard` and other plugin-registered subcommands carry `# plugin: <name>`.

@@ -1,9 +1,13 @@
-# Chapter 15 authoring rules
+# Chapter 15 — authoring delta
 
-Scope for this chapter is defined in CURRICULUM.md (Part mapping table).
-- Verify every Hermes command live before writing it here; append raw output to
-  docs/research/hermes/ and cite the file in README.md.
-- Keep the five required sections in order; do not add extra top-level sections.
-- Exercises for this chapter live at exercises/ex15-security-cost-governance.md.
-- Relevant docs pages: start from https://hermes-agent.nousresearch.com/docs/llms.txt
-  and pick the feature pages listed in CURRICULUM.md for chapter 15.
+Shared rules: `chapters/AGENTS.md`. Only what is specific to this chapter belongs here.
+
+## Scope boundary
+
+Threat model, defense layers, break-glass, and cost governance. The controls themselves are
+introduced where they are used (05 toolsets, 11 filtering, 13 backends) and are *owned* here.
+
+## Care
+
+Every control is described as a mechanism outside the model. "Instruct the agent not to" is
+never presented as a control — the chapter's general-pattern note depends on that.
