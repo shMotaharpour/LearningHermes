@@ -1,15 +1,18 @@
 # Chapter 13 — Shipping Agent Products
 
+> **Verified:** 2026-09-12 · Hermes Agent v0.20.6 (2026.8.27) · recheck: `python3 scripts/verify_chapters.py`
+
 ## Why this matters (job link)
 
-Deployment is the most-demanded skill in the corpus: 93 mentions across postings —
-Databricks: "Architect and implement robust, scalable ML infrastructure... support seamless
-integration of AI/ML models into production" (`docs/research/jobs/source-02.md`);
-Reflection: "deploying reliable production systems... modern DevOps practices (Docker,
-Kubernetes, and CI/CD)" (`docs/research/jobs/source-04.md`). Agents are software: they
-need backends, packaging, CI, and deployment checklists. This chapter covers running
-Hermes workloads on the right backend, shipping agent-built products through GitHub, and
-distributing whole agent setups.
+Shipping and DevOps is the second-most-cited requirement cluster by mentions: 13 of 18 postings with extracted body text name deployment, Docker/Kubernetes, or CI/CD (42 mentions; stats in
+`docs/research/jobs/stats-2026-09-12.txt`, reproduce with
+`python3 scripts/job_evidence_stats.py`) — Databricks: "Architect and implement robust,
+scalable ML infrastructure... support seamless integration of AI/ML models into production"
+(`docs/research/jobs/source-02.md`); Reflection: "deploying reliable production systems...
+modern DevOps practices (Docker, Kubernetes, and CI/CD)" (`docs/research/jobs/source-04.md`).
+Agents are software: they need backends, packaging, CI, and deployment checklists. This chapter
+covers running Hermes workloads on the right backend, shipping agent-built products through
+GitHub, and distributing whole agent setups.
 
 ## Concepts
 

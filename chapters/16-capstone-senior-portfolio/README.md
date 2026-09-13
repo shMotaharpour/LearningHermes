@@ -1,5 +1,7 @@
 # Chapter 16 — Capstone: Senior Portfolio
 
+> **Verified:** 2026-09-12 · Hermes Agent v0.20.6 (2026.8.27) · recheck: `python3 scripts/verify_chapters.py`
+
 ## Why this matters (job link)
 
 Everything before this chapter was competency; this one is *evidence*. Senior interviews

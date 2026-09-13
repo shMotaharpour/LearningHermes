@@ -1,0 +1,29 @@
+# Course content license: CC BY 4.0
+
+The prose and exercise material in this repository — `CURRICULUM.md`, `README.md`,
+`chapters/`, `exercises/`, `assets/`, and `docs/` — is licensed under the
+**Creative Commons Attribution 4.0 International** license (CC BY 4.0).
+
+* Human-readable summary: https://creativecommons.org/licenses/by/4.0/
+* Full legal code (authoritative): https://creativecommons.org/licenses/by/4.0/legalcode.en
+
+You are free to share (copy and redistribute the material in any medium or format) and
+adapt (remix, transform, and build upon the material) for any purpose, including
+commercially, under these terms:
+
+* **Attribution** — you must give appropriate credit, provide a link to the license, and
+  indicate if changes were made. You may do so in any reasonable manner, but not in any way
+  that suggests the licensor endorses you or your use.
+* **No additional restrictions** — you may not apply legal terms or technological measures
+  that legally restrict others from doing anything the license permits.
+
+Suggested attribution:
+
+> LearningHermes — AI Agent Engineering course, by Hossein Motaharpour,
+> licensed CC BY 4.0. Source: <repository URL>.
+
+No warranty is given: the material is provided "as is", without warranty of any kind,
+including fitness for a particular purpose.
+
+Code in this repository (`scripts/`, `tests/`, `.github/`) is licensed under MIT — see
+`LICENSE`.

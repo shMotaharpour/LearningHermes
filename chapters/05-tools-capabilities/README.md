@@ -1,5 +1,7 @@
 # Chapter 05 — Tools and Capabilities
 
+> **Verified:** 2026-09-12 · Hermes Agent v0.20.6 (2026.8.27) · recheck: `python3 scripts/verify_chapters.py`
+
 ## Why this matters (job link)
 
 Tool calling is the load-bearing skill in agent postings: Reflection wants engineers

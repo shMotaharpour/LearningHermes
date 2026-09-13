@@ -1,14 +1,16 @@
 # Chapter 15 — Security, Cost, and Governance
 
+> **Verified:** 2026-09-12 · Hermes Agent v0.20.6 (2026.8.27) · recheck: `python3 scripts/verify_chapters.py`
+
 ## Why this matters (job link)
 
-Security and governance appear in 21+ mentions and gate everything else: True Zero's
-engineer must align "all AI/ML solutions with applicable security, data handling,
+Security and governance language appears in 5 of 18 postings with extracted body text (23 mentions; `docs/research/jobs/stats-2026-09-12.txt`) and gates everything else: True Zero's
+engineer must align "all AI/ML solutions align with applicable security, data handling,
 compliance, and Zero Trust requirements" (`docs/research/jobs/source-03.md`); Paramount
-partners "with DevOps, SRE, and Infosec teams" (`docs/research/jobs/source-01.md`). An
-agent with shell access is a privileged workload — running one without a security model is
-negligence, and senior interviews probe exactly this. The second half of this chapter is
-cost governance: the routing decisions of Chapter 02 become a budget policy here.
+partners "with DevOps, SRE, and Infosec teams" (`docs/research/jobs/source-01.md`). An agent
+with shell access is a privileged workload — running one without a security model is
+negligence, and senior interviews probe exactly this. The second half of this chapter is cost
+governance: the routing decisions of Chapter 02 become a budget policy here.
 
 ## Concepts
 

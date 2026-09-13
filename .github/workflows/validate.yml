@@ -1,0 +1,48 @@
+name: validate
+
+on:
+  push:
+    branches: [english, farsi]
+  pull_request:
+
+jobs:
+  structure:
+    name: structure + evidence
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Course structure (chapter contract, citations, exercise pairing)
+        run: python3 scripts/validate_course.py --root .
+      - name: Quoted numbers still match the stored evidence
+        run: python3 scripts/job_evidence_stats.py --check
+      - name: Evidence ledger is up to date
+        run: python3 scripts/rebuild_job_ledger.py --check
+      - name: Unit tests
+        run: python3 -m unittest discover -s tests -v
+
+  parity:
+    name: branch parity (en <-> fa)
+    # The parity check compares this branch against its counterpart; it only runs when a
+    # translation is being brought back in line, per docs/research/README.md.
+    if: github.ref == 'refs/heads/farsi' || github.base_ref == 'farsi'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Mirror check against the English branch
+        run: |
+          set -euo pipefail
+          git fetch --depth=1 origin english
+          git worktree add ../english origin/english
+          python3 scripts/validate_course.py --root . --other ../english
+
+  # The `hermes` command claims themselves are re-checked with scripts/verify_chapters.py,
+  # which needs a machine with the Hermes CLI installed: run it locally before a release
+  # (CI runners cannot install the CLI).
