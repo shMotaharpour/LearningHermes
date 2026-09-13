@@ -28,7 +28,7 @@ Recurring requirement clusters, ordered by observed frequency in the stored evid
 | Shipping & DevOps | 13/18 | 42 | 13 |
 | Evaluation & observability | 8/18 | 31 | 14 |
 | Stakeholder/product skills | 8/18 | 11 | 06, 08, 16 |
-| RAG & context engineering | 6/18 | 15 | 03 |
+| RAG & context engineering | 6/18 | 15 | 03, 03b |
 | Security & governance | 5/18 | 23 | 15 |
 | Prompt & context engineering | 5/18 | 7 | 03, 10 |
 | API & systems integration | 4/18 | 12 | 12 |
@@ -40,7 +40,7 @@ Postings counted = the 18 with extracted body text; a posting can cite several c
 The course teaches each cluster hands-on: you do the work *with* an agent, on a real
 machine, with evidence saved under `docs/research/`.
 
-## Course Structure — 5 parts, 16 chapters
+## Course Structure — 5 parts, 17 chapters
 
 ### Part I — Foundations (know the machine)
 
@@ -49,6 +49,7 @@ machine, with evidence saved under `docs/research/`.
 | 01 | `chapters/01-agent-foundations/` | What an AI agent is; Hermes architecture (agent loop, tools, gateway); install; first sessions; `hermes doctor` | Agent orchestration |
 | 02 | `chapters/02-configuration-models/` | `config.yaml` vs `.env`; providers & models; aliases; Mixture of Agents; fallback providers; credential pools; local models | Cost optimization, model routing |
 | 03 | `chapters/03-context-memory/` | Context files (AGENTS.md, SOUL.md, USER.md, MEMORY.md); memory system & providers; context references; compression & caching | Prompt/context engineering, RAG-adjacent context skills |
+| 03b | `chapters/03b-retrieval-grounding/` | Chunking strategies compared; BM25; dense retrieval; reciprocal rank fusion; abstention; grounded citations and citation verification; retrieval evals | RAG & context engineering |
 
 ### Part II — Operating the Agent (daily driver)
 
@@ -95,7 +96,7 @@ Part V   -> Senior Applied AI Engineer (you ship, measure, secure, and defend th
 
 | Part | Chapters | Hands-on time | Exit capability |
 |---|---|---|---|
-| I | 01–03 | 6–9 h | Run and steer the agent; know where its context comes from |
+| I | 01–03b | 9–13 h | Run and steer the agent; know where its context comes from, and retrieve what is not in it |
 | II | 04–06 | 7–11 h | Operate it across surfaces, tools, and chat platforms |
 | III | 07–09 | 9–14 h | Ship workflows that run unattended |
 | IV | 10–13 | 12–18 h | Extend the platform and distribute what you built |
@@ -103,8 +104,16 @@ Part V   -> Senior Applied AI Engineer (you ship, measure, secure, and defend th
 | 16 | Capstone | 30–50 h over ~6 weeks | Defend all of the above with evidence |
 
 Estimates are *hands-on* time for the audience in `README.md`'s prerequisites — reading the
-chapter and doing its exercise on a real machine. Total: **~70–110 h** plus the capstone's
+chapter and doing its exercise on a real machine. Total: **~73–114 h** plus the capstone's
 calendar time, which is bounded by a 14-day unattended run rather than by effort.
+
+### A note on chapter numbering
+
+Chapter numbers may carry a single lowercase letter (`03b`). A chapter inserted between two
+existing ones takes a suffix rather than renumbering everything after it: renumbering would
+rewrite every "Chapter NN" cross-reference in the course *and* force the identical rename on
+the translation branch, whose parity check compares file trees. `scripts/validate_course.py`
+accepts `NN` or `NNx`, and the exercise file matches (`exercises/ex03b-<slug>.md`).
 
 ## Chapter Contract
 

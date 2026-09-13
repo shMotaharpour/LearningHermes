@@ -10,7 +10,7 @@ translation (English technical terms preserved). Content is identical across bra
 
 ## The Course
 
-- **Syllabus:** [CURRICULUM.md](CURRICULUM.md) — 5 parts, 16 chapters, competency mapping.
+- **Syllabus:** [CURRICULUM.md](CURRICULUM.md) — 5 parts, 17 chapters, competency mapping.
 - **Path:** Agent Operator → Agent Power User → Automation Engineer → Agent Developer →
   Senior Applied AI Engineer.
 
@@ -39,13 +39,13 @@ unattended runs mean wall-clock time exceeds working time.
 
 | Part | Chapters | Estimated hands-on time |
 |---|---|---|
-| I — Foundations | 01–03 | 6–9 h |
+| I — Foundations | 01–03b | 9–13 h |
 | II — Operating the Agent | 04–06 | 7–11 h |
 | III — Automation Engineering | 07–09 | 9–14 h |
 | IV — Building & Extending | 10–13 | 12–18 h |
 | V — Production Engineering | 14–15 | 6–10 h |
 | Capstone | 16 | 30–50 h over ~6 weeks (incl. a 14-day unattended run) |
-| **Total** | | **~70–110 h**, plus the capstone's calendar time |
+| **Total** | | **~73–114 h**, plus the capstone's calendar time |
 
 The capstone is deliberately calendar-bound, not effort-bound: `exercises/ex16-capstone-senior-portfolio.md`
 requires an automation that runs unattended for 14 days, and that cannot be compressed.
@@ -55,7 +55,8 @@ requires an automation that runs unattended for 14 days, and that cannot be comp
 ```
 AGENTS.md                  # Root agent instructions (what any agent working in this repo must know)
 CURRICULUM.md              # Canonical syllabus: parts, chapters, competency clusters
-chapters/                  # 16 chapters, 5 parts — one directory per chapter
+chapters/                  # 17 chapters, 5 parts — one directory per chapter
+  NN[x]-slug/              # a letter suffix (03b) marks a chapter inserted between two others
   NN-slug/
     README.md              # Chapter content: concepts -> verified commands -> pitfalls -> exercises
     AGENTS.md              # Per-chapter authoring rules for agents
