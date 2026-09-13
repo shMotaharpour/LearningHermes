@@ -2,32 +2,108 @@
 
 ## Objective
 
-Build a small but real eval harness and an observability habit: frozen tasks, deterministic
-checks, an LLM judge, a regression run, and a nightly eval job.
+Build the observability habit, then run a real regression experiment with the harness in
+`examples/evals/` — including the part that decides whether your result means anything.
+
+You finish with a baseline in version control, one defended go/no-go decision, a
+calibrated judge, and a nightly gate that is silent until it is not.
+
+Budget: 3–4 hours, most of it waiting on runs.
 
 ## Tasks
 
-1. **Observability sweep.** Run all four: `hermes monitoring status`,
+1. **Observability sweep.** Run all four layers: `hermes monitoring status`,
    `hermes logs --level warning --since 24h`, `hermes insights --days 7`,
-   `hermes sessions stats`. Write one sentence per layer: what it tells you about *your*
-   usage.
-2. **Eval set.** Define 5 frozen tasks (from Chapters 05/07 work): e.g. "count files in
-   dir X", "extract this PDF's abstract", "cron status report". For each: the command/
-   prompt, and a deterministic check (file exists, JSON parses, output contains Y).
-3. **Baseline run.** Run the 5 tasks 3× each with the current model; record pass/fail +
-   approximate tokens per task.
-4. **LLM judge.** For the two most open-ended tasks, add a rubric judge: export the
-   transcript (`hermes sessions export`), have a *different* model score grounding +
-   completeness 1–5. Record scores.
-5. **Regression run.** Make one real change (switch default model via `hermes config
-   set`); re-run the set; diff pass rate AND cost. Revert if regression.
-6. **Nightly harness.** Wrap steps 3–4 into `eval_runner.sh` that prints only on
-   regressions; wire it as a script-only cron job (Chapter 07 pattern).
+   `hermes sessions stats`. Write one sentence per layer about *your* usage — not what the
+   command does, what it told you.
+
+2. **Prove the harness before you trust it.**
+
+   ```bash
+   cd examples/evals
+   python3 eval_runner.py --out /dev/null --dry-run
+   python3 -m unittest discover -s ../../tests -k eval_harness
+   ```
+
+   The dry run costs nothing and calls no agent. Read `tasks.json` and, for each of the
+   five tasks, write down the property it pins. Identify which one would fail a run that
+   produced the **correct answer**, and why that is the right behaviour.
+
+3. **Baseline.** `python3 eval_runner.py --out baseline.json` on your current config, then
+   **commit `baseline.json`**. Record `hermes insights --days 1` alongside it: the harness
+   does not collect cost, and a quality baseline without a cost baseline is half a
+   measurement.
+
+4. **Read the intervals before you change anything.** Run `compare.py baseline.json
+   baseline.json`. Every delta is zero, and the Wilson intervals are still wide. Write down
+   the width of the interval on one task. That width is the smallest change you could
+   possibly detect at this sample size — everything smaller is invisible to you.
+
+5. **Regression experiment.** Make one real change — switch the default model with
+   `hermes config set model ...` — then:
+
+   ```bash
+   python3 eval_runner.py --out after.json --model <the new model>
+   python3 compare.py baseline.json after.json
+   ```
+
+   Write a go/no-go **with the p-value and the interval in it**. If the verdict is "no
+   distinguishable difference", say what sample size `compare.py` says you would need, and
+   decide — explicitly — whether the change is worth that many runs. "Inconclusive, and not
+   worth 82 runs per arm to resolve" is a legitimate senior answer. "It looked better" is
+   not.
+
+6. **Calibrate a judge, then use it.**
+
+   ```bash
+   python3 judge.py --judge-model <different model> --calibrate
+   ```
+
+   If it disagrees with a pinned label by more than one point, fix the rubric's anchors or
+   change the judge model, and say which you did and why. Only then:
+
+   ```bash
+   python3 judge.py --results after.json --against baseline.json --judge-model <different model>
+   ```
+
+   Record how many verdicts flipped when the order flipped. Then deliberately try to
+   break it: run `judge.py --results after.json --judge-model <the model under test>` and
+   record what happens and why that refusal exists.
+
+7. **Tag the failures.** Take every failing run in `after.json` and assign exactly one
+   class from `failure-taxonomy.md`, at the earliest point in the trajectory. Add one class
+   of your own from a failure the list does not cover, with its fix column filled in.
+   A class you cannot write a fix for is not a class.
+
+8. **Grow the set.** Turn one real failure — from `hermes cron incidents`,
+   `hermes logs --level error`, or your own week — into a sixth frozen task with a
+   deterministic check. This is the loop: production failures become eval tasks, so the
+   same failure cannot ship twice.
+
+9. **Nightly gate.** Wire `eval_runner.sh` as a script-only cron job with failures routed
+   away from the success target (Chapter 07):
+
+   ```bash
+   hermes cron create "0 3 * * *" --name nightly-eval \
+     --script eval_runner.sh --no-agent \
+     --deliver telegram --failure-deliver telegram:oncall
+   ```
+
+   Prove it both ways with `hermes cron tick`: silent when the set passes, loud when it
+   does not (temporarily point `EVAL_BASELINE` at a baseline you know is better).
 
 ## Verification checklist
 
-- [ ] Four-layer observability sweep completed with written observations.
-- [ ] 5-task eval set with deterministic checks, 3× baseline recorded.
-- [ ] Judge scores from a different model than the one under test.
-- [ ] One before/after regression diff including cost delta, with a documented decision.
-- [ ] Nightly eval cron job live and silent-on-pass.
+- [ ] Four-layer observability sweep completed, one written observation per layer.
+- [ ] Dry run and harness tests pass; the five tasks' purposes written down, including
+      which one fails a correct answer and why.
+- [ ] `baseline.json` committed, with a cost baseline from `hermes insights` beside it.
+- [ ] The Wilson interval width on one task recorded, and what it implies about your
+      detection floor.
+- [ ] A go/no-go decision quoting a p-value and an interval — including, if applicable,
+      an explicit decision not to collect the runs needed to resolve it.
+- [ ] Judge calibrated against the pinned labels before first use; order-flip count
+      recorded; the self-judging refusal observed and explained.
+- [ ] Every failing run tagged with one primary class, plus one class you added with a fix.
+- [ ] A sixth task derived from a real production failure.
+- [ ] Nightly cron job proven silent-on-pass and loud-on-regression via `hermes cron tick`.
