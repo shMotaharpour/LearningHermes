@@ -251,6 +251,48 @@ class ValidatorTests(unittest.TestCase):
         self.rewrite_chapter(text)
         self.reject("docs/research/hermes/nope.txt")
 
+    def test_letter_suffixed_chapter_is_accepted(self):
+        """03b: a chapter inserted between two others, without renumbering the course."""
+        self.put(self.root, "CURRICULUM.md",
+                 "# Curriculum\n\n| 01 | `chapters/01-test/` | Test |\n"
+                 "| 01b | `chapters/01b-inserted/` | Inserted |\n")
+        text = CHAPTER_README.format(num=1).replace(
+            "exercises/ex01-test.md", "exercises/ex01b-inserted.md")
+        self.put(self.root, "chapters/01b-inserted/README.md", text)
+        self.put(self.root, "chapters/01b-inserted/AGENTS.md", CHAPTER_AGENTS.format(num=1))
+        self.put(self.root, "exercises/ex01b-inserted.md", EXERCISE.format(num=1))
+        result = self.run_cli()
+        self.assertEqual(result.returncode, 0, result.stderr)
+
+    def test_letter_suffixed_chapter_still_needs_a_matching_exercise(self):
+        """The suffix widens the pattern; it does not loosen the pairing rule."""
+        self.put(self.root, "CURRICULUM.md",
+                 "# Curriculum\n\n| 01 | `chapters/01-test/` | Test |\n"
+                 "| 01b | `chapters/01b-inserted/` | Inserted |\n")
+        text = CHAPTER_README.format(num=1).replace(
+            "exercises/ex01-test.md", "exercises/ex01b-inserted.md")
+        self.put(self.root, "chapters/01b-inserted/README.md", text)
+        self.put(self.root, "chapters/01b-inserted/AGENTS.md", CHAPTER_AGENTS.format(num=1))
+        self.reject("no matching exercise file exercises/ex01b-*.md")
+
+    def test_letter_suffixed_exercise_slug_must_match_its_chapter(self):
+        self.put(self.root, "CURRICULUM.md",
+                 "# Curriculum\n\n| 01 | `chapters/01-test/` | Test |\n"
+                 "| 01b | `chapters/01b-inserted/` | Inserted |\n")
+        text = CHAPTER_README.format(num=1).replace(
+            "exercises/ex01-test.md", "exercises/ex01b-other.md")
+        self.put(self.root, "chapters/01b-inserted/README.md", text)
+        self.put(self.root, "chapters/01b-inserted/AGENTS.md", CHAPTER_AGENTS.format(num=1))
+        self.put(self.root, "exercises/ex01b-other.md", EXERCISE.format(num=1))
+        self.reject("slug does not match the chapter slug")
+
+    def test_a_multi_letter_suffix_is_not_a_chapter(self):
+        """One letter only: 01bc is a typo, not a numbering scheme."""
+        self.put(self.root, "chapters/01bc-nope/README.md", CHAPTER_README.format(num=1))
+        result = self.run_cli()
+        # Not recognised as a chapter directory, so it is ignored rather than validated.
+        self.assertEqual(result.returncode, 0, result.stderr)
+
     def test_missing_chapter_agents_rejected(self):
         (self.root / "chapters" / "01-test" / "AGENTS.md").unlink()
         self.reject("missing AGENTS.md")

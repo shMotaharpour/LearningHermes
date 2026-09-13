@@ -1,0 +1,65 @@
+{
+  "$comment": [
+    "Labelled questions for retrieval evaluation. `must_contain` is a distinctive string",
+    "from the passage that actually answers the question — the cheapest usable ground",
+    "truth, and enough to compute recall@k without hand-judging every run.",
+    "",
+    "The last two cases are ANSWERLESS on purpose. A retrieval eval made only of questions",
+    "the corpus answers cannot measure the failure that matters most in production: an",
+    "answer invented for a question nobody documented."
+  ],
+  "cases": [
+    {
+      "question": "how long are session transcripts kept?",
+      "must_contain": "retained for 90 days",
+      "doc": "retention"
+    },
+    {
+      "question": "what happens to transcripts with customer data?",
+      "must_contain": "30 days",
+      "doc": "retention"
+    },
+    {
+      "question": "when should I engage the global stop?",
+      "must_contain": "blast radius",
+      "doc": "incident-response"
+    },
+    {
+      "question": "who can declare an incident?",
+      "must_contain": "Any engineer may declare",
+      "doc": "incident-response"
+    },
+    {
+      "question": "how many backup rotations do we keep?",
+      "must_contain": "7 rotations",
+      "doc": "retention"
+    },
+    {
+      "question": "when does a new engineer take their first on-call shift?",
+      "must_contain": "shadowing two",
+      "doc": "onboarding"
+    },
+    {
+      "question": "what runs on auxiliary models?",
+      "must_contain": "session titling",
+      "doc": "cost-policy"
+    },
+    {
+      "question": "what is the threshold for investigating a spend jump?",
+      "must_contain": "40 percent",
+      "doc": "cost-policy"
+    },
+    {
+      "question": "what is our parental leave allowance?",
+      "must_contain": null,
+      "doc": null,
+      "answerless": true
+    },
+    {
+      "question": "which cloud region hosts the primary database?",
+      "must_contain": null,
+      "doc": null,
+      "answerless": true
+    }
+  ]
+}

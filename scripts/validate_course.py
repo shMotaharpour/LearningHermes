@@ -51,9 +51,14 @@ REQUIRED_EXERCISE_SECTIONS = [
     "## Verification checklist",
 ]
 
-CHAPTER_DIR_RE = re.compile(r"^\d{2}-[a-z0-9-]+$")
-EXERCISE_RE = re.compile(r"^ex(\d{2})-([a-z0-9-]+)\.md$")
-CURRICULUM_CHAPTER_RE = re.compile(r"chapters/(\d{2}-[a-z0-9-]+)/")
+# Chapters are NN-slug. A single lowercase letter may follow the digits (03b) for a
+# chapter inserted between two existing ones: renumbering every later chapter would rewrite
+# every "Chapter NN" cross-reference in the course AND force the same rename on the
+# translation branch, whose parity check compares file trees. A suffix costs one character.
+CHAPTER_NUM = r"\d{2}[a-z]?"
+CHAPTER_DIR_RE = re.compile(rf"^({CHAPTER_NUM})-([a-z0-9-]+)$")
+EXERCISE_RE = re.compile(rf"^ex({CHAPTER_NUM})-([a-z0-9-]+)\.md$")
+CURRICULUM_CHAPTER_RE = re.compile(rf"chapters/({CHAPTER_NUM}-[a-z0-9-]+)/")
 VERIFIED_RE = re.compile(
     r"^> \*\*Verified:\*\* (\d{4}-\d{2}-\d{2}) · Hermes Agent v(\d[\w.]*)", re.M
 )
@@ -184,7 +189,8 @@ def validate(
             errors.append(f"exercises/{p.name}: unbalanced code fences")
 
     for d in dirs:
-        num, slug = d.name[:2], d.name[3:]
+        chapter_match = CHAPTER_DIR_RE.match(d.name)
+        num, slug = chapter_match.group(1), chapter_match.group(2)
         rel = f"chapters/{d.name}"
         readme = d / "README.md"
         if not readme.is_file():
@@ -265,7 +271,7 @@ def validate(
         if code_block_count(readme) % 2:
             errors.append(f"{rel}/README.md: unbalanced code fences")
 
-    chapter_nums = {d.name[:2] for d in dirs}
+    chapter_nums = {CHAPTER_DIR_RE.match(d.name).group(1) for d in dirs}
     for n in sorted(set(exercise_by_num) - chapter_nums):
         errors.append(f"exercises/ex{n}-*.md has no matching chapter directory")
 
