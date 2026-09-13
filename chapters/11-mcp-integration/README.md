@@ -33,13 +33,13 @@ tools too.
 **`--args` must be the last option on the line.** Its help text says so literally, and the
 reason is argparse: `--args` takes the remainder, so everything after it belongs to the
 *spawned server process*, not to `hermes mcp add`. That makes
-`hermes mcp add notes --command ./notes-mcp --args --port 8321   # --args goes last` correct — `--port 8321`
+`hermes mcp add notes --command ./notes-mcp --args --port 8321` correct — `--port 8321`
 reaches `notes-mcp` — while moving a Hermes flag after it silently hands that flag to the
 child instead:
 
 ```bash
 hermes mcp add notes --command ./notes-mcp --connect-timeout 20 --args --port 8321   # right
-hermes mcp add notes --command ./notes-mcp --args --port 8321   # --args goes last --connect-timeout 20   # wrong
+hermes mcp add notes --command ./notes-mcp --args --port 8321 --connect-timeout 20   # wrong
 ```
 
 The second line does not error. It configures a server with the default timeout and passes
@@ -72,13 +72,60 @@ debugging ladder when a tool misbehaves: `hermes mcp list` (configured?) →
 
 Any language with an MCP SDK works — a stdio server is a script speaking JSON-RPC over
 stdio; an HTTP server exposes a URL. Hermes doesn't care where it runs; the contract is
-the protocol. Minimum viable server: one tool, JSON-schema'd inputs, deterministic
+the protocol. `examples/mcp-notes-server/notes_mcp.py` is a complete one in
+standard-library Python, with no SDK, so nothing hides what the protocol requires:
+
+```bash
+cd examples/mcp-notes-server
+python3 notes_mcp.py --selftest     # drive the whole protocol in-process, no agent needed
+hermes mcp add notes --command python3 --args "$PWD/notes_mcp.py"
+hermes mcp test notes
+```
+
+**The transport is one sentence:** read line-delimited JSON-RPC 2.0 from stdin, write
+responses to stdout. The handshake Hermes performs is `initialize` →
+`notifications/initialized` → `tools/list` → `tools/call`, at protocol version
+`2025-03-26`.
+
+**Four rules, and three of them are how a first server breaks.**
+
+1. **stdout is the protocol.** One stray `print()` and the client reads your debug line
+   where a frame should be. Diagnostics go to stderr. This is the most common first bug and
+   it presents as "the server doesn't work" with nothing in any log.
+2. **Never reply to a notification.** A message with no `id` is a notification
+   (`notifications/initialized` is the one you will meet first). Answer it and you have put
+   an extra frame on the wire, which the client reads as the answer to its *next* request —
+   so every later reply is off by one. The symptom is nonsense responses, not a protocol
+   error, which is what makes it expensive to find.
+3. **Declare `capabilities.tools` in the initialize result.** Per the spec a client may
+   skip `tools/list` entirely when that capability is absent — Hermes does exactly this, to
+   support prompt-only and resource-only servers. Omit it and your tools simply never
+   appear, with no error anywhere.
+4. **A tool failure is not a protocol failure.** A tool that cannot do its job returns a
+   normal result carrying `isError: true` and a readable reason, so the model recovers on
+   its next turn. A JSON-RPC error (`-32601`, `-32700`) means the *request* was malformed.
+   Confusing the two turns a recoverable situation into a dead connection.
+
+Rule 4 is Chapter 01's loop lesson wearing a different costume: an error the model can read
+is recoverable; an error that kills the channel is not. It recurs at every layer of this
+course, which is a sign it is the real rule rather than a Hermes convention.
+
+**Test it at two layers.** `tests/test_mcp_notes_server.py` covers the handlers in-process,
+*and* runs the server as a subprocess over a real pipe — because stdout pollution, an extra
+frame, and a missing capability are all invisible to an in-process test. The assertion
+worth copying: four messages in, one a notification, means **exactly three frames out**.
+That one number catches rule 2.
+
+Minimum viable server: one tool, JSON-schema'd inputs, deterministic
 output. Chapter 12's plugin system is the in-process alternative when you want deeper
 integration than tools.
 
 **Evidence:** `docs/research/hermes/cli-evidence-2026-09-07-b5-skills-mcp-plugins.txt`
 (full `hermes mcp` command tree, live `mcp list` empty-state + `mcp catalog` table with
-real entries).
+real entries). The handshake and protocol version quoted above were read from the Hermes
+source at v0.21.2 (`tools/mcp_tool_transport.py`, whose `_advertises_tools` documents the
+capability rule), not paraphrased; `tests/test_mcp_notes_server.py` pins the server's
+behaviour offline, including a real subprocess round-trip.
 
 ## Verified commands
 
@@ -92,6 +139,16 @@ hermes mcp test notes                    # synthetic connection check
 hermes mcp configure notes               # toggle per-tool selection
 hermes mcp login github / reauth --all   # OAuth maintenance
 hermes mcp remove notes
+```
+
+Write and wire your own (`examples/mcp-notes-server/`):
+
+```bash
+cd examples/mcp-notes-server
+python3 notes_mcp.py --selftest                    # protocol check, no agent needed
+hermes mcp add notes --command python3 --args "$PWD/notes_mcp.py"
+hermes mcp test notes                              # reachable?
+hermes tools list                                  # notes:note_add and friends appear
 ```
 
 Catalog:
@@ -133,6 +190,15 @@ hermes tools disable github:create_issue # scope one tool off
 - **A Hermes flag written after `--args`.** It is consumed by the spawned server, not by
   Hermes, and nothing complains. If a flag you passed appears to have been ignored, check
   its position relative to `--args` first.
+- **Printing to stdout in your own server.** It is the wire. The server looks broken and no
+  log says why. Everything diagnostic goes to stderr.
+- **Replying to `notifications/initialized`.** The extra frame becomes the answer to the
+  next request and every reply afterwards is off by one. You will debug your tools for an
+  hour before suspecting the handshake.
+- **Forgetting `capabilities.tools`.** Hermes may never call `tools/list`, so your tools
+  are absent with no error to find.
+- **Raising a JSON-RPC error when a tool merely failed.** `isError: true` in the result
+  lets the model read the reason and recover; a protocol error kills the channel.
 - **Skipping `mcp test`.** A server can be configured and still broken (wrong path, dead
   process). Test is the cheapest check.
 - **Confusing MCP with plugins.** MCP = external tools over protocol (cross-language,
@@ -144,3 +210,22 @@ hermes tools disable github:create_issue # scope one tool off
 Work through `exercises/ex11-mcp-integration.md`. Verification: one catalog MCP
 installed+filtered, one custom stdio MCP server written and called by the agent, OAuth
 reauth drill done.
+
+### Senior interview probes
+
+1. Describe the MCP stdio transport precisely enough that someone could implement it. What
+   is on the wire, and in what order?
+2. Your server's tools never appear in the client, and no error is logged anywhere. Name
+   two distinct causes and how you would tell them apart.
+3. When does a tool return `isError: true`, and when do you send a JSON-RPC error instead?
+   What breaks if you choose wrong?
+4. Why must a JSON-RPC notification go unanswered, and what is the *observable symptom*
+   when a server answers one?
+5. MCP versus an in-process plugin (Chapter 12): give two things each can do that the other
+   cannot, and name the decision that should drive the choice.
+6. You add an MCP server with 40 tools and your agent gets worse. Explain the mechanism and
+   the fix.
+7. How would you test an MCP server in CI, with no agent and no network? What would an
+   in-process test miss?
+8. `hermes mcp serve` turns your agent into a tool provider. What are you exposing, who
+   authenticates, and what is the blast radius if the key leaks?
