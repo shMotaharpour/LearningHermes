@@ -18,8 +18,8 @@ directory. Nothing here is decoration: these files are the citation targets of t
 1. **Cite the file that actually contains the claim.** A citation that points at the wrong
    file is a course bug, not a rounding error. `scripts/validate_course.py` opens every
    referenced path and fails on dangling references.
-2. **No empty evidence files.** A failed fetch gets a recorded failure entry in
-   `jobs/ledger.json`, not a zero-byte file. The validator fails on empty files here.
+2. **No empty evidence files.** A failed fetch gets a `note` on its `jobs/ledger.json`
+   entry, not a zero-byte file. The validator fails on empty files here.
 3. **Numbers are generated, never hand-tallied.** Counts quoted in `CURRICULUM.md` and the
    chapters come from `scripts/job_evidence_stats.py`:
 

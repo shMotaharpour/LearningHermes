@@ -33,7 +33,8 @@ docs/
     hermes/                # Verified Hermes CLI outputs + llms.txt snapshot (evidence base)
     jobs/                  # Job posting research: postings, searches, generated stats, ledger
 scripts/                   # Course tooling (validators, evidence stats, chapter re-verification)
-tests/                     # Tests for repo scripts (standard library only).github/workflows/         # CI: structure + evidence checks on every push and pull request
+tests/                     # Tests for repo scripts (standard library only)
+.github/workflows/         # CI: structure + evidence checks on every push and pull request
 LICENSE                    # MIT — the code in scripts/, tests/, .github/
 LICENSE-CONTENT            # CC BY 4.0 — the course text
 CONTRIBUTING.md            # Workflow, chapter contract, evidence rules

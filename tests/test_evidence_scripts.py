@@ -15,6 +15,17 @@ SCRIPTS = Path(__file__).resolve().parents[1] / "scripts"
 STATS = SCRIPTS / "job_evidence_stats.py"
 LEDGER = SCRIPTS / "rebuild_job_ledger.py"
 
+import importlib.util
+
+
+def _load(name: str):
+    """Import a repo script by file path (tests run before scripts/ is on sys.path)."""
+    spec = importlib.util.spec_from_file_location(name, SCRIPTS / f"{name}.py")
+    assert spec is not None and spec.loader is not None
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
+
 BODY = (
     "Senior Forward Deployed Engineer. You will deploy agent systems on Kubernetes, "
     "own CI/CD pipelines, and evaluate model quality with regression evals. "
@@ -125,6 +136,30 @@ class EvidenceScriptTests(unittest.TestCase):
         self.assertIn("## Requirement clusters", text)
         self.assertIn("Postings | Mentions", text)
         self.assertIn(f"/{rep['postings_with_body_text']} |", text)
+
+    def test_non_posting_reference_pages_are_excluded(self):
+        """Blogs, career guides, and job-description aggregators are not postings.
+
+        Regression: a devopsschool.com blog post used to sit in the corpus that all
+        cluster counts are computed over.
+        """
+        non_posting = _load("job_evidence").NON_POSTING_RE
+        for url in (
+            "https://www.devopsschool.com/blog/llm-quality-engineer-role-blueprint",
+            "https://sundeepteki.org/uploads/3/8/2/4/38242873/preview_-_ai-automation-engineer-career-guide-2026.pdf",
+            "https://jobdescription.org/jobs/artificial-intelligence/ai-agent-engineer",
+        ):
+            self.assertTrue(non_posting.search(url), url)
+
+    def test_family_claim_drift_is_detected(self):
+        """--check fails when a quoted family count drifts from the evidence."""
+        stats = json.loads(self.run_cli(STATS, "--json").stdout)
+        families = {row["family"]: row["postings"] for row in stats["families"]}
+        family = next(iter(families))
+        stats_module = _load("job_evidence_stats")
+        claim = f"({family}, {families[family] + 1} postings in this corpus)"
+        m = stats_module.FAMILY_CLAIM_RE.search(claim)
+        self.assertIsNotNone(m)
 
 
 if __name__ == "__main__":

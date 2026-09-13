@@ -36,7 +36,7 @@ Corollaries learned the hard way (details in `docs/research/README.md`):
 - Aggregate counts (`N postings`, `N mentions`) are produced by
   `scripts/job_evidence_stats.py`, never hand-tallied; `--check` fails on drift.
 - Never leave an empty evidence file behind: an unpublishable fetch is recorded as a
-  `failed_fetches` entry in `docs/research/jobs/ledger.json`, not as a zero-byte `source-*.md`.
+  `note` on its entry in `docs/research/jobs/ledger.json`, not as a zero-byte `source-*.md`.
 - Machine state is a dated snapshot. Write the shape of the output plus the command that
   produced it, and let `scripts/verify_chapters.py` tell you when the live CLI has moved on.
 

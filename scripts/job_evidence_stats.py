@@ -31,6 +31,9 @@ JOBS_DIR = JOBS_DIR_DEFAULT
 ROOT = Path(__file__).resolve().parent.parent
 CURRICULUM_ROW_RE = re.compile(r"^\|\s*([^|]+?)\s*\|\s*(\d+)/(\d+)\s*\|\s*(\d+)\s*\|")
 CLAIM_RE = re.compile(r"(\d+) of (\d+) postings with extracted body text(?:\s*\((\d+) mentions\))?")
+FAMILY_CLAIM_RE = re.compile(
+    r"\(([^(),]+), (\d+) postings? in this corpus\)"
+)
 
 
 def render_markdown(rep: dict) -> str:
@@ -116,6 +119,7 @@ def check(root: Path, rep: dict) -> list[str]:
             )
 
     valid = {(row["postings"], rep["postings_with_body_text"], row["mentions"]) for row in rep["clusters"]}
+    families = {row["family"]: row["postings"] for row in rep["families"]}
     for chapter in sorted((root / "chapters").glob("*/README.md")):
         rel = chapter.relative_to(root)
         text = chapter.read_text(encoding="utf-8", errors="replace")
@@ -127,6 +131,16 @@ def check(root: Path, rep: dict) -> list[str]:
                 continue
             if (postings, total, int(mentions)) not in valid:
                 problems.append(f"{rel}: claim '{m.group(0)}' matches no cluster in the evidence")
+        # Family tags quoted in prose: "(<family>, N posting(s) in this corpus)".
+        for m in FAMILY_CLAIM_RE.finditer(text):
+            family, postings = m.group(1).strip(), int(m.group(2))
+            if family not in families:
+                problems.append(f"{rel}: family '{family}' is not a known job family")
+            elif families[family] != postings:
+                problems.append(
+                    f"{rel}: claim says {postings} postings for family '{family}'; "
+                    f"evidence says {families[family]}"
+                )
     return problems
 
 

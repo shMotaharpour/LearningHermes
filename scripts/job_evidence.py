@@ -49,7 +49,10 @@ JOB_URL_RE = re.compile(
     re.IGNORECASE,
 )
 NON_POSTING_RE = re.compile(
-    r"(sign_in|/job-seeker-support|q-[a-z-]*jobs|ziprecruiter\.com/Jobs|indeed\.com/q-|/guides/|job_alert_post)",
+    r"(sign_in|/job-seeker-support|q-[a-z-]*jobs|ziprecruiter\.com/Jobs|indeed\.com/q-|/guides/|job_alert_post"
+    # Reference material, not a hiring page: blog posts, career guides, and
+    # job-description aggregator pages that only *describe* a role.
+    r"|/blog/|/advice/|career[- ]guide|jobdescription\.org)",
     re.IGNORECASE,
 )
 
@@ -162,14 +165,50 @@ def discover(jobs_dir: Path) -> tuple[dict[str, dict], list[str]]:
 
 def company_for(url: str, title: str) -> str:
     """Prefer the company named in the posting title; fall back to the URL host."""
+    # "Role at Company", "Role @ Company", "Role — Company" — the company follows the
+    # last role/company separator. Try these before falling back to the URL host.
+    for marker in (" @ ", " at ", " — "):
+        idx = title.lower().rfind(marker)
+        if idx == -1:
+            continue
+        tail = title[idx + len(marker) :].strip()
+        for sep in (" - ", " – ", " | ", " — "):
+            tail = tail.split(sep)[0].strip()
+        lowered = tail.lower()
+        if 1 < len(tail) < 40 and not lowered.startswith(("greenhouse", "job", "united states", "remote", "careers at")):
+            return tail
     if "|" in title:
         tail = title.rsplit("|", 1)[1].strip()
-        if 1 < len(tail) < 40 and not tail.lower().startswith("job"):
+        if 1 < len(tail) < 40 and not tail.lower().startswith(("job", "careers at", "built in")):
             return tail
+        # "Role - Company | board" shape: the company is the last " - " segment
+        # before the board tag (e.g. "... - Autodesk | Job Details").
+        head = title.rsplit("|", 1)[0].strip()
+        if " - " in head:
+            tail = head.split(" - ")[-1].strip()
+            if 1 < len(tail) < 40 and not tail.lower().startswith(("senior ", "staff ", "lead ", "principal ", "ai ", "mcp ", "job ")):
+                return tail
+    if " - " in title:
+        # "Role - Company" / "Role - Company - board": prefer the trailing segment.
+        segments = [s.strip() for s in title.split(" - ")]
+        tail = segments[-1]
+        if 1 < len(tail) < 40 and not tail.lower().startswith(("senior ", "staff ", "lead ", "principal ", "ai ", "ai/", "mcp ", "forward ", "myworkdayjobs", "greenhouse", "lever")):
+            return tail
+        # "Company - Role" (Lever-style): the leading segment is the company.
+        head = segments[0]
+        if 1 < len(head) < 30 and not head.lower().startswith(("senior ", "staff ", "lead ", "principal ", "ai ", "forward ", "job ")):
+            return head
+    # Trailing "Company" tag after a bare en-dash (e.g. "AI Engineer – AI Agents (Healthcare)"
+    # never occurs without some separator; try "–" only when nothing else matched).
     host = re.sub(r"^www\.", "", urlsplit(url).netloc)
     parts = host.split(".")
     if parts[0] in {"jobs", "job-boards", "careers"} and len(parts) > 2:
         return parts[1]
+    # Board host with no better signal: use the slug segment of the path when it
+    # names the company (e.g. job-boards.greenhouse.io/natera/jobs/...).
+    if parts[0] in {"job-boards", "jobs"} and len(parts) > 1 and parts[1] not in {"greenhouse", "lever", "ashby", "ashbyhq", "workable", "recruitee", "smartrecruiters"}:
+        return parts[1]
+    # Known job-board hosts only: never invent a company from the board's own name.
     return parts[0]
 
 
