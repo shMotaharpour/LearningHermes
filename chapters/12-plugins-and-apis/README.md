@@ -68,6 +68,95 @@ fix. This is the concrete version of a rule that applies to every in-process ext
 point you will ever ship against — internal import paths are not an API, and a compat
 shim has an expiry date printed on it.
 
+### Authoring one: the four registration surfaces
+
+Installing plugins is recon. Writing one is the chapter. `examples/plugins/egress-guard/`
+is a complete, installable plugin — read it alongside this section.
+
+A plugin is a directory with a `plugin.yaml` manifest and a `register(ctx)` entry point,
+dropped into `~/.hermes/plugins/` (user-global) or `./.hermes/plugins/` (project-local).
+`register` is called once per process at discovery, and `ctx` is the whole surface:
+
+| Call | Registers | In `egress-guard` |
+|---|---|---|
+| `ctx.register_hook(name, fn)` | a lifecycle callback | `pre_tool_call` gates outbound calls |
+| `ctx.register_tool(...)` | a tool the model can call | `egress_check` |
+| `ctx.register_command(...)` | an in-session slash command | `/egress`, `/egress policy` |
+| `ctx.register_cli_command(...)` | `hermes <name> ...` | `hermes egress-guard --json` |
+
+That last one is worth noticing: a plugin adds an argparse subtree to the `hermes` CLI at
+startup **without touching core**. The rule upstream states plainly — a plugin must never
+modify `run_agent.py`, `cli.py`, or `hermes_cli/main.py`; if it needs something the
+framework lacks, the *generic* surface widens. That is the discipline that keeps an
+extension point from rotting into a pile of special cases.
+
+### `pre_tool_call`: the only hook that is a control
+
+Most hooks observe. `pre_tool_call` runs **before dispatch** and its return value decides
+what happens:
+
+```python
+{"action": "block",   "message": "..."}                  # veto; message becomes the tool result
+{"action": "approve", "message": "...", "rule_key": "..."}  # route to the human approval gate
+{"action": "modify",  "args": {...}}                      # shallow-merged into the tool's args
+```
+
+First valid `block`/`approve` wins; `modify` directives accumulate and are applied even
+when a later hook blocks. A `block` without a message is ignored — the message *is* the
+tool result, so there is nothing to hand back without one.
+
+Two properties of the contract matter more than the syntax:
+
+- **Callbacks are signature-inspected.** A callback declaring only the kwargs it wants
+  receives only those; a `**kwargs` callback gets the full payload. This is what makes the
+  hook contract *additive*: new payload fields cannot break an existing narrow callback.
+  Write `**_` anyway.
+- **The approval gate is fail-closed.** An `approve` directive whose gate errors, denies,
+  or times out is **blocked**. A plugin that flags an action for approval never silently
+  executes it because the gate broke.
+
+Contrast `post_tool_call`, which `egress-guard` registers and deliberately leaves empty of
+policy: by the time it fires, the bytes have already left. It is for observation. Nothing
+you do there is a control.
+
+### Structure: keep the policy out of the runtime
+
+The single most useful structural choice in a plugin is the one `egress-guard` makes:
+`policy.py` imports **nothing from Hermes**. Every decision that could be wrong is a pure
+function over plain dicts, covered by `tests/test_plugin_egress_guard.py` with no agent, no
+network, and no Hermes install. `__init__.py` only translates hook payloads into policy
+calls and verdicts back into directives.
+
+Do this in every plugin you write. The runtime surface is the part you cannot test cheaply,
+so keep it thin enough that there is nothing in it to test.
+
+Three decisions in that plugin are worth arguing with, because they are the decisions every
+policy gate faces:
+
+1. **Order.** Secrets are checked before destination: a credential going to an *allowed*
+   host is still a credential leaving.
+2. **`host_allowed` matches on a dot boundary.** `example.com` allows `api.example.com` and
+   rejects `example.com.evil.tld`. A substring check here is the whole vulnerability.
+3. **`rule_key` groups the approval allowlist by destination, not by tool.** Approving
+   `web_fetch` once must not approve every host forever — the grain of an allowlist entry
+   is a security decision.
+
+And one thing it gets deliberately, instructively wrong: its `EGRESS_TOOLS` map is an
+**implicit allowlist**, so a tool Hermes adds tomorrow is ungated until someone adds it.
+That is why the plugin is defence in depth and not a boundary — real egress control is
+`hermes egress` (Chapter 15), enforced *below* the agent rather than inside it. Knowing
+which of your controls can be walked around, and saying so, is the senior part.
+
+### Trust: what you are actually installing
+
+A plugin runs **in-process, with your credentials in reach**, which is why `register_tool`
+has an `override=True` that requires operator opt-in
+(`plugins.entries.<id>.allow_tool_override: true`) before a plugin may replace a built-in
+like `write_file`. Without that gate any enabled plugin could silently substitute a
+privileged built-in. Read that as the general rule: **the dangerous capability exists, and
+it is gated on an explicit operator decision recorded in config** — not on a plugin's good
+manners.
+
 ### API server: agent as OpenAI-compatible endpoint
 
 `hermes serve` (verified: OpenAI-compatible API for any frontend) — point Open WebUI,
@@ -107,7 +196,10 @@ API server when any OpenAI client will do; choose MCP when tools should live out
 (full plugins command tree, serve/acp/proxy help),
 `docs/research/hermes/cli-evidence-2026-09-13-v0.21.2-surface.txt` (`plugins`, `plugins
 browse/validate/compat` — all three are new since v0.20.6, and `search`/`install` changed
-from "community index" to "curated catalog").
+from "community index" to "curated catalog"). The `register(ctx)` surface, the
+`pre_tool_call` directive shape, and the `AIAgent` arguments used in
+`examples/embed-agent.py` were read from the Hermes source at v0.21.2 rather than
+paraphrased; `tests/test_plugin_egress_guard.py` pins the plugin's behaviour offline.
 
 ## Verified commands
 
@@ -125,6 +217,25 @@ hermes plugins enable|disable <name>
 hermes plugins validate <dir>      # CI gate for catalog admission (--json)
 hermes plugins compat              # enabled plugins importing removed module paths
 hermes plugins pack <dir>          # package your own
+```
+
+Author and install one (`examples/plugins/egress-guard/`):
+
+```bash
+cp -r examples/plugins/egress-guard ~/.hermes/plugins/
+hermes plugins list                        # it appears
+hermes plugins capabilities egress-guard   # what it registers — read BEFORE enabling
+hermes plugins doctor                      # against the real runtime contracts
+hermes plugins validate --json examples/plugins/egress-guard   # the CI gate
+hermes egress-guard --json                 # plugin: egress-guard
+```
+
+Embed the loop in Python (`examples/embed-agent.py`, run from a Hermes checkout):
+
+```bash
+git clone https://github.com/NousResearch/hermes-agent.git && cd hermes-agent
+uv sync
+uv run python /path/to/LearningHermes/examples/embed-agent.py
 ```
 
 API surfaces:
@@ -159,6 +270,17 @@ from hermes_cli.agent import AIAgent   # import path per official guide
 - **Ignoring `plugins compat` until the removal date.** The warning period ends and the
   plugin simply stops loading; `plugins.allow_deprecated_imports: true` buys time and
   nothing else.
+- **Policy logic inside the hook callback.** It welds your decisions to the runtime and
+  makes them untestable. Pure module, thin adapter.
+- **A hook that can raise.** A guard that crashes is a guard that is not running, and the
+  agent carries on without it. Wrap every callback.
+- **Treating `post_tool_call` as a control.** The bytes have already left.
+- **A `block` directive with no message.** Hermes ignores it, because the message *is* the
+  tool result. Your veto silently does nothing.
+- **An implicit tool allowlist.** A gate keyed on a fixed list of tool names fails open the
+  day a new tool ships. Know which of your controls degrade silently.
+- **`pip install hermes-agent` for embedding.** There is no supported wheel; run from a
+  checkout with `uv sync`. A script that assumes otherwise works on your machine only.
 - **Serving without a key.** `hermes serve` without `API_SERVER_KEY` on a reachable
   interface hands your machine's tool access to whoever finds the port.
 - **Proxy scope confusion.** The proxy fronts *providers you're logged into*; it is not
@@ -168,5 +290,25 @@ from hermes_cli.agent import AIAgent   # import path per official guide
 
 ## Exercises
 
-Work through `exercises/ex12-plugins-and-apis.md`. Verification: one plugin capability
-inspect+doctor, API server round-trip with key, ACP or proxy demo, embedding snippet runs.
+Work through `exercises/ex12-plugins-and-apis.md`. Verification: a plugin you authored is
+installed and observed blocking a real tool call, API server round-trip with key, ACP or
+proxy demo, `examples/embed-agent.py` runs.
+
+### Senior interview probes
+
+1. A plugin and an MCP server can both add a tool. Name three things a plugin can do that
+   an MCP server cannot, and one thing MCP gives you that a plugin does not.
+2. Your `pre_tool_call` hook returns `{"action": "block"}` with no message. What happens,
+   and why is that the right behaviour rather than a silent veto?
+3. Why is an `approve` directive whose approval gate times out treated as a block? What
+   class of bug does that choice prevent?
+4. A plugin wants to replace the built-in `write_file` tool. Walk through what has to be
+   true for that to work, and explain the design reasoning behind the gate.
+5. You are reviewing a third-party plugin before installing it in a team's environment.
+   What do you run, in what order, and what would make you say no?
+6. Explain why `hermes plugins install --ref <sha>` is not merely a convenience. What is
+   the failure mode without it?
+7. Your plugin's policy gate has an allowlist of tool names it inspects. What happens when
+   the platform adds a new tool, and how would you design around it?
+8. When would you embed `AIAgent` in Python instead of putting `hermes serve` behind your
+   application? What do you take on by doing so?

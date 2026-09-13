@@ -7,6 +7,8 @@ header. This script is what makes that header checkable:
   * it extracts every `hermes ...` command from the chapter and exercise files,
   * resolves the subcommand path by running `hermes <path> --help` (the ONLY thing it
     executes; no state-changing command is ever run),
+  * routes lines marked `# plugin: <name>` to a separate count: a plugin registers its own
+    `hermes <name>` subcommand, so it cannot resolve on a CLI without that plugin,
   * reports commands whose subcommand no longer resolves (hard failure) and commands whose
     options are not mentioned in the help output (soft, printed for review).
 
@@ -55,6 +57,14 @@ def has_shell_syntax(cmd: str) -> bool:
     return bool(SHELL_META_RE.search(QUOTED_RE.sub("", cmd)))
 HERMES_CMD_RE = re.compile(r"^\s*(?:sudo\s+)?hermes\s+\S")
 
+# A plugin can add a `hermes <name> ...` subcommand via ctx.register_cli_command, so such a
+# command genuinely does NOT resolve on a CLI where that plugin is not installed. Chapter 12
+# teaches exactly that, so the chapter marks those lines and they are reported separately
+# rather than counted as drift. The marker must name the plugin: an unnamed escape hatch
+# would become the way to silence a real failure, and naming it means `hermes plugins list`
+# tells you whether the claim is still true.
+PLUGIN_PROVIDED_RE = re.compile(r"#\s*plugin:\s*([A-Za-z0-9._-]+)\s*$", re.M)
+
 
 def _help(exe: str, args: list[str]) -> tuple[bool, str]:
     """Run `hermes <args> --help`; the only command this script executes."""
@@ -87,21 +97,40 @@ def installed_version() -> str:
     return m.group(1) if m else ""
 
 
-def extract_commands(text: str) -> list[str]:
-    """Every `hermes ...` command in fenced blocks and inline code spans."""
+def extract_commands(text: str) -> tuple[list[str], list[str]]:
+    """Every `hermes ...` command in fenced blocks and inline code spans.
+
+    Returns (commands_to_check, plugin_provided). A line ending in `# plugin: <name>` is
+    routed to the second list: it is a subcommand a plugin registers, which cannot resolve
+    on a CLI without that plugin installed.
+    """
     commands: list[str] = []
+    plugin_provided: list[str] = []
+    # A file declares a plugin subcommand once, with the marker on a fenced line. Every
+    # other mention of that same subcommand in the file — including inline spans in a
+    # table, which cannot carry a trailing comment without rendering it — is then covered.
+    declared: set[str] = {m.group(1) for m in PLUGIN_PROVIDED_RE.finditer(text)}
+
+    def route(cmd: str, marked: bool) -> None:
+        name = _tokenize(cmd)[:1]
+        if marked or (name and name[0] in declared):
+            plugin_provided.append(cmd)
+        else:
+            commands.append(cmd)
+
     for block in FENCE_RE.findall(text):
         joined = block.replace("\\\n", " ")
         for line in joined.splitlines():
             line = re.sub(r"^\s*[\$#>]\s*", "", line)
-            line = re.split(r"\s+#\s+", line)[0].strip()
-            if HERMES_CMD_RE.match(line):
-                commands.append(line)
+            marked = bool(PLUGIN_PROVIDED_RE.search(line))
+            bare = re.split(r"\s+#\s+", line)[0].strip()
+            if HERMES_CMD_RE.match(bare):
+                route(bare, marked)
     for span in INLINE_RE.findall(text):
         span = span.strip()
         if HERMES_CMD_RE.match(span):
-            commands.append(span)
-    return commands
+            route(span, False)
+    return commands, plugin_provided
 
 
 def _tokenize(cmd: str) -> list[str]:
@@ -204,12 +233,15 @@ def check_file(path: Path, label: str, live_version: str, cache: dict[str, tuple
         "commands": 0,
         "checked": 0,
         "skipped_shell": [],
+        "plugin_provided": [],
         "unknown_subcommand": [],
         "partial_subcommand": [],
         "unverified_flags": [],
         "version_drift": False,
     }
-    for cmd in extract_commands(text):
+    checkable, plugin_provided = extract_commands(text)
+    report["plugin_provided"] = plugin_provided
+    for cmd in checkable:
         report["commands"] += 1
         if has_shell_syntax(cmd):
             report["skipped_shell"].append(cmd)
@@ -280,6 +312,8 @@ def main() -> int:
             line = f"{r['file']}: {r['checked']}/{r['commands']} commands checked"
             if r["skipped_shell"]:
                 line += f", {len(r['skipped_shell'])} skipped (shell syntax)"
+            if r["plugin_provided"]:
+                line += f", {len(r['plugin_provided'])} plugin-provided"
             if r["unknown_subcommand"]:
                 line += f", {len(r['unknown_subcommand'])} UNKNOWN subcommand"
             if r["partial_subcommand"]:
@@ -287,6 +321,8 @@ def main() -> int:
             if r["unverified_flags"]:
                 line += f", {len(r['unverified_flags'])} unverified flag"
             print(line)
+            for item in r["plugin_provided"]:
+                print(f"    plugin:  {item}  (not a core subcommand; needs that plugin installed)")
             for item in r["unknown_subcommand"]:
                 print(f"    unknown: {item['command']}  (deepest valid: {item['deepest_valid']})")
             for item in r["partial_subcommand"]:
@@ -297,6 +333,8 @@ def main() -> int:
             f"\ninstalled Hermes Agent: {live}; {len(reports)} files, "
             f"{sum(r['checked'] for r in reports)} commands verified, "
             f"{sum(len(r['skipped_shell']) for r in reports)} skipped"
+            + (f", {sum(len(r['plugin_provided']) for r in reports)} plugin-provided"
+               if any(r["plugin_provided"] for r in reports) else "")
         )
         if missing_header:
             print(f"missing Verified header: {', '.join(r['file'] for r in missing_header)}")
