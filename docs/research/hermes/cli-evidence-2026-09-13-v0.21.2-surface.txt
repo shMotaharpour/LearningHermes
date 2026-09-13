@@ -1,0 +1,576 @@
+# Hermes CLI evidence — 2026-09-13 — Hermes Agent v0.21.2 (2026.9.11) · upstream 422bc9bd
+#
+# Re-verification pass after the course was written against v0.20.6 (2026.8.27).
+# Scope: --help surfaces only. These are machine-independent, so unlike the
+# 2026-09-07 batches this file carries no live machine state and stays reproducible.
+# Capture: hermes <path> --help, run against the upstream tree at 422bc9bd.
+
+=== $ hermes --version ===
+Hermes Agent v0.21.2 (2026.9.11) · upstream 422bc9bd
+Install directory: [REDACTED — local checkout path]
+Install method: git
+Python: 3.11.15
+OpenAI SDK: Not installed
+
+=== $ hermes auth --help ===
+usage: hermes auth [-h]
+                   {add,list,remove,reset,priority,refresh,status,logout,upgrade,spotify}
+                   ...
+
+positional arguments:
+  {add,list,remove,reset,priority,refresh,status,logout,upgrade,spotify}
+    add                 Add a pooled credential
+    list                List pooled credentials
+    remove              Remove a pooled credential by index, id, or label
+    reset               Clear exhaustion status for a provider's credentials
+                        (all, or one target)
+    priority            Move a pooled credential to a priority (0 = tried
+                        first under fill_first)
+    refresh             Refresh a pooled OAuth credential's tokens and clear
+                        its cooldown
+    status              Show auth status for a provider
+    logout              Log out a provider and clear stored auth state
+    upgrade             Sign in with a Nous account, keeping your connectors
+    spotify             Authenticate Hermes with Spotify via PKCE
+
+options:
+  -h, --help            show this help message and exit
+
+=== $ hermes auth priority --help ===
+usage: hermes auth priority [-h] provider target priority
+
+positional arguments:
+  provider    Provider id
+  target      Credential index, entry id, or exact label
+  priority    New priority; others are renumbered
+
+options:
+  -h, --help  show this help message and exit
+
+=== $ hermes auth refresh --help ===
+usage: hermes auth refresh [-h] provider [target]
+
+positional arguments:
+  provider    Provider id
+  target      Credential index, entry id, or exact label (required when the
+              pool holds more than one)
+
+options:
+  -h, --help  show this help message and exit
+
+=== $ hermes auth upgrade --help ===
+usage: hermes auth upgrade [-h] [--no-browser] [--timeout TIMEOUT]
+
+options:
+  -h, --help         show this help message and exit
+  --no-browser       Do not auto-open a browser for sign-in
+  --timeout TIMEOUT  Network timeout in seconds
+
+=== $ hermes migrate --help ===
+usage: hermes migrate [-h] {xai} ...
+
+Diagnose and (optionally) rewrite the active config.yaml to replace references
+to retired models or deprecated settings.
+
+positional arguments:
+  {xai}
+    xai       Migrate xAI models scheduled for retirement on May 15, 2026
+
+options:
+  -h, --help  show this help message and exit
+
+=== $ hermes portal --help ===
+usage: hermes portal [-h] {login,info,status,open,tools} ...
+
+Run `hermes portal` with no subcommand to log in to Nous Portal and set it up
+— pick a model, set Nous as your provider, and offer the Tool Gateway (the
+human-readable alias for `hermes auth add nous --type oauth`, identical to
+`hermes setup --portal`). Subcommands: login (default), info, open, tools.
+
+positional arguments:
+  {login,info,status,open,tools}
+    login               Log in to Nous Portal + set it up (default; one-shot
+                        onboarding)
+    info                Show Portal auth + Tool Gateway routing summary
+    open                Open the Portal subscription page in your default
+                        browser
+    tools               List Tool Gateway tools and which are routed via Nous
+
+options:
+  -h, --help            show this help message and exit
+
+=== $ hermes gateway --help ===
+usage: hermes gateway [-h] [--accept-hooks]
+                      {run,start,stop,restart,status,install,uninstall,list,setup,migrate-legacy,migrate,enroll}
+                      ...
+
+Manage the messaging gateway (Telegram, Discord, WhatsApp, Weixin, and more)
+
+positional arguments:
+  {run,start,stop,restart,status,install,uninstall,list,setup,migrate-legacy,migrate,enroll}
+    run                 Run gateway in foreground (recommended for WSL,
+                        Docker, Termux)
+    start               Start the installed systemd/launchd background service
+    stop                Stop gateway service
+    restart             Restart gateway service
+    status              Show gateway status
+    install             Install gateway as a systemd/launchd background
+                        service
+    uninstall           Uninstall gateway service
+    list                List all profiles and their gateway status
+    setup               Configure messaging platforms
+    migrate-legacy      Remove legacy hermes.service units from pre-rename
+                        installs
+    migrate             Move per-profile gateways onto one multiplexed default
+                        gateway (or back)
+    enroll              Enroll this gateway with a relay connector (writes
+                        relay auth creds to .env)
+
+options:
+  -h, --help            show this help message and exit
+  --accept-hooks        Auto-approve unseen shell hooks without a TTY prompt
+                        (equivalent to HERMES_ACCEPT_HOOKS=1 /
+                        hooks_auto_accept: true).
+
+=== $ hermes gateway migrate --help ===
+usage: hermes gateway migrate [-h] [--multiplex | --standalone] [--dry-run]
+                              [-y]
+
+Stop and uninstall each secondary profile's standalone gateway, turn on
+gateway.multiplex_profiles on the default profile and restart its gateway so
+it serves every profile. Runs a preflight first (duplicate bot tokens, port-
+binding platforms without a /p/<profile>/ ingress) and changes nothing when
+blocked. --standalone rolls the recorded migration back.
+
+options:
+  -h, --help    show this help message and exit
+  --multiplex   Migrate to one multiplexed gateway (default)
+  --standalone  Roll back to per-profile gateways from the recorded manifest
+  --dry-run     Print the plan and blockers without changing anything
+  -y, --yes     Apply without confirmation
+
+=== $ hermes cron create --help ===
+usage: hermes cron create [-h] [--name NAME] [--deliver DELIVER]
+                          [--failure-deliver FAILURE_DELIVER]
+                          [--repeat REPEAT] [--skill SKILLS] [--script SCRIPT]
+                          [--no-agent] [--monitor-script MONITOR_SCRIPT]
+                          [--monitor-url MONITOR_URL] [--workdir WORKDIR]
+                          [--model MODEL] [--provider MODEL_PROVIDER]
+                          [--reasoning-effort REASONING_EFFORT] [--continuity]
+                          [--paused] [--paused-reason PAUSED_REASON]
+                          schedule [prompt]
+
+positional arguments:
+  schedule              Schedule like '30m', 'every 2h', or '0 9 * * *'
+  prompt                Optional self-contained prompt or task instruction
+
+options:
+  -h, --help            show this help message and exit
+  --name NAME           Optional human-friendly job name
+  --deliver DELIVER     Delivery target: origin, local, telegram, discord,
+                        signal, platform:chat_id, or bot-chat[:profile]
+                        (inject output into a local profile's canonical Bot
+                        Chat as a message the bot responds to)
+  --failure-deliver FAILURE_DELIVER
+                        Override target for FAILURE notices only (same grammar
+                        as --deliver). 'local' suppresses failure notices
+                        entirely; run state stays visible in `hermes cron
+                        list`. Omit = failures follow --deliver.
+  --repeat REPEAT       Optional repeat count
+  --skill SKILLS        Attach a skill. Repeat to add multiple skills.
+  --script SCRIPT       Path to a script under ~/.hermes/scripts/. Default
+                        mode: script stdout is injected into the agent's
+                        prompt each run. With --no-agent: the script IS the
+                        job and its stdout is delivered verbatim. .sh/.bash
+                        files run via bash, everything else via Python.
+  --no-agent            Skip the LLM entirely — run --script on schedule and
+                        deliver its stdout directly. Empty stdout = silent.
+                        Classic watchdog pattern (memory alerts, disk alerts,
+                        CI pings).
+  --monitor-script MONITOR_SCRIPT
+                        Monitor mode: path to a cheap source script under
+                        ~/.hermes/scripts/ that runs each tick BEFORE the
+                        agent. Unchanged output (exact-bytes hash) suppresses
+                        the agent run entirely; changed output injects a
+                        MONITOR CHANGE DETECTED diff into the prompt. Script
+                        output must be stable (no timestamps). Mutually
+                        exclusive with --monitor-url; incompatible with --no-
+                        agent.
+  --monitor-url MONITOR_URL
+                        Monitor mode: http(s) URL fetched with a bounded GET
+                        each tick instead of a script. Same hash-suppression
+                        semantics as --monitor-script.
+  --workdir WORKDIR     Absolute path for the job to run from. Injects
+                        AGENTS.md / CLAUDE.md / .cursorrules from that
+                        directory and uses it as the cwd for
+                        terminal/file/code_exec tools. Omit to preserve old
+                        behaviour (no project context files).
+  --model MODEL         Pin this job to a specific inference model (user-
+                        owned; the agent's cronjob tool cannot set this). Omit
+                        to follow cron.model / model.default from config.yaml.
+  --provider MODEL_PROVIDER
+                        Inference provider paired with --model (e.g.
+                        'openrouter', 'nous').
+  --reasoning-effort REASONING_EFFORT
+                        Pin this job's reasoning (thinking) effort: none,
+                        minimal, low, medium, high, xhigh, max, or ultra.
+                        Overrides agent.reasoning_effort and
+                        agent.reasoning_overrides for this job; unsupported
+                        levels are clamped by the provider at request time.
+                        Omit to follow config.
+  --continuity          Each run wakes up with the job's own previous output
+                        injected into its prompt, so it can dedupe against
+                        what was already reported and continue where the last
+                        run left off (scouts, monitors, incremental digests).
+                        First run is unchanged.
+  --paused              Create disabled in one write; resume to schedule, or
+                        explicitly run now.
+  --paused-reason PAUSED_REASON
+                        Auditable reason; requires --paused.
+
+=== $ hermes peer --help ===
+usage: hermes peer [-h] {add,set,list,ls,remove,rm,dm,run,status,stop} ...
+
+Register other Hermes gateways as peers and message their agents. 'hermes peer dm <peer>[/<agent>] "..."' delivers into the remote agent's canonical Bot Chat over the peer's API server and prints the reply — the cross-machine twin of 'hermes -p <bot> chat'. The peer must run the api_server platform; its API_SERVER_KEY is stored locally as a credential in ~/.hermes/.env.
+
+positional arguments:
+  {add,set,list,ls,remove,rm,dm,run,status,stop}
+    add (set)           Register (or update) a peer gateway
+    list (ls)           List registered peers
+    remove (rm)         Remove a peer
+    dm                  Message an agent on a peer gateway and print its reply
+    run                 Start a long peer turn asynchronously and return its
+                        run ID
+    status              Read the status and final output of an asynchronous
+                        peer run
+    stop                Stop one asynchronous peer run without affecting
+                        another turn
+
+options:
+  -h, --help            show this help message and exit
+
+Examples:
+  hermes peer add spark --url http://spark.lan:8377 --key <API_SERVER_KEY>
+  hermes peer list
+  hermes peer dm spark "Message from 🤖 dixie (@dixie): disk status?"
+  hermes peer dm spark/researcher "..."   # named profile on a multiplexed peer
+  hermes peer run spark --idempotency-key ticket-123 < long-task.txt
+  hermes peer status spark run_abc123
+  hermes peer stop spark run_abc123
+  hermes peer remove spark
+
+Exit codes: 0 ok, 1 delivery/peer error, 2 usage error.
+
+=== $ hermes peer run --help ===
+usage: hermes peer run [-h] [--idempotency-key IDEMPOTENCY_KEY] [--json]
+                       target [message]
+
+positional arguments:
+  target                <peer> or <peer>/<agent> (named profile on a
+                        multiplexed peer)
+  message               Message text (or stdin)
+
+options:
+  -h, --help            show this help message and exit
+  --idempotency-key IDEMPOTENCY_KEY
+                        Stable retry key (generated when omitted)
+  --json                Emit a JSON result
+
+=== $ hermes peer status --help ===
+usage: hermes peer status [-h] [--json] target run_id
+
+positional arguments:
+  target      <peer> or <peer>/<agent> (named profile on a multiplexed peer)
+  run_id      Run ID returned by 'hermes peer run'
+
+options:
+  -h, --help  show this help message and exit
+  --json      Emit a JSON result
+
+=== $ hermes peer stop --help ===
+usage: hermes peer stop [-h] [--json] target run_id
+
+positional arguments:
+  target      <peer> or <peer>/<agent> (named profile on a multiplexed peer)
+  run_id      Run ID returned by 'hermes peer run'
+
+options:
+  -h, --help  show this help message and exit
+  --json      Emit a JSON result
+
+=== $ hermes plugins --help ===
+usage: hermes plugins [-h]
+                      {install,search,browse,validate,update,remove,rm,uninstall,list,ls,enable,disable,capabilities,doctor,compat,pack,show,info}
+                      ...
+
+Install, update, remove, list, or validate native Hermes plugins and portable
+Agent Plugins v1 packages. Portable packages install disabled.
+
+positional arguments:
+  {install,search,browse,validate,update,remove,rm,uninstall,list,ls,enable,disable,capabilities,doctor,compat,pack,show,info}
+    install             Install a plugin from the curated catalog, a Git URL,
+                        or owner/repo
+    search              Search the curated Hermes plugin catalog
+    browse              List every curated plugin catalog entry
+    validate            Validate a plugin directory for catalog admission (CI
+                        gate)
+    update              Pull latest changes for an installed plugin
+    remove (rm, uninstall)
+                        Remove an installed plugin
+    list (ls)           List installed plugins
+    enable              Enable a disabled plugin
+    disable             Disable a plugin without removing it
+    capabilities        Show declared vs granted capabilities per plugin
+    doctor              Validate a plugin with the real runtime contracts
+    compat              Show installed plugins that import paths removed by
+                        the Sep 2026 decomposition
+    pack                Declarative, shareable plugin sets (hermes-pack.yaml)
+    show (info)         Show details for a single plugin (including
+                        emits/listens)
+
+options:
+  -h, --help            show this help message and exit
+
+=== $ hermes plugins browse --help ===
+usage: hermes plugins browse [-h]
+
+options:
+  -h, --help  show this help message and exit
+
+=== $ hermes plugins validate --help ===
+usage: hermes plugins validate [-h] [--json] path
+
+positional arguments:
+  path        Path to the plugin directory
+
+options:
+  -h, --help  show this help message and exit
+  --json      Print machine-readable JSON (for CI)
+
+=== $ hermes plugins compat --help ===
+usage: hermes plugins compat [-h] [--json] [path]
+
+Statically scans every enabled external plugin for imports of pre-
+decomposition module paths (see COMPAT_MANIFEST.md) and prints file:line, old
+path -> new path. Exits 1 when any plugin is affected. Plugins still affected
+on the removal date are not loaded (override:
+plugins.allow_deprecated_imports: true).
+
+positional arguments:
+  path        Scan one plugin directory instead of the installed set (for
+              plugin authors)
+
+options:
+  -h, --help  show this help message and exit
+  --json      Machine-readable output
+
+=== $ hermes backup --help ===
+usage: hermes backup [-h] [-o OUTPUT] [-q] [-l LABEL] [-k N]
+
+Create a zip archive of your entire Hermes configuration, skills, sessions,
+and data (excludes the hermes-agent codebase). Use --quick for a fast snapshot
+of just critical state files.
+
+options:
+  -h, --help            show this help message and exit
+  -o OUTPUT, --output OUTPUT
+                        Output path for the zip file (default: ~/hermes-
+                        backup-<timestamp>.zip)
+  -q, --quick           Quick snapshot: only critical state files (config,
+                        state.db, .env, auth, cron)
+  -l LABEL, --label LABEL
+                        Label for the snapshot (only used with --quick)
+  -k N, --keep N        After a full backup, delete older hermes-backup-*.zip
+                        files in the output directory beyond the newest N
+                        (default 3; 0 keeps everything)
+
+=== $ hermes pause --help ===
+usage: hermes pause [-h] [--reason REASON]
+
+Engage the global emergency stop. Halts NEW work only — cron dispatch, kanban
+dispatch, and new gateway turns — until `hermes resume`. In-flight work is
+never killed.
+
+options:
+  -h, --help       show this help message and exit
+  --reason REASON  Optional reason stored in the sentinel and shown to users
+
+=== $ hermes resume --help ===
+usage: hermes resume [-h]
+
+Remove the ESTOP sentinel; dispatch resumes on the next tick.
+
+options:
+  -h, --help  show this help message and exit
+
+=== $ hermes vault --help ===
+usage: hermes vault [-h] {add,list,rm,sources} ...
+
+Store login credentials in a locally encrypted vault. The agent sees handles
+and login identifiers (metadata); passwords are injected server-side by
+browser_vault_fill on the exact origin they were saved for and never enter the
+conversation.
+
+positional arguments:
+  {add,list,rm,sources}
+    add                 Save a login, card or address ahead of time (optional:
+                        the agent asks you on the page when it needs one)
+    list                List vault items (metadata only, never values)
+    rm                  Remove a vault item by handle
+    sources             Show detected password managers (1Password,
+                        Bitwarden); they are on automatically
+
+options:
+  -h, --help            show this help message and exit
+
+=== $ hermes bundles --help ===
+usage: hermes bundles [-h] {list,show,create,delete,reload} ...
+
+Skill bundles let you load several skills under one slash command. `/<bundle>`
+from the CLI or gateway loads every referenced skill at once.
+
+positional arguments:
+  {list,show,create,delete,reload}
+    list                List installed skill bundles
+    show                Show one bundle's contents
+    create              Create a new skill bundle
+    delete              Delete a skill bundle
+    reload              Re-scan the bundles directory and report changes
+
+options:
+  -h, --help            show this help message and exit
+
+=== $ hermes sync --help ===
+usage: hermes sync [-h]
+                   {status,pull,push,now,enable,disable,device,propose} ...
+
+Skill Sync keeps your skills with you. Personal sync moves your own skills between your devices; if you belong to an organisation, you also get its shared skills and can propose your own back to the team.
+
+positional arguments:
+  {status,pull,push,now,enable,disable,device,propose}
+    status              Show what is synced, and from where
+    pull                Pull your synced skills (and your organisation's)
+    push                Push your opted-in skills
+    now                 Reconcile now: pull then push
+    enable              Include a skill in your sync
+    disable             Exclude a skill from your sync
+    device              Show or set this device's label (shown in the sync
+                        console)
+    propose             Share a skill with your organisation
+
+options:
+  -h, --help            show this help message and exit
+
+Examples:
+  hermes sync status            what is synced, and from where
+  hermes sync enable my-skill   include a skill in your sync
+  hermes sync now               pull, then push
+  hermes sync propose my-skill  share a skill with your team
+
+=== $ hermes verify --help ===
+usage: hermes verify [-h] [--detect-only] [--save] [--skip-start]
+                     [--phase {bootstrap,build,test,start}] [--port PORT]
+                     [--timeout TIMEOUT] [--ready-timeout READY_TIMEOUT]
+                     [--json]
+                     [path]
+
+Detect how the current project is built, tested, and started (or load the
+saved manifest at .hermes/environment.json), then run a verification pass:
+bootstrap -> build -> test -> start in background -> poll readiness ->
+teardown.
+
+positional arguments:
+  path                  Project root to verify (default: current directory)
+
+options:
+  -h, --help            show this help message and exit
+  --detect-only         Only detect and print the recipe as JSON; run nothing
+  --save                Save the recipe as .hermes/environment.json in the
+                        project
+  --skip-start          Run command phases but skip starting the app /
+                        readiness poll
+  --phase {bootstrap,build,test,start}
+                        Run only the given phase(s); repeatable
+  --port PORT           Override the port used for the readiness poll
+  --timeout TIMEOUT     Per-phase timeout in seconds (default: 600)
+  --ready-timeout READY_TIMEOUT
+                        Readiness poll timeout in seconds (default: 60)
+  --json                Emit a machine-readable JSON result
+
+=== $ hermes console --help ===
+usage: hermes console [-h]
+
+Open a curated Hermes command REPL. This is not a raw shell and does not
+expose the full Hermes CLI.
+
+options:
+  -h, --help  show this help message and exit
+
+=== $ hermes debug --help ===
+usage: hermes debug [-h] {share,delete} ...
+
+Debug utilities for Hermes Agent. Use 'hermes debug share' to upload a debug report (system info + recent logs) to a paste service and get a shareable URL.
+
+positional arguments:
+  {share,delete}
+    share         Upload debug report to a paste service and print a shareable
+                  URL
+    delete        Delete a paste uploaded by 'hermes debug share'
+
+options:
+  -h, --help      show this help message and exit
+
+Examples:
+    hermes debug share              Upload debug report (asks for confirmation)
+    hermes debug share --yes        Skip confirmation (for scripts/CI)
+    hermes debug share --lines 500  Include more log lines
+    hermes debug share --expire 30  Keep dpaste.com fallback pastes for 30 days
+    hermes debug share --local      Print report locally (no upload)
+    hermes debug share --no-redact  Disable upload-time secret redaction
+    hermes debug share --nous       Upload to Nous-internal storage (private)
+    hermes debug delete <url>       Delete a previously uploaded paste
+
+=== $ hermes dump --help ===
+usage: hermes dump [-h] [--show-keys]
+
+Output a compact, plain-text summary of your Hermes setup that can be copy-
+pasted into Discord/GitHub for support context
+
+options:
+  -h, --help   show this help message and exit
+  --show-keys  Show redacted API key prefixes (first/last 4 chars) instead of
+               just set/not set
+
+=== $ hermes mcp add --help ===
+usage: hermes mcp add [-h] [--url URL] [--command MCP_COMMAND] [--args ...]
+                      [--auth {oauth,header}] [--preset PRESET]
+                      [--connect-timeout CONNECT_TIMEOUT] [--env [ENV ...]]
+                      name
+
+positional arguments:
+  name                  Server name (used as config key)
+
+options:
+  -h, --help            show this help message and exit
+  --url URL             HTTP/SSE endpoint URL
+  --command MCP_COMMAND
+                        Stdio command (e.g. npx)
+  --args ...            Arguments for stdio command; must be the last option
+  --auth {oauth,header}
+                        Auth method
+  --preset PRESET       Known MCP preset name
+  --connect-timeout CONNECT_TIMEOUT
+                        Timeout in seconds for initial connection and tool
+                        discovery
+  --env [ENV ...]       Environment variables for stdio servers (KEY=VALUE)
+
+=== $ hermes mcp reauth --help ===
+usage: hermes mcp reauth [-h] [--all] [name]
+
+positional arguments:
+  name        Server name to re-authenticate (omit with --all)
+
+options:
+  -h, --help  show this help message and exit
+  --all       Re-authenticate every OAuth server in config, one at a time
+

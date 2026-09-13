@@ -1,6 +1,6 @@
 # Chapter 07 — Cron and Scheduled Workflows
 
-> **Verified:** 2026-09-12 · Hermes Agent v0.20.6 (2026.8.27) · recheck: `python3 scripts/verify_chapters.py`
+> **Verified:** 2026-09-13 · Hermes Agent v0.21.2 (2026.9.11) · recheck: `python3 scripts/verify_chapters.py`
 
 ## Why this matters (job link)
 
@@ -65,10 +65,47 @@ prompt on an interval — session-local relatives of cron for watch-while-I-work
 - One-shot jobs take ISO timestamps; recurring jobs take intervals or cron expressions.
 - `hermes cron tick` runs due jobs once and exits — the deterministic way to test.
 - `hermes cron pause/resume` beats delete-and-recreate for temporary silencing.
+- `--paused` creates a job **disabled in one write**, so it never fires between creation
+  and the moment you are ready. `--paused-reason` records an auditable why. This is how you
+  land a job in a review-then-enable workflow instead of racing the scheduler.
+
+### Failure routing is separate from success routing
+
+`--deliver` sets where output goes; `--failure-deliver` (v0.21.2) overrides the target for
+**failure notices only**, using the same grammar. Two patterns this unlocks:
+
+- Success to the team channel, failures to the on-call channel — so a broken 6am briefing
+  pages the person who can fix it instead of confusing the audience.
+- `--failure-deliver local` **suppresses failure notices entirely** while run state stays
+  visible in `hermes cron list`. Use it for a noisy, known-flaky job you are already
+  watching — never as a default, because it converts a page into something you have to
+  remember to look at.
+
+Failure routing is the cheapest reliability feature in the chapter: unattended work that
+fails silently is worse than unattended work that never ran.
+
+### Cost and effort per job
+
+`--model` and `--provider` pin a job's inference; `--reasoning-effort` pins its thinking
+level (`none` … `ultra`), overriding `agent.reasoning_effort` for that job only. A
+disk-watchdog digest does not need the same reasoning budget as a research briefing, and
+per-job pinning is where Chapter 02's routing discipline becomes money.
+
+### The global stop
+
+Cron pause is per job. `hermes pause` is the **global emergency stop**: it halts *new* cron
+dispatch, kanban dispatch, and new gateway turns until `hermes resume`, and it never kills
+in-flight work. `hermes pause --reason "provider outage"` records why. Reach for it when
+the blast radius is "everything scheduled", not "this job" — a provider outage, a bad
+config rollout, a runaway spend — and treat leaving it engaged as an incident of its own,
+because nothing scheduled runs while it is on.
 
 **Evidence:** `docs/research/hermes/cli-evidence-2026-09-07-b4-gateway-cron-events.txt`
 (full cron command tree, live job listing with real IDs/schedules/targets, cron status),
-`docs/research/hermes/cli-evidence-2026-09-07.txt` (cron help).
+`docs/research/hermes/cli-evidence-2026-09-07.txt` (cron help),
+`docs/research/hermes/cli-evidence-2026-09-13-v0.21.2-surface.txt` (`cron create`, `pause`,
+`resume` on v0.21.2 — `--failure-deliver`, `--reasoning-effort`, `--paused` and
+`--paused-reason` are new since v0.20.6).
 
 ## Verified commands
 
@@ -89,8 +126,12 @@ hermes cron create "0 6 * * *" \
   --name "daily-briefing" \
   --deliver "telegram" \
   --skill grounded-citations \
-  "Research AI engineering news since yesterday. Summarize top 5 with links. Persian ZWNJ characters are forbidden in automated prompts."
+  "Research AI engineering news since yesterday. Summarize the top 5 with links. Output: one bullet per item, title then one sentence then the URL. If nothing is new, say 'no new items'."
 ```
+
+Note the shape of that prompt: it names the task, the output format, **and** the empty
+case. A cron prompt has no reader to fall back on, so every branch it can take has to be
+written down.
 
 Script-only job (no LLM):
 
@@ -111,6 +152,22 @@ hermes cron remove <job-id>
 hermes cron notepad <job-id> read|write  # durable job memory
 ```
 
+Failure routing, staged creation, and the global stop:
+
+```bash
+hermes cron create "0 6 * * *" \
+  --name "daily-briefing" \
+  --deliver "telegram:-1001:307" \
+  --failure-deliver "telegram:-1002" \
+  --reasoning-effort low \
+  --paused --paused-reason "pending review by ops" \
+  "Research AI engineering news since yesterday. Summarize the top 5 with links."
+
+hermes cron resume <job-id>              # enable it once the review passes
+hermes pause --reason "provider outage"  # global stop: no new cron/kanban/gateway work
+hermes resume                            # lift it; dispatch resumes on the next tick
+```
+
 ## Common pitfalls
 
 - **Prompts that assume a reader.** Cron runs are autonomous — the job cannot ask you
@@ -128,6 +185,14 @@ hermes cron notepad <job-id> read|write  # durable job memory
   Use `hermes cron tick` (or `cron run`) to prove the pipeline before the first real fire.
 - **Unacknowledged incidents.** Failures stay listed in `hermes cron incidents` until
   acknowledged; treat it like a pager queue.
+- **Failures delivered to the audience.** Without `--failure-deliver`, a failure notice
+  goes wherever the output goes. The stakeholder channel learns your job is broken before
+  you do.
+- **`--failure-deliver local` as a habit.** It suppresses the notice, not the failure. Used
+  by default it turns every unattended job into one nobody is watching.
+- **Leaving the global stop engaged.** `hermes pause` silences *everything* scheduled and
+  survives restarts. Nothing pages you about it — `hermes status` is where you notice, and
+  by then a day of briefings is gone.
 
 ## Exercises
 

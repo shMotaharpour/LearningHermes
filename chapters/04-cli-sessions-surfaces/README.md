@@ -1,6 +1,6 @@
 # Chapter 04 — CLI, Sessions, and Surfaces
 
-> **Verified:** 2026-09-12 · Hermes Agent v0.20.6 (2026.8.27) · recheck: `python3 scripts/verify_chapters.py`
+> **Verified:** 2026-09-13 · Hermes Agent v0.21.2 (2026.9.11) · recheck: `python3 scripts/verify_chapters.py`
 
 ## Why this matters (job link)
 
@@ -65,9 +65,35 @@ in the official docs slash-commands page; the five above cover 80% of daily use.
 exact ID. On multi-platform setups, "most recent" is whichever session — CLI or any
 Telegram topic — wrote last. For anything that matters, resume by ID.
 
+### Reporting an incident: `dump`, `debug share`, `console`
+
+Three commands exist for the moment you need help, and the difference between them is who
+sees your machine.
+
+- **`hermes dump`** prints a compact plain-text summary of your setup, meant to be
+  copy-pasted into an issue or a support channel. `--show-keys` exists; using it in a
+  public thread is how credentials leak.
+- **`hermes debug share`** packages system info plus recent logs (`--lines`, default 200)
+  and uploads it. Read its defaults carefully, because they encode a real threat model:
+  logs are run through secret redaction before upload unless you pass `--no-redact`; the
+  public paste service expires (paste.rs after 6 hours, the dpaste.com fallback after
+  `--expire` days and **not deletable**); `--nous` uploads privately instead; and without
+  `-y` on a non-TTY it **refuses rather than uploading silently**. `--local` prints the
+  report instead of uploading — start there, read what you are about to publish, then
+  decide.
+- **`hermes console`** opens a curated Hermes command REPL. It is deliberately *not* a
+  shell and does not expose the full CLI — the right surface to hand someone who needs to
+  run a few Hermes commands without a general-purpose terminal.
+
+The habit worth forming: `hermes dump` for "what is my setup", `hermes debug share
+--local` to read the bundle, and only then a share — public with redaction on, or `--nous`
+when the logs are sensitive at all.
+
 **Evidence:** `docs/research/hermes/cli-evidence-2026-09-07-b3-sessions-tools.txt`
 (live `sessions list` with real IDs, `sessions stats`, checkpoints help, TTY constraint),
-`docs/research/hermes/cli-evidence-2026-09-07-b7-multiagent-shipping.txt` (dashboard/backup).
+`docs/research/hermes/cli-evidence-2026-09-07-b7-multiagent-shipping.txt` (dashboard/backup),
+`docs/research/hermes/cli-evidence-2026-09-13-v0.21.2-surface.txt` (`dump`, `debug`,
+`console` on v0.21.2).
 
 ## Verified commands
 
@@ -110,6 +136,15 @@ hermes logs -n 100                       # tail agent.log / errors.log
 hermes logs --level error --since 1h     # filtered incident view
 ```
 
+Incident reporting:
+
+```bash
+hermes dump                      # compact setup summary for an issue (never --show-keys publicly)
+hermes debug share --local       # build the bundle and read it before publishing
+hermes debug share --nous -y     # upload privately instead of to a public paste service
+hermes console                   # curated Hermes REPL — not a shell
+```
+
 ## Common pitfalls
 
 - **Sessions are not free.** Unpruned experiment sessions make search noisy and the DB
@@ -127,6 +162,10 @@ hermes logs --level error --since 1h     # filtered incident view
 - **Skipping `hermes logs` during incidents.** The transcript shows what the agent did;
   `hermes logs` shows what the runtime did (gateway, provider errors, tool failures).
   Incidents need both.
+- **`debug share` straight to a public paste.** Redaction is on by default and is not
+  perfect. `--local` first, read it, then publish — or `--nous` if the logs touch anything
+  you would not post. A dpaste.com fallback paste cannot be deleted.
+- **`hermes dump --show-keys` in a support thread.** It does exactly what it says.
 
 ## Exercises
 

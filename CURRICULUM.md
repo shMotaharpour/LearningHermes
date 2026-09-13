@@ -93,6 +93,19 @@ Part IV  -> Agent Developer     (you extend the platform: skills, MCP, plugins, 
 Part V   -> Senior Applied AI Engineer (you ship, measure, secure, and defend the system)
 ```
 
+| Part | Chapters | Hands-on time | Exit capability |
+|---|---|---|---|
+| I | 01–03 | 6–9 h | Run and steer the agent; know where its context comes from |
+| II | 04–06 | 7–11 h | Operate it across surfaces, tools, and chat platforms |
+| III | 07–09 | 9–14 h | Ship workflows that run unattended |
+| IV | 10–13 | 12–18 h | Extend the platform and distribute what you built |
+| V | 14–15 | 6–10 h | Measure, secure, and govern it |
+| 16 | Capstone | 30–50 h over ~6 weeks | Defend all of the above with evidence |
+
+Estimates are *hands-on* time for the audience in `README.md`'s prerequisites — reading the
+chapter and doing its exercise on a real machine. Total: **~70–110 h** plus the capstone's
+calendar time, which is bounded by a 14-day unattended run rather than by effort.
+
 ## Chapter Contract
 
 Every chapter follows the same contract (enforced by `scripts/validate_course.py`):
@@ -101,9 +114,11 @@ Every chapter follows the same contract (enforced by `scripts/validate_course.py
    `## Verified commands`, `## Common pitfalls`, `## Exercises` (pointer to the exercise file).
 2. One exercise file per chapter: `exercises/exNN-<slug>.md` (slug matching the chapter
    directory) with `## Objective`, `## Tasks`, and `## Verification checklist`.
-3. A `> **Verified:** YYYY-MM-DD · Hermes Agent vX.Y.Z · recheck: ...` header line. Commands
-   in chapters must be verified against real Hermes behavior; raw evidence is saved under
-   `docs/research/hermes/` and referenced from the chapter.
+3. A `> **Verified:** YYYY-MM-DD · Hermes Agent vX.Y.Z · recheck: ...` header line, with
+   the **same date and version in every chapter** — the course is re-verified as one pass,
+   and the validator fails when chapters disagree. Commands in chapters must be verified
+   against real Hermes behavior; raw evidence is saved under `docs/research/hermes/` and
+   referenced from the chapter.
 4. No filler prose. Concept → exact commands → exercise.
 
 ### Keeping claims true
@@ -117,6 +132,8 @@ guard rather than a promise:
 | Quoted counts and cluster denominators | `python3 scripts/job_evidence_stats.py --check` (recomputes from `docs/research/jobs/`, fails on any drift) |
 | Which source file backs which posting | `python3 scripts/rebuild_job_ledger.py --check` |
 | Citations, section order, exercise pairing, empty evidence files | `python3 scripts/validate_course.py --root .` |
+| Chapters agreeing on one verification date + Hermes version | `python3 scripts/validate_course.py --root .` (error on disagreement; warning when the header is older than `--max-age-days`, default 180) |
+| All of the above at once | `scripts/check.sh` |
 
 Machine-state numbers (session counts, prompt sizes, installed model, tool lists) are
 **dated snapshots**, labelled as such and always paired with the command that produced them.

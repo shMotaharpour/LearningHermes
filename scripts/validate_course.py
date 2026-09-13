@@ -6,7 +6,9 @@ Structural checks (always):
     (both directions: no chapter missing from CURRICULUM, no listed chapter missing).
   - Chapter directories match the NN-slug pattern (2-digit prefix).
   - Each chapter README.md carries the required section headers, in the required order.
-  - Each chapter README.md carries a `> **Verified:** YYYY-MM-DD` drift header.
+  - Each chapter README.md carries a `> **Verified:** YYYY-MM-DD · Hermes Agent vX.Y.Z`
+    drift header, and every chapter states the SAME date and version (the course is
+    verified as one pass, not chapter by chapter).
   - Each chapter README.md links its matching exercise file (exercises/exNN-<slug>.md).
   - Each exercise file carries `## Objective`, `## Tasks`, `## Verification checklist`.
   - Exercise slugs match their chapter slugs.
@@ -19,6 +21,9 @@ Structural checks (always):
 Warnings (non-fatal unless --warnings-as-errors):
   - `examples/...` or `assets/...` paths cited by chapters and exercises that do not
     exist yet (planned course material).
+  - A `Verified:` header older than --max-age-days (default 180). The commands are
+    re-checked by scripts/verify_chapters.py against a real CLI; this warning is the
+    reminder that nobody has run it in a while.
 
 Parity checks (--other PATH, comparing e.g. the farsi checkout against english):
   - Same relative file trees (markdown files).
@@ -29,6 +34,7 @@ from __future__ import annotations
 import argparse
 import re
 import sys
+from datetime import date
 from pathlib import Path
 
 REQUIRED_SECTIONS = [
@@ -48,7 +54,10 @@ REQUIRED_EXERCISE_SECTIONS = [
 CHAPTER_DIR_RE = re.compile(r"^\d{2}-[a-z0-9-]+$")
 EXERCISE_RE = re.compile(r"^ex(\d{2})-([a-z0-9-]+)\.md$")
 CURRICULUM_CHAPTER_RE = re.compile(r"chapters/(\d{2}-[a-z0-9-]+)/")
-VERIFIED_RE = re.compile(r"^> \*\*Verified:\*\* \d{4}-\d{2}-\d{2}\b", re.M)
+VERIFIED_RE = re.compile(
+    r"^> \*\*Verified:\*\* (\d{4}-\d{2}-\d{2}) · Hermes Agent v(\d[\w.]*)", re.M
+)
+DEFAULT_MAX_AGE_DAYS = 180
 
 BACKTICK_EVIDENCE_RE = re.compile(r"`([^`]*docs/research/[^`]*)`")
 BARE_EVIDENCE_RE = re.compile(r"docs/research/[A-Za-z0-9._/\-]+")
@@ -110,10 +119,16 @@ def code_block_count(path: Path) -> int:
     return sum(1 for line in text.splitlines() if line.strip().startswith("```"))
 
 
-def validate(root: Path) -> tuple[list[str], list[str]]:
+def validate(
+    root: Path,
+    max_age_days: int = DEFAULT_MAX_AGE_DAYS,
+    today: date | None = None,
+) -> tuple[list[str], list[str]]:
     """Return (errors, warnings)."""
     errors: list[str] = []
     warnings: list[str] = []
+    today = today or date.today()
+    verified_headers: dict[str, tuple[str, str]] = {}
 
     curriculum = root / "CURRICULUM.md"
     if not curriculum.is_file():
@@ -165,8 +180,32 @@ def validate(root: Path) -> tuple[list[str], list[str]]:
         if positions != sorted(positions):
             errors.append(f"{rel}/README.md: required sections are out of order")
 
-        if not VERIFIED_RE.search(text):
-            errors.append(f"{rel}/README.md: missing '> **Verified:** YYYY-MM-DD' drift header")
+        verified = VERIFIED_RE.search(text)
+        if not verified:
+            errors.append(
+                f"{rel}/README.md: missing "
+                "'> **Verified:** YYYY-MM-DD · Hermes Agent vX.Y.Z' drift header"
+            )
+        else:
+            stamp, version = verified.group(1), verified.group(2)
+            verified_headers[f"{rel}/README.md"] = (stamp, version)
+            try:
+                verified_on = date.fromisoformat(stamp)
+            except ValueError:
+                errors.append(f"{rel}/README.md: Verified header date '{stamp}' is not a real date")
+            else:
+                if verified_on > today:
+                    errors.append(
+                        f"{rel}/README.md: Verified header is dated in the future ({stamp})"
+                    )
+                else:
+                    age = (today - verified_on).days
+                    if age > max_age_days:
+                        warnings.append(
+                            f"{rel}/README.md: verified {age} days ago ({stamp}, "
+                            f"Hermes v{version}); re-run scripts/verify_chapters.py "
+                            f"against a current CLI"
+                        )
 
         agents_md = d / "AGENTS.md"
         if not agents_md.is_file():
@@ -209,6 +248,16 @@ def validate(root: Path) -> tuple[list[str], list[str]]:
     for n in sorted(set(exercise_by_num) - chapter_nums):
         errors.append(f"exercises/ex{n}-*.md has no matching chapter directory")
 
+    # The course is verified as one pass: a chapter claiming a different date or a
+    # different Hermes version than its siblings means a partial re-verification was
+    # left half-done, which is exactly the drift the header exists to make visible.
+    if len(set(verified_headers.values())) > 1:
+        stamps = sorted({f"{d} / v{v}" for d, v in verified_headers.values()})
+        errors.append(
+            "chapters disagree on their Verified header — expected one date and one "
+            f"Hermes version across the course, found: {', '.join(stamps)}"
+        )
+
     research = root / "docs" / "research"
     if research.is_dir():
         for p in sorted(research.rglob("*")):
@@ -250,9 +299,18 @@ def main() -> int:
         action="store_true",
         help="treat dangling examples/ and assets/ references as failures",
     )
+    parser.add_argument(
+        "--max-age-days",
+        type=int,
+        default=DEFAULT_MAX_AGE_DAYS,
+        help=(
+            "warn when a chapter's Verified header is older than this "
+            f"(default: {DEFAULT_MAX_AGE_DAYS})"
+        ),
+    )
     args = parser.parse_args()
 
-    errors, warnings = validate(args.root)
+    errors, warnings = validate(args.root, max_age_days=args.max_age_days)
     if args.other:
         errors += parity(args.root, args.other)
 

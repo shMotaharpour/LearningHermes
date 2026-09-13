@@ -81,6 +81,9 @@ references are reported as warnings until the file exists.
   longer resolve.
 - `python3 -m unittest discover -s tests -v` — repo script tests (standard library only;
   `python3 -m pytest tests/ -q` also works when pytest is installed).
+- `scripts/check.sh [--other PATH]` — runs all of the above in one pass and reports every
+  failure rather than stopping at the first. `verify_chapters.py` is skipped with a notice
+  when no `hermes` is on PATH, so the script is useful on a CI-like machine too.
 - Do not hand-edit anything outside this repo (Hermes config in `~/.hermes/` is read-only
   reference material, never modified for course writing).
 

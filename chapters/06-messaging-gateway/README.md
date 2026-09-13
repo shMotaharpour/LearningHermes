@@ -1,6 +1,6 @@
 # Chapter 06 — Messaging Gateway
 
-> **Verified:** 2026-09-12 · Hermes Agent v0.20.6 (2026.8.27) · recheck: `python3 scripts/verify_chapters.py`
+> **Verified:** 2026-09-13 · Hermes Agent v0.21.2 (2026.9.11) · recheck: `python3 scripts/verify_chapters.py`
 
 ## Why this matters (job link)
 
@@ -60,6 +60,29 @@ Each profile (`~/.hermes/profiles/<name>/`) can run its own gateway — multiple
 at once is a supported topology (different bots, different platforms, different
 personalities). `hermes gateway list` shows per-profile status.
 
+**Two topologies, and a migration between them.** Per-profile standalone gateways are one
+process, one systemd unit, and one set of platform connections *per profile*. The
+alternative, added by v0.21.2's `hermes gateway migrate`, is **multiplexing**: one gateway
+on the default profile serves every profile, driven by `gateway.multiplex_profiles`.
+
+```bash
+hermes gateway migrate --dry-run     # print the plan and any blockers, change nothing
+hermes gateway migrate --multiplex   # default direction: collapse onto one gateway
+hermes gateway migrate --standalone  # roll back from the recorded manifest
+```
+
+The migration stops and uninstalls each secondary profile's standalone gateway, turns on
+`gateway.multiplex_profiles`, and restarts the default profile's gateway. It runs a
+preflight first and **changes nothing when blocked** — the two blockers it checks for are
+duplicate bot tokens across profiles and port-binding platforms that have no
+`/p/<profile>/` ingress. Because the rollback reads a recorded manifest, `--standalone`
+only works on a migration Hermes performed; it is not a general "split this gateway" tool.
+
+Pick multiplexed when profiles share a host and you care about memory and unit count; pick
+standalone when a profile needs its own blast radius (a customer-facing bot that must not
+be restarted because an internal profile changed). Always run `--dry-run` first: the
+preflight is the cheapest way to discover that two profiles are sharing a bot token.
+
 ### hermes send — the egress side
 
 `hermes send` (verified full help in evidence batch 1) delivers messages *to* platforms
@@ -70,7 +93,9 @@ universal notification primitive.
 
 **Evidence:** `docs/research/hermes/cli-evidence-2026-09-07-b4-gateway-cron-events.txt`
 (live `gateway status` systemd output incl. real 429 retry logs, `send --list` targets),
-`docs/research/hermes/cli-evidence-2026-09-07.txt` (full `send --help`).
+`docs/research/hermes/cli-evidence-2026-09-07.txt` (full `send --help`),
+`docs/research/hermes/cli-evidence-2026-09-13-v0.21.2-surface.txt` (`gateway` and `gateway
+migrate` — `migrate` is new since v0.20.6).
 
 ## Verified commands
 
@@ -82,6 +107,7 @@ hermes gateway start|stop|restart
 hermes gateway install     # install as systemd/launchd service
 hermes gateway list        # per-profile gateway status
 hermes gateway setup       # interactive platform configuration
+hermes gateway migrate --dry-run    # multiplex plan + preflight blockers (v0.21.2)
 ```
 
 Delivery targets:
@@ -125,6 +151,10 @@ hermes sessions repair-routing            # fix lost routing identity
 - **Peak-hour 429s.** The gateway retries rate-limited calls automatically (verified live
   logs: "Retrying API call in 2.4s (attempt 1/3)") — but sustained 429s need the fallback
   chain from Chapter 02, not hope.
+- **Multiplexing without the dry run.** `hermes gateway migrate` uninstalls the secondary
+  profiles' units. Its preflight refuses on duplicate bot tokens and on port-binding
+  platforms with no `/p/<profile>/` ingress, so `--dry-run` tells you in seconds what a
+  blind migration would tell you after the outage.
 
 ## Exercises
 

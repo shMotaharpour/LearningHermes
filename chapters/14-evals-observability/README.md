@@ -1,6 +1,6 @@
 # Chapter 14 — Evals and Observability
 
-> **Verified:** 2026-09-12 · Hermes Agent v0.20.6 (2026.8.27) · recheck: `python3 scripts/verify_chapters.py`
+> **Verified:** 2026-09-13 · Hermes Agent v0.21.2 (2026.9.11) · recheck: `python3 scripts/verify_chapters.py`
 
 ## Why this matters (job link)
 
@@ -45,10 +45,10 @@ An eval set is: N tasks + expected properties + a judge. Three judge patterns:
 ### The regression discipline
 
 Any change to the system — model, system prompt, memory, skill, MCP toolset — can silently
-degrade behavior. The senior habit: before/after runs on a frozen task set, one metric
-(tas much "did it complete" as "tokens/calls spent"), a diff, and a go/no-go. Your
-`docs/research/hermes/` evidence files *are* regression baselines for this course's own
-tooling claims.
+degrade behavior. The senior habit: before/after runs on a frozen task set, a metric that
+covers completion *and* cost (as much "did it finish the task" as "tokens and tool calls
+spent"), a diff, and a go/no-go. Your `docs/research/hermes/` evidence files *are*
+regression baselines for this course's own tooling claims.
 
 ### Cost as a quality metric
 

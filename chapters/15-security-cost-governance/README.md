@@ -1,6 +1,6 @@
 # Chapter 15 — Security, Cost, and Governance
 
-> **Verified:** 2026-09-12 · Hermes Agent v0.20.6 (2026.8.27) · recheck: `python3 scripts/verify_chapters.py`
+> **Verified:** 2026-09-13 · Hermes Agent v0.21.2 (2026.9.11) · recheck: `python3 scripts/verify_chapters.py`
 
 ## Why this matters (job link)
 
@@ -45,6 +45,36 @@ and message people. Each capability is an attack surface:
    and plugin deps against OSV.dev.
 5. **Least privilege** — toolset scoping per run (Ch 05), MCP tool filtering (Ch 11),
    read-only catalog MCPs where possible.
+6. **The global stop** — `hermes pause` halts *new* cron dispatch, kanban dispatch, and
+   gateway turns until `hermes resume`, without killing in-flight work.
+   `hermes pause --reason "<why>"` records an auditable reason. This is the break-glass
+   control: a compromised skill, a runaway spend, a provider incident, a bad rollout.
+   Every defense above bounds what the agent *may* do; this is the only one that stops it
+   from starting anything new, and it is the one your on-call person must know by heart.
+
+### Credentials the model never sees (`hermes vault`)
+
+Egress injection (layer 3) keeps API credentials out of the model's context. `hermes vault`
+does the same job for **logins the agent uses in a browser**: passwords, cards and
+addresses are stored in a locally encrypted vault, the agent sees only handles and login
+identifiers (metadata), and the value is injected server-side by `browser_vault_fill` **on
+the exact origin it was saved for**. It never enters the conversation.
+
+```bash
+hermes vault add            # save a login/card/address ahead of time
+hermes vault list           # metadata only — never values
+hermes vault rm <handle>
+hermes vault sources        # detected password managers (1Password, Bitwarden)
+```
+
+Two properties are the lesson, not the commands. **Origin binding** means a phished or
+injected page at a look-alike domain gets nothing, because the fill is scoped to the
+saved origin rather than to the agent's judgment. **Metadata-only visibility** means a
+transcript leak, a compressed context, or a shared session exposes handles, not
+credentials. Together they are the browser-automation answer to the same question egress
+control answers for APIs: *how do we let the agent authenticate without letting the model
+hold the secret?* Any agent platform doing browser work has to answer it; this is what a
+good answer looks like.
 
 ### Cost governance
 
@@ -62,11 +92,15 @@ From Chapter 02's routing to an actual policy:
 
 An approval allowlist with rationale, a secrets inventory (what lives where, rotation),
 an egress policy (allowed destinations), an eval baseline (Ch 14) as the change gate, and
-an incident runbook (Ch 04 logs + Ch 07 incidents).
+an incident runbook (Ch 04 logs + Ch 07 incidents) that names who may run `hermes pause`,
+what gets communicated while it is engaged, and what must be true before `hermes resume`.
+A break-glass control with no written procedure is used too late or never.
 
 **Evidence:** `docs/research/hermes/cli-evidence-2026-09-07-b6-security-observability.txt`
 (security/approvals/secrets/egress command trees), `docs/research/hermes/cli-evidence-2026-09-07.txt`
-(auth pools), plus gateway 429-retry logs in evidence b4 as cost/rate context.
+(auth pools), plus gateway 429-retry logs in evidence b4 as cost/rate context;
+`docs/research/hermes/cli-evidence-2026-09-13-v0.21.2-surface.txt` (`pause`, `resume`,
+`vault`, `backup` on v0.21.2).
 
 ## Verified commands
 
@@ -75,6 +109,14 @@ Approvals:
 ```bash
 hermes approvals suggest      # mine past decisions -> proposed allowlist
 hermes security               # OSV.dev scan: venv + plugin deps (verified)
+```
+
+Break-glass:
+
+```bash
+hermes pause --reason "suspected prompt injection via inbox skill"
+hermes status                 # confirm the stop is engaged
+hermes resume                 # lift it; dispatch resumes on the next tick
 ```
 
 Secrets:
@@ -99,6 +141,7 @@ Cost:
 hermes insights --days 7      # weekly review
 hermes fallback list          # resilience of the tier policy
 hermes auth list              # pooled credentials state
+hermes backup -o ~/backups --keep 7   # retention on the archive that holds .env
 ```
 
 ## Common pitfalls
@@ -117,6 +160,13 @@ hermes auth list              # pooled credentials state
   `security`).
 - **Governance documents nobody re-reads.** The allowlist/egress/budget docs are living
   runbooks — review on incidents and quarterly.
+- **No rehearsed break-glass.** The first time anyone runs `hermes pause` should not be
+  during the incident. Rehearse it, and write down what "safe to resume" means.
+- **A forgotten `hermes pause`.** It survives restarts and silences everything scheduled.
+  Nothing pages you; `hermes status` is where it shows. Put "is the global stop engaged?"
+  in the same weekly review as `hermes insights`.
+- **Unbounded backup archives.** `hermes backup` includes `.env`. Every unpruned copy is
+  another place your keys live — `--keep N` bounds the count, encryption bounds the rest.
 
 ## Exercises
 

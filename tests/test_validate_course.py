@@ -1,6 +1,7 @@
 """Black-box, file-based CLI regression tests; standard library only."""
 import subprocess
 import sys
+from datetime import date, timedelta
 from pathlib import Path
 import tempfile
 import unittest
@@ -144,7 +145,71 @@ class ValidatorTests(unittest.TestCase):
         self.rewrite_chapter("\n".join(
             line for line in CHAPTER_README.format(num=1).splitlines()
             if not line.startswith("> **Verified:**")).replace("\n\n\n", "\n\n"))
-        self.reject("missing '> **Verified:** YYYY-MM-DD' drift header")
+        self.reject("missing '> **Verified:** YYYY-MM-DD · Hermes Agent vX.Y.Z' drift header")
+
+    def test_verified_header_without_version_rejected(self):
+        self.rewrite_chapter(
+            CHAPTER_README.format(num=1).replace(
+                "> **Verified:** 2026-09-12 · Hermes Agent v0.20.6 (2026.8.27) · recheck:",
+                "> **Verified:** 2026-09-12 · recheck:",
+            )
+        )
+        self.reject("missing '> **Verified:** YYYY-MM-DD · Hermes Agent vX.Y.Z' drift header")
+
+    def date_the_chapter(self, days_ago):
+        """Re-stamp the fixture chapter's Verified header relative to today."""
+        stamp = (date.today() - timedelta(days=days_ago)).isoformat()
+        self.rewrite_chapter(CHAPTER_README.format(num=1).replace("2026-09-12", stamp))
+
+    def test_stale_verified_header_warns_but_passes(self):
+        self.date_the_chapter(400)
+        result = self.run_cli()
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertIn("re-run scripts/verify_chapters.py", result.stderr)
+        self.assertIn("verified 400 days ago", result.stderr)
+
+    def test_stale_verified_header_fails_under_warnings_as_errors(self):
+        self.date_the_chapter(400)
+        self.reject("re-run scripts/verify_chapters.py", extra=["--warnings-as-errors"])
+
+    def test_max_age_days_is_the_threshold(self):
+        self.date_the_chapter(10)
+        fresh = self.run_cli(extra=["--max-age-days", "10"])
+        self.assertEqual(fresh.returncode, 0, fresh.stderr)
+        self.assertNotIn("re-run scripts/verify_chapters.py", fresh.stderr)
+        stale = self.run_cli(extra=["--max-age-days", "9"])
+        self.assertEqual(stale.returncode, 0, stale.stderr)
+        self.assertIn("re-run scripts/verify_chapters.py", stale.stderr)
+
+    def test_fresh_verified_header_does_not_warn(self):
+        self.date_the_chapter(0)
+        result = self.run_cli()
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertNotIn("re-run scripts/verify_chapters.py", result.stderr)
+
+    def test_future_verified_header_rejected(self):
+        self.rewrite_chapter(
+            CHAPTER_README.format(num=1).replace("2026-09-12", "2999-01-01")
+        )
+        self.reject("Verified header is dated in the future")
+
+    def test_unparseable_verified_date_rejected(self):
+        self.rewrite_chapter(
+            CHAPTER_README.format(num=1).replace("2026-09-12", "2026-13-45")
+        )
+        self.reject("is not a real date")
+
+    def test_chapters_disagreeing_on_verified_header_rejected(self):
+        self.put(self.root, "CURRICULUM.md",
+                 "# Curriculum\n\n| 01 | `chapters/01-test/` | Test |\n"
+                 "| 02 | `chapters/02-other/` | Other |\n")
+        second = CHAPTER_README.format(num=2).replace(
+            "Hermes Agent v0.20.6 (2026.8.27)", "Hermes Agent v0.21.2 (2026.9.11)"
+        ).replace("exercises/ex02-test.md", "exercises/ex02-other.md")
+        self.put(self.root, "chapters/02-other/README.md", second)
+        self.put(self.root, "chapters/02-other/AGENTS.md", CHAPTER_AGENTS.format(num=2))
+        self.put(self.root, "exercises/ex02-other.md", EXERCISE.format(num=2))
+        self.reject("chapters disagree on their Verified header")
 
     def test_missing_chapter_agents_rejected(self):
         (self.root / "chapters" / "01-test" / "AGENTS.md").unlink()

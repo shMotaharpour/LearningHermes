@@ -1,6 +1,6 @@
 # Chapter 10 — Skills Engineering
 
-> **Verified:** 2026-09-12 · Hermes Agent v0.20.6 (2026.8.27) · recheck: `python3 scripts/verify_chapters.py`
+> **Verified:** 2026-09-13 · Hermes Agent v0.21.2 (2026.9.11) · recheck: `python3 scripts/verify_chapters.py`
 
 ## Why this matters (job link)
 
@@ -56,6 +56,40 @@ usage tracking, staleness detection, archival, LLM-driven review of agent-create
 Combined with `hermes skills check|update|audit|diff|list-modified`, skills become
 versioned infrastructure — not vibes in a prompts folder.
 
+### Bundles: several skills under one slash command
+
+`hermes bundles list|show|create|delete|reload` groups skills so that `/<bundle>` from the
+CLI or the gateway loads every referenced skill at once. This is composition, and it
+interacts directly with the progressive-disclosure budget above: a bundle is a *deliberate*
+decision to pay several index lines and potentially several bodies in one move. Bundle the
+skills that are genuinely used together in one task (an incident runbook: logs + notepad +
+delivery), never "everything about topic X".
+
+`hermes bundles reload` re-scans the bundles directory and reports what changed — the
+command you run after editing bundle files by hand.
+
+### Skill Sync: the same skills on every device
+
+`hermes sync` keeps skills with you rather than with one machine. Personal sync moves your
+own skills between your devices; if you belong to an organisation, you also receive its
+shared skills and can propose your own back to the team.
+
+```bash
+hermes sync status          # what is synced, and from where
+hermes sync now             # reconcile: pull then push
+hermes sync enable <skill>  # opt one skill into your sync
+hermes sync disable <skill> # keep one local
+hermes sync device          # show/set this device's label
+hermes sync propose <skill> # share a skill with your organisation
+```
+
+Note the shape: sync is **opt-in per skill** (`enable`/`disable`), and contributing to the
+org is a *proposal*, not a push. Both defaults are correct and worth copying into any
+internal tooling you build — a skill can carry machine-specific paths or a customer's
+procedure, so "sync everything" is a leak, and "anyone can publish to the team" is how a
+shared registry rots. `hermes sync device` labels the machine so the sync console shows
+which device pushed what, which is the minimum provenance a shared skill store needs.
+
 ### Registries and publishing
 
 `hermes skills search|install|inspect|publish` (verified) reach registries (skills.sh,
@@ -72,7 +106,9 @@ inspect <id>` previews content without installing — read skills like you read 
 **Evidence:** `docs/research/hermes/cli-evidence-2026-09-07-b5-skills-mcp-plugins.txt`
 (live skills list table incl. Trust/Status columns, inspect help),
 `docs/research/hermes/cli-evidence-2026-09-07.txt` (full skills command tree with
-trust/publish/audit). Live proof-by-existence: this repo's
+trust/publish/audit),
+`docs/research/hermes/cli-evidence-2026-09-13-v0.21.2-surface.txt` (`bundles`, `sync` on
+v0.21.2). Live proof-by-existence: this repo's
 `.hermes/skills/learninghermes-authoring/SKILL.md`.
 
 ## Verified commands
@@ -106,6 +142,18 @@ hermes skills list-modified     # what you've customized
 hermes skills publish           # push your skill to a registry
 ```
 
+Bundles and sync:
+
+```bash
+hermes bundles list             # installed bundles
+hermes bundles show <bundle>    # which skills it loads
+hermes bundles create           # group skills under one /<bundle> command
+hermes bundles reload           # re-scan after hand-editing
+hermes sync status              # what is synced, and from where
+hermes sync enable <skill>      # opt one skill in (sync is per-skill, not all-or-nothing)
+hermes sync now                 # pull then push
+```
+
 ## Common pitfalls
 
 - **Description bloat.** A paragraph-long description inflates the every-session index.
@@ -120,6 +168,12 @@ hermes skills publish           # push your skill to a registry
   consciously, or fork into your own skill.
 - **Name drift.** Referencing `my-skill` in cron prompts after renaming it to `my-skill-v2`
   breaks automation — keep names stable.
+- **Bundling by topic instead of by task.** A bundle loads every skill it references at
+  once. Group what a single task needs; a "topic" bundle is a context bill you pay for
+  nothing.
+- **Syncing skills that are machine- or customer-specific.** `hermes sync` is per-skill for
+  a reason. A skill carrying absolute paths or a client's procedure should stay local —
+  check `hermes sync status` after adding anything sensitive.
 
 ## Exercises
 

@@ -53,12 +53,23 @@ It also needs:
 ## Before opening a pull request
 
 ```bash
+scripts/check.sh        # all of the below, every check run, failures collected
+```
+
+Or individually:
+
+```bash
 python3 scripts/validate_course.py --root .          # structure + citations
 python3 scripts/job_evidence_stats.py --check        # quoted numbers vs evidence
 python3 scripts/rebuild_job_ledger.py --check        # provenance index
 python3 -m unittest discover -s tests -v             # tests (standard library only)
 python3 scripts/verify_chapters.py                   # re-run the `hermes` commands (needs the CLI)
 ```
+
+`scripts/validate_course.py` also warns when a chapter's `Verified:` header is older than
+180 days (`--max-age-days N` to change the threshold) and fails when chapters disagree on
+the date or Hermes version they were verified against — the course is re-verified as one
+pass, not chapter by chapter.
 
 `pytest tests/ -q` also works when pytest is installed; the suite is standard-library
 `unittest` so it runs anywhere, including on a bare interpreter.
