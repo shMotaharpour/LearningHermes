@@ -1,0 +1,8 @@
+name: egress-guard
+version: 1.0.0
+description: "Policy gate for outbound tool calls: block, escalate to human approval, or redact — declared in one YAML-ish policy instead of scattered through prompts."
+author: "LearningHermes (Chapter 12)"
+hooks:
+  - pre_tool_call
+  - post_tool_call
+  - on_session_end
