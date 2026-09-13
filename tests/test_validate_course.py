@@ -211,6 +211,36 @@ class ValidatorTests(unittest.TestCase):
         self.put(self.root, "exercises/ex02-other.md", EXERCISE.format(num=2))
         self.reject("chapters disagree on their Verified header")
 
+    def test_fenced_block_lines_are_not_welded_into_one_path(self):
+        """Regression: consecutive shell lines in a fence became one bogus reference."""
+        self.put(self.root, "examples/evals/eval_runner.py", "print('hi')\n")
+        text = CHAPTER_README.format(num=1).replace(
+            "```bash\nhermes doctor\n```",
+            "```bash\ncd examples/evals\npython3 eval_runner.py --out /dev/null\n```",
+        )
+        self.rewrite_chapter(text)
+        result = self.run_cli()
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertNotIn("evalspython3", result.stderr)
+
+    def test_line_wrapped_inline_span_is_still_joined(self):
+        """The joining behaviour the fence fix must not break."""
+        text = CHAPTER_README.format(num=1).replace(
+            "Evidence: docs/research/jobs/source-01.md",
+            "Evidence: `docs/research/jobs/\nsource-01.md`",
+        )
+        self.rewrite_chapter(text)
+        result = self.run_cli()
+        self.assertEqual(result.returncode, 0, result.stderr)
+
+    def test_dangling_reference_inside_a_fence_is_still_caught(self):
+        text = CHAPTER_README.format(num=1).replace(
+            "```bash\nhermes doctor\n```",
+            "```bash\ncat docs/research/hermes/nope.txt\n```",
+        )
+        self.rewrite_chapter(text)
+        self.reject("docs/research/hermes/nope.txt")
+
     def test_missing_chapter_agents_rejected(self):
         (self.root / "chapters" / "01-test" / "AGENTS.md").unlink()
         self.reject("missing AGENTS.md")
