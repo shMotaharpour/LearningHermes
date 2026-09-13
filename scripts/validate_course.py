@@ -12,7 +12,10 @@ Structural checks (always):
   - Each chapter README.md links its matching exercise file (exercises/exNN-<slug>.md).
   - Each exercise file carries `## Objective`, `## Tasks`, `## Verification checklist`.
   - Exercise slugs match their chapter slugs.
-  - Each chapter has a non-empty AGENTS.md.
+  - `chapters/AGENTS.md` (the shared chapter contract) exists and is non-empty.
+  - Each chapter has a non-empty AGENTS.md that does NOT restate a line from the shared
+    contract. Sixteen copies of the same paragraph are what this check exists to prevent:
+    they drift, and then nobody knows which copy is authoritative.
   - Every `docs/research/...` path cited by a chapter or exercise exists on disk,
     and every cited evidence file is non-empty (no orphan/empty evidence files).
   - No zero-byte file anywhere under docs/research/.
@@ -63,6 +66,8 @@ VERIFIED_RE = re.compile(
     r"^> \*\*Verified:\*\* (\d{4}-\d{2}-\d{2}) · Hermes Agent v(\d[\w.]*)", re.M
 )
 DEFAULT_MAX_AGE_DAYS = 180
+# Below this, a matching line is boilerplate ("## Care") rather than a duplicated rule.
+MIN_SHARED_RULE_CHARS = 40
 
 # Splits on fenced blocks: re.split with one group yields prose, body, prose, body, ...
 FENCE_SPLIT_RE = re.compile(r"^```[^\n]*\n(.*?)^```", re.M | re.S)
@@ -140,6 +145,25 @@ def md_files(root: Path) -> set[str]:
     return out
 
 
+def substantive_lines(text: str) -> set[str]:
+    """Normalised prose lines worth comparing: long enough to be a rule, not a heading."""
+    out = set()
+    for raw in text.splitlines():
+        line = " ".join(raw.strip().lstrip("-*").split()).rstrip(".").lower()
+        if len(line) >= MIN_SHARED_RULE_CHARS and not line.startswith("#"):
+            out.add(line)
+    return out
+
+
+def duplicated_from_shared(chapter_text: str, shared: set[str]) -> list[str]:
+    """Lines a per-chapter AGENTS.md copied verbatim from the shared contract.
+
+    An exact-line check rather than a word cap: it names the offending line, it cannot be
+    satisfied by padding, and it keeps working when the shared contract is reworded.
+    """
+    return sorted(substantive_lines(chapter_text) & shared)
+
+
 def code_block_count(path: Path) -> int:
     text = path.read_text(encoding="utf-8", errors="replace")
     return sum(1 for line in text.splitlines() if line.strip().startswith("```"))
@@ -162,6 +186,16 @@ def validate(
         listed: set[str] = set()
     else:
         listed = set(CURRICULUM_CHAPTER_RE.findall(curriculum.read_text(encoding="utf-8", errors="replace")))
+
+    shared_agents = root / "chapters" / "AGENTS.md"
+    shared_agents_lines: set[str] = set()
+    if not shared_agents.is_file():
+        errors.append("chapters/AGENTS.md missing (the shared chapter contract)")
+    else:
+        shared_text = shared_agents.read_text(encoding="utf-8", errors="replace")
+        if not shared_text.strip():
+            errors.append("chapters/AGENTS.md: empty")
+        shared_agents_lines = substantive_lines(shared_text)
 
     dirs = chapter_dirs(root)
     if not dirs:
@@ -237,8 +271,15 @@ def validate(
         agents_md = d / "AGENTS.md"
         if not agents_md.is_file():
             errors.append(f"{rel}: missing AGENTS.md")
-        elif not agents_md.read_text(encoding="utf-8", errors="replace").strip():
-            errors.append(f"{rel}/AGENTS.md: empty")
+        else:
+            agents_text = agents_md.read_text(encoding="utf-8", errors="replace")
+            if not agents_text.strip():
+                errors.append(f"{rel}/AGENTS.md: empty")
+            for line in duplicated_from_shared(agents_text, shared_agents_lines):
+                errors.append(
+                    f"{rel}/AGENTS.md: restates a line from chapters/AGENTS.md "
+                    f"— keep only this chapter's delta: {line!r}"
+                )
 
         ex = exercise_by_num.get(num)
         if ex is None:

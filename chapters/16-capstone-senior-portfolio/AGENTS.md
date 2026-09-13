@@ -1,9 +1,19 @@
-# Chapter 16 authoring rules
+# Chapter 16 — authoring delta
 
-Scope for this chapter is defined in CURRICULUM.md (Part mapping table).
-- Verify every Hermes command live before writing it here; append raw output to
-  docs/research/hermes/ and cite the file in README.md.
-- Keep the five required sections in order; do not add extra top-level sections.
-- Exercises for this chapter live at exercises/ex16-capstone-senior-portfolio.md.
-- Relevant docs pages: start from https://hermes-agent.nousresearch.com/docs/llms.txt
-  and pick the feature pages listed in CURRICULUM.md for chapter 16.
+Shared rules: `chapters/AGENTS.md`. Only what is specific to this chapter belongs here.
+
+## Scope boundary
+
+Synthesis and defence. This chapter introduces no new Hermes surface; it composes verified
+commands from earlier chapters.
+
+## Ships
+
+`examples/capstone/` — cost model, postmortem template and worked example, system-design
+briefs, competency map. Pinned by `tests/test_cost_model.py`.
+
+## Care
+
+Prices in `workflow.json` are placeholders and must stay visibly so (angle-bracketed names,
+and the tool's warning on every run). A cost model on invented prices is worse than none,
+and a test enforces this.

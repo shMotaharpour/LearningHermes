@@ -1,9 +1,12 @@
-# Chapter 13 authoring rules
+# Chapter 13 — authoring delta
 
-Scope for this chapter is defined in CURRICULUM.md (Part mapping table).
-- Verify every Hermes command live before writing it here; append raw output to
-  docs/research/hermes/ and cite the file in README.md.
-- Keep the five required sections in order; do not add extra top-level sections.
-- Exercises for this chapter live at exercises/ex13-shipping-agent-products.md.
-- Relevant docs pages: start from https://hermes-agent.nousresearch.com/docs/llms.txt
-  and pick the feature pages listed in CURRICULUM.md for chapter 13.
+Shared rules: `chapters/AGENTS.md`. Only what is specific to this chapter belongs here.
+
+## Scope boundary
+
+Where the agent runs, how a setup is distributed, and the deployment checklist. Security
+controls are 15; the eval gate the checklist ends at is 14.
+
+## Care
+
+Backend examples are framed by blast radius, not convenience.

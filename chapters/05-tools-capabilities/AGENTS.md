@@ -1,9 +1,12 @@
-# Chapter 05 authoring rules
+# Chapter 05 — authoring delta
 
-Scope for this chapter is defined in CURRICULUM.md (Part mapping table).
-- Verify every Hermes command live before writing it here; append raw output to
-  docs/research/hermes/ and cite the file in README.md.
-- Keep the five required sections in order; do not add extra top-level sections.
-- Exercises for this chapter live at exercises/ex05-tools-capabilities.md.
-- Relevant docs pages: start from https://hermes-agent.nousresearch.com/docs/llms.txt
-  and pick the feature pages listed in CURRICULUM.md for chapter 05.
+Shared rules: `chapters/AGENTS.md`. Only what is specific to this chapter belongs here.
+
+## Scope boundary
+
+Built-in toolsets and the escalation ladder. MCP tools are 11; approvals are 15.
+
+## Care
+
+The ladder (search → extract → browser) is the chapter's spine. New capabilities get placed
+on it by cost and blast radius, or they do not go in.

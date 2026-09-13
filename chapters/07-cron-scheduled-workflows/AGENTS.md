@@ -1,9 +1,14 @@
-# Chapter 07 authoring rules
+# Chapter 07 — authoring delta
 
-Scope for this chapter is defined in CURRICULUM.md (Part mapping table).
-- Verify every Hermes command live before writing it here; append raw output to
-  docs/research/hermes/ and cite the file in README.md.
-- Keep the five required sections in order; do not add extra top-level sections.
-- Exercises for this chapter live at exercises/ex07-cron-scheduled-workflows.md.
-- Relevant docs pages: start from https://hermes-agent.nousresearch.com/docs/llms.txt
-  and pick the feature pages listed in CURRICULUM.md for chapter 07.
+Shared rules: `chapters/AGENTS.md`. Only what is specific to this chapter belongs here.
+
+## Scope boundary
+
+Time-triggered work. Event-triggered work is 08. The global stop is introduced here as an
+operational control and owned as a procedure by 15.
+
+## Care
+
+Example prompts must be self-contained and state the empty case, because that is the
+chapter's own rule. A repo-authoring constraint once leaked into an example prompt here;
+keep authoring rules out of teaching payloads.

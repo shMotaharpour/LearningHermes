@@ -1,9 +1,21 @@
-# Chapter 12 authoring rules
+# Chapter 12 — authoring delta
 
-Scope for this chapter is defined in CURRICULUM.md (Part mapping table).
-- Verify every Hermes command live before writing it here; append raw output to
-  docs/research/hermes/ and cite the file in README.md.
-- Keep the five required sections in order; do not add extra top-level sections.
-- Exercises for this chapter live at exercises/ex12-plugins-and-apis.md.
-- Relevant docs pages: start from https://hermes-agent.nousresearch.com/docs/llms.txt
-  and pick the feature pages listed in CURRICULUM.md for chapter 12.
+Shared rules: `chapters/AGENTS.md`. Only what is specific to this chapter belongs here.
+
+## Scope boundary
+
+In-process extension and the API surfaces (`serve`, `acp`, `proxy`, embedding). Cross-process
+tools are 11.
+
+## Ships
+
+`examples/plugins/egress-guard/` and `examples/embed-agent.py`. Pinned by
+`tests/test_plugin_egress_guard.py`.
+
+## Care
+
+- `policy.py` must keep importing nothing from Hermes. That separation is the chapter's
+  structural lesson and what makes the plugin testable offline.
+- The plugin's implicit tool allowlist is a known limitation the chapter states out loud.
+  Do not quietly "fix" it without also rewriting the passage that teaches it.
+- `embed-agent.py` documents the checkout-and-`uv sync` path. There is no published wheel.

@@ -1,9 +1,14 @@
-# Chapter 03 authoring rules
+# Chapter 03 — authoring delta
 
-Scope for this chapter is defined in CURRICULUM.md (Part mapping table).
-- Verify every Hermes command live before writing it here; append raw output to
-  docs/research/hermes/ and cite the file in README.md.
-- Keep the five required sections in order; do not add extra top-level sections.
-- Exercises for this chapter live at exercises/ex03-context-memory.md.
-- Relevant docs pages: start from https://hermes-agent.nousresearch.com/docs/llms.txt
-  and pick the feature pages listed in CURRICULUM.md for chapter 03.
+Shared rules: `chapters/AGENTS.md`. Only what is specific to this chapter belongs here.
+
+## Scope boundary
+
+What goes into the prompt and what persists between sessions. Retrieval from an external
+corpus is 03b — this chapter's argument is that you should not need it yet, and that
+argument only works if the two stay separate.
+
+## Care
+
+`hermes prompt-size` figures are a dated snapshot of one machine. The decomposition is the
+lesson; the magnitudes are not.

@@ -1,9 +1,13 @@
-# Chapter 10 authoring rules
+# Chapter 10 — authoring delta
 
-Scope for this chapter is defined in CURRICULUM.md (Part mapping table).
-- Verify every Hermes command live before writing it here; append raw output to
-  docs/research/hermes/ and cite the file in README.md.
-- Keep the five required sections in order; do not add extra top-level sections.
-- Exercises for this chapter live at exercises/ex10-skills-engineering.md.
-- Relevant docs pages: start from https://hermes-agent.nousresearch.com/docs/llms.txt
-  and pick the feature pages listed in CURRICULUM.md for chapter 10.
+Shared rules: `chapters/AGENTS.md`. Only what is specific to this chapter belongs here.
+
+## Scope boundary
+
+Skills as maintained knowledge: authoring, trust, bundles, sync, publishing. Plugins are 12;
+MCP is 11.
+
+## Care
+
+This repo's own `.hermes/skills/learninghermes-authoring/` is the chapter's worked example
+and must stay consistent with what the chapter teaches.

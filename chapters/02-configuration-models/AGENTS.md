@@ -1,9 +1,13 @@
-# Chapter 02 authoring rules
+# Chapter 02 — authoring delta
 
-Scope for this chapter is defined in CURRICULUM.md (Part mapping table).
-- Verify every Hermes command live before writing it here; append raw output to
-  docs/research/hermes/ and cite the file in README.md.
-- Keep the five required sections in order; do not add extra top-level sections.
-- Exercises for this chapter live at exercises/ex02-configuration-models.md.
-- Relevant docs pages: start from https://hermes-agent.nousresearch.com/docs/llms.txt
-  and pick the feature pages listed in CURRICULUM.md for chapter 02.
+Shared rules: `chapters/AGENTS.md`. Only what is specific to this chapter belongs here.
+
+## Scope boundary
+
+Routing, providers, credentials and cost levers. Secrets *handling* and egress belong to 15;
+what the prompt is made of belongs to 03.
+
+## Care
+
+`hermes config get model` output is one machine's snapshot. Quote the three-layer shape,
+never the model names, as the lesson.

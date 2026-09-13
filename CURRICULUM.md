@@ -118,7 +118,8 @@ accepts `NN` or `NNx`, and the exercise file matches (`exercises/ex03b-<slug>.md
 
 ## Chapter Contract
 
-Every chapter follows the same contract (enforced by `scripts/validate_course.py`):
+Every chapter follows the same contract (written out in `chapters/AGENTS.md` and enforced by
+`scripts/validate_course.py`):
 
 1. `README.md` with sections in this order: `## Why this matters (job link)`, `## Concepts`,
    `## Verified commands`, `## Common pitfalls`, `## Exercises` (pointer to the exercise file).

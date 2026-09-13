@@ -50,7 +50,10 @@ Each chapter directory `chapters/NN-slug/` contains:
 - A `> **Verified:** YYYY-MM-DD · Hermes Agent vX.Y.Z · recheck: python3 scripts/verify_chapters.py`
   header line, updated whenever the chapter's commands are re-run against a live install.
 - Optional `notes.md` for drafts; delete before publication.
-- `AGENTS.md` with chapter-specific authoring rules and research pointers.
+- `AGENTS.md` carrying ONLY that chapter's delta — its scope boundary, what it ships
+  under `examples/` and which test pins it, and any rule that applies there and
+  nowhere else. The rules shared by every chapter live once in `chapters/AGENTS.md`;
+  `scripts/validate_course.py` fails on a per-chapter file that restates one of them.
 
 Each chapter has one matching `exercises/exNN-<slug>.md` — the slug must equal the chapter
 directory slug — with `## Objective`, `## Tasks`, and `## Verification checklist` (commands

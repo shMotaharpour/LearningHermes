@@ -1,9 +1,14 @@
-# Chapter 01 authoring rules
+# Chapter 01 — authoring delta
 
-Scope for this chapter is defined in CURRICULUM.md (Part mapping table).
-- Verify every Hermes command live before writing it here; append raw output to
-  docs/research/hermes/ and cite the file in README.md.
-- Keep the five required sections in order; do not add extra top-level sections.
-- Exercises for this chapter live at exercises/ex01-agent-foundations.md.
-- Relevant docs pages: start from https://hermes-agent.nousresearch.com/docs/llms.txt
-  and pick the feature pages listed in CURRICULUM.md for chapter 01.
+Shared rules: `chapters/AGENTS.md`. Only what is specific to this chapter belongs here.
+
+## Scope boundary
+
+Concepts only, and the map of the rest of the course. Anything that needs configuration
+detail belongs to 02; anything about the session store belongs to 04.
+
+## Ships
+
+`examples/agent-loop/miniagent.py` — the loop in ~120 lines, plus `assets/agent-loop.svg`.
+Pinned by `tests/test_agent_loop.py`. The transport seam is load-bearing: every failure
+branch must stay testable offline, so do not add a code path that requires a live model.

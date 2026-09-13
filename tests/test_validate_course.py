@@ -52,9 +52,19 @@ Do the thing.
 - [ ] `hermes doctor` passes.
 """
 
-CHAPTER_AGENTS = """# Chapter {num:02d} — Authoring
+CHAPTER_AGENTS = """# Chapter {num:02d} — authoring delta
 
-- Verify commands live before quoting them.
+Shared rules: `chapters/AGENTS.md`.
+
+## Scope boundary
+
+This chapter covers the test fixture and nothing adjacent to it.
+"""
+
+SHARED_AGENTS = """# AGENTS.md — `chapters/` (shared chapter contract)
+
+- Verify every Hermes command live before writing it here, and cite the evidence file.
+- Keep the five required top-level sections in the required order.
 """
 
 
@@ -66,6 +76,7 @@ class ValidatorTests(unittest.TestCase):
         self.other = Path(self.temp.name) / "farsi"
         for root in (self.root, self.other):
             self.put(root, "CURRICULUM.md", "# Curriculum\n\n| 01 | `chapters/01-test/` | Test |\n")
+            self.put(root, "chapters/AGENTS.md", SHARED_AGENTS)
             self.put(root, "README.md", "# Course\n")
             self.put(root, "chapters/01-test/README.md", CHAPTER_README.format(num=1))
             self.put(root, "chapters/01-test/AGENTS.md", CHAPTER_AGENTS.format(num=1))
@@ -291,6 +302,47 @@ class ValidatorTests(unittest.TestCase):
         self.put(self.root, "chapters/01bc-nope/README.md", CHAPTER_README.format(num=1))
         result = self.run_cli()
         # Not recognised as a chapter directory, so it is ignored rather than validated.
+        self.assertEqual(result.returncode, 0, result.stderr)
+
+    def test_missing_shared_chapter_contract_rejected(self):
+        (self.root / "chapters" / "AGENTS.md").unlink()
+        self.reject("chapters/AGENTS.md missing")
+
+    def test_empty_shared_chapter_contract_rejected(self):
+        self.put(self.root, "chapters/AGENTS.md", "   \n")
+        self.reject("chapters/AGENTS.md: empty")
+
+    def test_chapter_agents_restating_a_shared_rule_rejected(self):
+        """The check that stops 18 copies drifting apart — the point of the split."""
+        self.put(self.root, "chapters/01-test/AGENTS.md",
+                 CHAPTER_AGENTS.format(num=1)
+                 + "\n- Verify every Hermes command live before writing it here, and cite"
+                   " the evidence file.\n")
+        self.reject("restates a line from chapters/AGENTS.md")
+
+    def test_the_duplication_check_names_the_offending_line(self):
+        self.put(self.root, "chapters/01-test/AGENTS.md",
+                 CHAPTER_AGENTS.format(num=1)
+                 + "\n- Keep the five required top-level sections in the required order.\n")
+        result = self.run_cli()
+        self.assertEqual(result.returncode, 1)
+        self.assertIn("five required top-level sections", result.stderr)
+
+    def test_short_shared_lines_are_not_treated_as_duplication(self):
+        """A heading or a stock phrase is boilerplate, not a copied rule."""
+        self.put(self.root, "chapters/AGENTS.md", SHARED_AGENTS + "\n## Care\n")
+        self.put(self.root, "chapters/01-test/AGENTS.md",
+                 CHAPTER_AGENTS.format(num=1) + "\n## Care\n\nNothing special.\n")
+        result = self.run_cli()
+        self.assertEqual(result.returncode, 0, result.stderr)
+
+    def test_a_reworded_rule_is_allowed(self):
+        """The check targets copies, not the topic — a real delta may discuss the same area."""
+        self.put(self.root, "chapters/01-test/AGENTS.md",
+                 CHAPTER_AGENTS.format(num=1)
+                 + "\n- Evidence for this chapter is the b3 batch; re-capture it on a"
+                   " version bump.\n")
+        result = self.run_cli()
         self.assertEqual(result.returncode, 0, result.stderr)
 
     def test_missing_chapter_agents_rejected(self):

@@ -19,7 +19,8 @@ The rules below exist because that is the promise the course makes to its reader
 
 ## Adding or changing a chapter
 
-A chapter is `chapters/NN-slug/README.md` plus `chapters/NN-slug/AGENTS.md`, and it must
+A chapter is `chapters/NN-slug/README.md` plus `chapters/NN-slug/AGENTS.md` (that
+chapter's delta only — the shared contract is `chapters/AGENTS.md`), and it must
 contain these sections in this order:
 
 1. `## Why this matters (job link)`
