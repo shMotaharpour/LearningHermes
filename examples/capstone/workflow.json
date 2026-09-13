@@ -1,0 +1,76 @@
+{
+  "$comment": [
+    "A worked cost/latency model for a capstone-shaped workflow.",
+    "",
+    "PRICES ARE PLACEHOLDERS. They are not quoted from any provider and will be wrong for",
+    "yours. Replace every number in `models` with your provider's current published rates",
+    "before you take any conclusion from this file — a cost model built on invented prices",
+    "is worse than no cost model, because it produces a confident number.",
+    "",
+    "The SHAPE is the lesson: jobs x frequency x tokens x price, with cache and failure",
+    "retry accounted for. That shape transfers to any provider and any platform."
+  ],
+  "currency": "USD",
+  "models": {
+    "cheap": {
+      "name": "<your cheap tier model>",
+      "input_per_mtok": 0.15,
+      "output_per_mtok": 0.60,
+      "cached_input_per_mtok": 0.02,
+      "typical_latency_s": 3
+    },
+    "strong": {
+      "name": "<your strong tier model>",
+      "input_per_mtok": 3.00,
+      "output_per_mtok": 15.00,
+      "cached_input_per_mtok": 0.30,
+      "typical_latency_s": 12
+    }
+  },
+  "jobs": [
+    {
+      "name": "daily-briefing",
+      "why": "agent job: research + summarise, delivered to a channel",
+      "tier": "strong",
+      "runs_per_day": 1,
+      "input_tokens": 18000,
+      "output_tokens": 1200,
+      "cached_fraction": 0.7,
+      "tool_calls": 6,
+      "failure_rate": 0.05
+    },
+    {
+      "name": "pr-triage",
+      "why": "webhook job: fires per pull request opened",
+      "tier": "cheap",
+      "runs_per_day": 12,
+      "input_tokens": 9000,
+      "output_tokens": 600,
+      "cached_fraction": 0.6,
+      "tool_calls": 3,
+      "failure_rate": 0.03
+    },
+    {
+      "name": "disk-watchdog",
+      "why": "script-only: no LLM at all",
+      "tier": "cheap",
+      "runs_per_day": 24,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "cached_fraction": 0,
+      "tool_calls": 0,
+      "failure_rate": 0.0
+    },
+    {
+      "name": "nightly-eval",
+      "why": "the regression gate from Chapter 14",
+      "tier": "cheap",
+      "runs_per_day": 1,
+      "input_tokens": 40000,
+      "output_tokens": 2500,
+      "cached_fraction": 0.3,
+      "tool_calls": 25,
+      "failure_rate": 0.02
+    }
+  ]
+}
