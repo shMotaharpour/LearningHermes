@@ -10,7 +10,7 @@ translation (English technical terms preserved). Content is identical across bra
 
 ## The Course
 
-- **Syllabus:** [CURRICULUM.md](CURRICULUM.md) — 5 parts, 18 chapters, competency mapping.
+- **Syllabus:** [CURRICULUM.md](CURRICULUM.md) — 5 parts, 19 chapters, competency mapping.
 - **Path:** Agent Operator → Agent Power User → Automation Engineer → Agent Developer →
   Senior Applied AI Engineer.
 
@@ -39,13 +39,13 @@ unattended runs mean wall-clock time exceeds working time.
 
 | Part | Chapters | Estimated hands-on time |
 |---|---|---|
-| I — Foundations | 01–03b | 9–13 h |
+| I — Foundations | 01–03c | 12–17 h |
 | II — Operating the Agent | 04–06 | 7–11 h |
 | III — Automation Engineering | 07–09 | 9–14 h |
 | IV — Building & Extending | 10–13 | 12–18 h |
 | V — Production Engineering | 14–15 | 9–14 h |
 | Capstone | 16 | 30–50 h over ~6 weeks (incl. a 14-day unattended run) |
-| **Total** | | **~76–118 h**, plus the capstone's calendar time |
+| **Total** | | **~79–122 h**, plus the capstone's calendar time |
 
 The capstone is deliberately calendar-bound, not effort-bound: `exercises/ex16-capstone-senior-portfolio.md`
 requires an automation that runs unattended for 14 days, and that cannot be compressed.
@@ -55,7 +55,7 @@ requires an automation that runs unattended for 14 days, and that cannot be comp
 ```
 AGENTS.md                  # Root agent instructions (what any agent working in this repo must know)
 CURRICULUM.md              # Canonical syllabus: parts, chapters, competency clusters
-chapters/                  # 18 chapters, 5 parts — one directory per chapter
+chapters/                  # 19 chapters, 5 parts — one directory per chapter
   AGENTS.md                # Shared chapter contract: the rules every chapter obeys
   NN[x]-slug/              # a letter suffix (03b) marks a chapter inserted between two others
   NN-slug/
@@ -123,6 +123,11 @@ verification requirements, commit conventions, and the bilingual branch rules.
 
   The repo's own tooling has **no third-party dependencies** — standard library only, on
   Python 3.11+. There is nothing to `pip install` to run the checks.
+
+  One *example* needs a package: `examples/retrieval-scale/` uses `sqlite-vec` for real
+  vector search (Chapter 03c). Its tests skip cleanly when the package is absent, so
+  `python3 -m unittest discover -s tests` still passes everywhere; `pip install sqlite-vec`
+  to actually run them.
 
 - Add `--other <path>` to the validator to compare two branch checkouts (structural parity).
 - See `CONTRIBUTING.md` for the full chapter contract and evidence rules.
