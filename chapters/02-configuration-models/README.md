@@ -1,6 +1,6 @@
 # Chapter 02 — Configuration and Models
 
-> **Verified:** 2026-09-13 · Hermes Agent v0.21.2 (2026.9.11) · recheck: `python3 scripts/verify_chapters.py`
+> **Verified:** 2026-09-14 · Hermes Agent v0.21.3 (2026.9.14) · recheck: `python3 scripts/verify_chapters.py`
 
 ## Why this matters (job link)
 
@@ -24,6 +24,16 @@ provider serves (`gemini/gemini-2.5-pro` = Google model via OpenRouter;
 latency).
 Hermes resolves `provider/model` pairs at runtime and supports three auth patterns: API
 keys (`.env`), OAuth browser logins, pooled credentials.
+
+A local endpoint is just a provider whose weights you own — llama.cpp's `llama-server`,
+Ollama, vLLM all speak the OpenAI-compatible wire on loopback. One gate is easy to hit and
+hard to debug blind: **Hermes refuses to start an agent on any model reporting < 64K
+context**, and what it reads is the endpoint's `/v1/models` metadata, not your server
+flags — a tiny GGUF reports its *training* window (8K), `--ctx-size 65536` gets capped to
+it by llama.cpp, and the documented fix is a per-model `context_length` override in
+`providers:` config. Verified end-to-end on 2026-09-14: refusal text, override, one-shot
+session (`docs/research/hermes/cli-evidence-2026-09-14-local-endpoint.txt`); the full
+serving path and what the override does and does not buy is Chapter 03d's territory.
 
 ### The three-layer model resolution
 

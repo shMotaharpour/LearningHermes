@@ -1,0 +1,48 @@
+task: 12 dims, 6 outputs, domain on a 9-dim subspace, true edit rank 2, label noise 0.5
+training: full-batch GD, lr 0.05, 1200 steps, seed 0 — the ONLY difference between rows is what was trainable
+
+head to head:
+                    method  trainable  new-domain mse  old-domain mse  seconds
+------------------------------------------------------------------------------
+             base (frozen)          0          2.3695          0.0000     0.00
+            full fine-tune         72          0.0564          0.0262     0.77
+                  lora r=2         36          0.0343          0.0074     1.12
+    qlora r=2 (4-bit base)         36          0.0369          0.0127     1.10
+    qlora r=3 (4-bit base)         54          0.0458          0.0201     1.30
+
+rank sweep (same data, same steps, one adapter per rank):
+  rank  trainable   train mse   new-domain   old-domain  seconds
+----------------------------------------------------------------
+     0          0      2.3581       2.3695       0.0000     0.00
+     1         18      0.5473       0.3212       0.0031     0.89
+     2         36      0.2073       0.0357       0.0076     1.11
+     4         72      0.1966       0.0483       0.0198     1.50
+     6        108      0.1895       0.0566       0.0262     1.92
+
+base-precision floor (4-bit base, before any adapter):
+  quantization error on new-domain inputs: 0.0075
+  quantization error on old-domain inputs: 0.0074
+
+Read the head-to-head first. Full fine-tune moved all 72
+base weights; LoRA moved the equivalent of a rank-capped edit and beat it on
+BOTH columns here — because this task's true edit is exactly low-rank and
+invisible to the old domain, so the constraint cost nothing while full
+fine-tuning's extra freedom went to fitting label noise. That is the bet you
+make when you choose LoRA: that the edit is low-rank. This demo is the case
+where the bet pays; the sweep below is how you check it on your own task.
+
+Now the sweep, the capacity knob. Below the true rank the adapter cannot
+express the edit it is asked for. At rank 2 the new-domain error bottoms
+out. Above it, watch two columns move in opposite directions: train mse
+keeps falling PAST the label-noise floor — that is noise being memorized —
+while the new domain gets WORSE again and the old domain keeps drifting.
+Rank is not 'more is better'. It is a capacity knob, and the right setting
+is the size of the edit, which you find by sweeping, not by hoping.
+
+The floor row is the third knob: base precision, a number that exists before
+any adapter does. Compare the two qlora rows: more rank on the same
+quantized base made BOTH columns worse — extra capacity just chased the
+same noise harder. What shrinks the quantization error is more BITS, and
+the error shrinks with precision before training even starts. If your
+adapter has plateaued and the base itself is the thing that is wrong, no
+adapter setting will fix it.
