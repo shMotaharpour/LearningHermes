@@ -1,0 +1,46 @@
+# Default-deny egress for the gateway namespace — Chapter 13b, and Chapter 15's egress
+# lesson enforced by the platform rather than by the agent.
+#
+# NOT APPLIED BY THIS REPO. `kubectl apply --dry-run=client` validates the structure only.
+# NetworkPolicy needs a CNI that enforces it: on GKE that is Dataplane V2 or Calico. On a
+# cluster without enforcement this object applies cleanly and does NOTHING, which is the
+# most dangerous failure mode in this file — you will believe you have egress control.
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: gateway-default-deny-egress
+  namespace: hermes
+spec:
+  podSelector:
+    matchLabels:
+      app: hermes-gateway
+  policyTypes: ["Egress"]
+  egress:
+    # DNS, or nothing resolves and every failure looks like a network outage.
+    - to:
+        - namespaceSelector: {}
+          podSelector:
+            matchLabels:
+              k8s-app: kube-dns
+      ports:
+        - protocol: UDP
+          port: 53
+    # The database, by private IP range.
+    - to:
+        - ipBlock:
+            cidr: 10.0.0.0/8
+      ports:
+        - protocol: TCP
+          port: 5432
+    # Everything else — model providers, messaging platforms — goes through an egress
+    # proxy you control, so the allowlist lives in one place and is auditable. This is
+    # `hermes egress` (Chapter 15) expressed at the cluster layer: the agent cannot reach
+    # the internet directly even if it is talked into trying.
+    - to:
+        - podSelector:
+            matchLabels:
+              app: egress-proxy
+      ports:
+        - protocol: TCP
+          port: 3128

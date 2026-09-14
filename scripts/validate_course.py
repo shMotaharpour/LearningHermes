@@ -9,6 +9,10 @@ Structural checks (always):
   - Each chapter README.md carries a `> **Verified:** YYYY-MM-DD · Hermes Agent vX.Y.Z`
     drift header, and every chapter states the SAME date and version (the course is
     verified as one pass, not chapter by chapter).
+  - Except chapters named in REVIEWED_CHAPTERS, whose commands this repo cannot run (no
+    cloud account). Those must carry `> **Reviewed:** YYYY-MM-DD · NOT verified against
+    <what> · <how it IS checked>` and must NOT carry a Verified header. Every other chapter
+    is forbidden from using the Reviewed header, so the weaker standard cannot spread.
   - Each chapter README.md links its matching exercise file (exercises/exNN-<slug>.md).
   - Each exercise file carries `## Objective`, `## Tasks`, `## Verification checklist`.
   - Exercise slugs match their chapter slugs.
@@ -65,6 +69,17 @@ CURRICULUM_CHAPTER_RE = re.compile(rf"chapters/({CHAPTER_NUM}-[a-z0-9-]+)/")
 VERIFIED_RE = re.compile(
     r"^> \*\*Verified:\*\* (\d{4}-\d{2}-\d{2}) · Hermes Agent v(\d[\w.]*)", re.M
 )
+
+# A chapter whose commands this repo CANNOT run carries a different, weaker header and says
+# what it could not verify and how it is checked instead. The course's credibility rests on
+# `Verified:` meaning something, so a chapter about a cloud provider we hold no account with
+# must not claim it. Membership is explicit: the weaker standard is opt-in BY NAME, so a
+# chapter can never quietly downgrade itself, and a listed chapter may not claim to be
+# verified either.
+REVIEWED_RE = re.compile(
+    r"^> \*\*Reviewed:\*\* (\d{4}-\d{2}-\d{2}) · NOT verified against (.+?) · (.+)$", re.M
+)
+REVIEWED_CHAPTERS = {"13b-cloud-deployment"}
 DEFAULT_MAX_AGE_DAYS = 180
 # Below this, a matching line is boilerplate ("## Care") rather than a duplicated rule.
 MIN_SHARED_RULE_CHARS = 40
@@ -173,11 +188,13 @@ def validate(
     root: Path,
     max_age_days: int = DEFAULT_MAX_AGE_DAYS,
     today: date | None = None,
+    reviewed_chapters: set[str] | None = None,
 ) -> tuple[list[str], list[str]]:
     """Return (errors, warnings)."""
     errors: list[str] = []
     warnings: list[str] = []
     today = today or date.today()
+    reviewed_chapters = REVIEWED_CHAPTERS if reviewed_chapters is None else reviewed_chapters
     verified_headers: dict[str, tuple[str, str]] = {}
 
     curriculum = root / "CURRICULUM.md"
@@ -241,8 +258,44 @@ def validate(
         if positions != sorted(positions):
             errors.append(f"{rel}/README.md: required sections are out of order")
 
+        is_reviewed_chapter = d.name in reviewed_chapters
+        reviewed = REVIEWED_RE.search(text)
         verified = VERIFIED_RE.search(text)
-        if not verified:
+
+        if is_reviewed_chapter and verified:
+            errors.append(
+                f"{rel}/README.md: listed in REVIEWED_CHAPTERS but claims a 'Verified:' "
+                "header — this repo cannot run its commands"
+            )
+        elif is_reviewed_chapter and not reviewed:
+            errors.append(
+                f"{rel}/README.md: missing '> **Reviewed:** YYYY-MM-DD · NOT verified "
+                "against <what> · <how it IS checked>' header"
+            )
+        elif reviewed and not is_reviewed_chapter:
+            errors.append(
+                f"{rel}/README.md: uses the weaker 'Reviewed:' header without being listed "
+                "in REVIEWED_CHAPTERS — add it there deliberately or verify the chapter"
+            )
+
+        if is_reviewed_chapter:
+            # Age is still tracked: a cloud provider's surface drifts faster than a CLI's.
+            if reviewed:
+                stamp = reviewed.group(1)
+                try:
+                    reviewed_on = date.fromisoformat(stamp)
+                except ValueError:
+                    errors.append(
+                        f"{rel}/README.md: Reviewed header date '{stamp}' is not a real date")
+                else:
+                    if reviewed_on > today:
+                        errors.append(
+                            f"{rel}/README.md: Reviewed header is dated in the future ({stamp})")
+                    elif (today - reviewed_on).days > max_age_days:
+                        warnings.append(
+                            f"{rel}/README.md: reviewed {(today - reviewed_on).days} days ago "
+                            f"({stamp}); re-check it against the provider's current docs")
+        elif not verified:
             errors.append(
                 f"{rel}/README.md: missing "
                 "'> **Verified:** YYYY-MM-DD · Hermes Agent vX.Y.Z' drift header"
@@ -368,6 +421,15 @@ def main() -> int:
         help="treat dangling examples/ and assets/ references as failures",
     )
     parser.add_argument(
+        "--reviewed",
+        action="append",
+        metavar="CHAPTER_DIR",
+        help=(
+            "chapter directory whose commands this repo cannot run, so it carries the "
+            "weaker 'Reviewed:' header (repeatable; overrides the built-in list)"
+        ),
+    )
+    parser.add_argument(
         "--max-age-days",
         type=int,
         default=DEFAULT_MAX_AGE_DAYS,
@@ -378,7 +440,11 @@ def main() -> int:
     )
     args = parser.parse_args()
 
-    errors, warnings = validate(args.root, max_age_days=args.max_age_days)
+    errors, warnings = validate(
+        args.root,
+        max_age_days=args.max_age_days,
+        reviewed_chapters=set(args.reviewed) if args.reviewed else None,
+    )
     if args.other:
         errors += parity(args.root, args.other)
 

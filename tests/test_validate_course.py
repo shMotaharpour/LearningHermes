@@ -304,6 +304,59 @@ class ValidatorTests(unittest.TestCase):
         # Not recognised as a chapter directory, so it is ignored rather than validated.
         self.assertEqual(result.returncode, 0, result.stderr)
 
+    def reviewed_fixture(self):
+        """A chapter whose commands this repo cannot run, named in the allowlist."""
+        self.put(self.root, "CURRICULUM.md",
+                 "# Curriculum\n\n| 01 | `chapters/01-test/` | Test |\n"
+                 "| 99b | `chapters/99b-cloud/` | Cloud |\n")
+        text = CHAPTER_README.format(num=1).replace(
+            "> **Verified:** 2026-09-12 · Hermes Agent v0.20.6 (2026.8.27) · recheck: "
+            "`python3 scripts/verify_chapters.py`",
+            "> **Reviewed:** 2026-09-14 · NOT verified against a live cloud project · "
+            "checked by structural tests",
+        ).replace("exercises/ex01-test.md", "exercises/ex99b-cloud.md")
+        self.put(self.root, "chapters/99b-cloud/README.md", text)
+        self.put(self.root, "chapters/99b-cloud/AGENTS.md", CHAPTER_AGENTS.format(num=9))
+        self.put(self.root, "exercises/ex99b-cloud.md", EXERCISE.format(num=9))
+
+    def test_allowlisted_chapter_may_use_the_reviewed_header(self):
+        self.reviewed_fixture()
+        result = self.run_cli(extra=["--reviewed", "99b-cloud"])
+        self.assertEqual(result.returncode, 0, result.stderr)
+
+    def test_allowlisted_chapter_may_not_claim_verified(self):
+        """The weaker standard cannot be used to smuggle in a stronger claim."""
+        self.reviewed_fixture()
+        self.put(self.root, "chapters/99b-cloud/README.md",
+                 CHAPTER_README.format(num=1).replace(
+                     "exercises/ex01-test.md", "exercises/ex99b-cloud.md"))
+        self.reject("claims a 'Verified:' header", extra=["--reviewed", "99b-cloud"])
+
+    def test_a_chapter_not_on_the_allowlist_may_not_use_the_reviewed_header(self):
+        """The weaker standard is opt-in by name, so it cannot spread quietly."""
+        self.reviewed_fixture()
+        self.reject("without being listed in REVIEWED_CHAPTERS")
+
+    def test_an_allowlisted_chapter_must_actually_carry_the_header(self):
+        """Being on the list is not an exemption from saying what was not verified."""
+        self.reviewed_fixture()
+        self.put(self.root, "chapters/99b-cloud/README.md",
+                 CHAPTER_README.format(num=1)
+                 .replace("> **Verified:** 2026-09-12 · Hermes Agent v0.20.6 (2026.8.27) · "
+                          "recheck: `python3 scripts/verify_chapters.py`", "")
+                 .replace("exercises/ex01-test.md", "exercises/ex99b-cloud.md"))
+        self.reject("missing '> **Reviewed:**", extra=["--reviewed", "99b-cloud"])
+
+    def test_a_stale_reviewed_header_warns(self):
+        """Cloud surfaces drift faster than a CLI's, so age is still tracked."""
+        self.reviewed_fixture()
+        old_stamp = (date.today() - timedelta(days=400)).isoformat()
+        path = self.root / "chapters" / "99b-cloud" / "README.md"
+        path.write_text(path.read_text().replace("2026-09-14", old_stamp), encoding="utf-8")
+        result = self.run_cli(extra=["--reviewed", "99b-cloud"])
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertIn("provider's current docs", result.stderr)
+
     def test_missing_shared_chapter_contract_rejected(self):
         (self.root / "chapters" / "AGENTS.md").unlink()
         self.reject("chapters/AGENTS.md missing")

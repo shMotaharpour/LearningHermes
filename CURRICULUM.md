@@ -25,7 +25,7 @@ Recurring requirement clusters, ordered by observed frequency in the stored evid
 | Cluster | Postings | Mentions | Chapters |
 |---------|---------:|---------:|----------|
 | Agentic orchestration | 13/18 | 44 | 01, 05, 09 |
-| Shipping & DevOps | 13/18 | 42 | 13 |
+| Shipping & DevOps | 13/18 | 42 | 13, 13b |
 | Evaluation & observability | 8/18 | 31 | 14, 14b |
 | Stakeholder/product skills | 8/18 | 11 | 06, 08, 16 |
 | RAG & context engineering | 6/18 | 15 | 03, 03b, 03c |
@@ -40,7 +40,7 @@ Postings counted = the 18 with extracted body text; a posting can cite several c
 The course teaches each cluster hands-on: you do the work *with* an agent, on a real
 machine, with evidence saved under `docs/research/`.
 
-## Course Structure — 5 parts, 19 chapters
+## Course Structure — 5 parts, 20 chapters
 
 ### Part I — Foundations (know the machine)
 
@@ -76,6 +76,7 @@ machine, with evidence saved under `docs/research/`.
 | 11 | `chapters/11-mcp-integration/` | MCP add/config/filter; catalog installs; `hermes mcp serve`; OAuth MCP; building & testing MCP servers | Tool-calling, MCP, integration |
 | 12 | `chapters/12-plugins-and-apis/` | Plugin system (tools, hooks, secret sources, provider plugins); OpenAI-compatible API server; ACP for editors; `hermes proxy`; Python library embedding | API & platform engineering |
 | 13 | `chapters/13-shipping-agent-products/` | Terminal backends (local, Docker, SSH, Daytona, Modal); GitHub PR workflow via agent; CI/CD integration; profile distributions; deployment checklist | Shipping & DevOps |
+| 13b | `chapters/13b-cloud-deployment/` | The gateway on GCP: Cloud Run vs GKE; Workload Identity and least-privilege service accounts; secrets outside Terraform state; Cloud SQL + pgvector; default-deny egress at the platform layer; digest pinning. **Reviewed, not verified** — see the chapter header | Cloud infrastructure & DevOps |
 
 ### Part V — Production Engineering (make it senior)
 
@@ -101,12 +102,12 @@ Part V   -> Senior Applied AI Engineer (you ship, measure, secure, and defend th
 | I | 01–03c | 12–17 h | Run and steer the agent; know where its context comes from, and retrieve what is not in it |
 | II | 04–06 | 7–11 h | Operate it across surfaces, tools, and chat platforms |
 | III | 07–09 | 9–14 h | Ship workflows that run unattended |
-| IV | 10–13 | 12–18 h | Extend the platform and distribute what you built |
+| IV | 10–13b | 16–23 h | Extend the platform and distribute what you built |
 | V | 14–15 | 9–14 h | Measure, secure, and govern it |
 | 16 | Capstone | 30–50 h over ~6 weeks | Defend all of the above with evidence |
 
 Estimates are *hands-on* time for the audience in `README.md`'s prerequisites — reading the
-chapter and doing its exercise on a real machine. Total: **~79–122 h** plus the capstone's
+chapter and doing its exercise on a real machine. Total: **~83–127 h** plus the capstone's
 calendar time, which is bounded by a 14-day unattended run rather than by effort.
 
 ### A note on chapter numbering
@@ -145,6 +146,7 @@ guard rather than a promise:
 | Which source file backs which posting | `python3 scripts/rebuild_job_ledger.py --check` |
 | Citations, section order, exercise pairing, empty evidence files | `python3 scripts/validate_course.py --root .` |
 | Chapters agreeing on one verification date + Hermes version | `python3 scripts/validate_course.py --root .` (error on disagreement; warning when the header is older than `--max-age-days`, default 180) |
+| A chapter whose commands this repo cannot run | `python3 scripts/validate_course.py --root .` — it must carry `Reviewed:` instead of `Verified:`, must be named in `REVIEWED_CHAPTERS`, and no other chapter may use that header. Currently exactly one: `13b-cloud-deployment`. |
 | All of the above at once | `scripts/check.sh` |
 
 Machine-state numbers (session counts, prompt sizes, installed model, tool lists) are

@@ -1,0 +1,133 @@
+# Hermes gateway on GKE — Chapter 13b.
+#
+# NOT APPLIED BY THIS REPO. What CI checks is `kubectl apply --dry-run=client`, which
+# validates structure against the built-in schema and nothing about your cluster.
+#
+# Cloud Run (../terraform/main.tf) is the simpler answer for one gateway. This exists for
+# the case Cloud Run does not cover: you already run GKE, you need sidecars, or you need
+# node-level control. Choosing GKE because it looks more serious is how teams acquire an
+# operations burden they did not need.
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: hermes-gateway
+  namespace: hermes
+  annotations:
+    # Workload Identity: the pod authenticates AS a GCP service account without a key file
+    # ever existing. A downloaded service-account JSON is a credential that cannot be
+    # rotated by the platform and will outlive the person who created it.
+    iam.gke.io/gcp-service-account: hermes-gateway@PROJECT_ID.iam.gserviceaccount.com
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: hermes-gateway
+  namespace: hermes
+spec:
+  # StatefulSet, not Deployment. The gateway holds platform connections and a session
+  # store; it wants a stable identity and an orderly restart, not interchangeable pods.
+  serviceName: hermes-gateway
+  replicas: 1
+  selector:
+    matchLabels:
+      app: hermes-gateway
+  template:
+    metadata:
+      labels:
+        app: hermes-gateway
+    spec:
+      serviceAccountName: hermes-gateway
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 10001
+        fsGroup: 10001
+      containers:
+        - name: gateway
+          # Pinned by digest, not by tag. A tag is a moving pointer, and "it worked
+          # yesterday" is not a rollback plan.
+          image: europe-west4-docker.pkg.dev/PROJECT_ID/hermes/gateway@sha256:REPLACE_WITH_DIGEST
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 8080
+          env:
+            - name: HERMES_PROVIDER_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: hermes-secrets
+                  key: provider-api-key
+          resources:
+            requests:
+              cpu: "500m"
+              memory: "1Gi"
+            limits:
+              # No CPU limit on purpose: a throttled agent loop looks like a slow model,
+              # and you will spend a day blaming the provider. Memory IS limited, because
+              # a leak should kill the pod rather than the node.
+              memory: "2Gi"
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop: ["ALL"]
+          startupProbe:
+            # Generous: a gateway reconnects to every platform on boot. A tight startup
+            # probe restarts it mid-reconnect, forever.
+            tcpSocket:
+              port: 8080
+            periodSeconds: 5
+            failureThreshold: 24
+          livenessProbe:
+            tcpSocket:
+              port: 8080
+            periodSeconds: 20
+          readinessProbe:
+            httpGet:
+              path: /healthz
+              port: 8080
+            periodSeconds: 10
+          volumeMounts:
+            - name: state
+              mountPath: /home/hermes/.hermes
+            - name: tmp
+              mountPath: /tmp
+      volumes:
+        - name: tmp
+          emptyDir: {}
+      terminationGracePeriodSeconds: 60
+  volumeClaimTemplates:
+    - metadata:
+        name: state
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        resources:
+          requests:
+            storage: 20Gi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: hermes-gateway
+  namespace: hermes
+spec:
+  selector:
+    app: hermes-gateway
+  ports:
+    - name: http
+      port: 80
+      targetPort: 8080
+---
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: hermes-gateway
+  namespace: hermes
+spec:
+  # One replica and minAvailable 1 means a voluntary drain waits for you. That is the
+  # correct answer for a single-replica stateful service: a node upgrade should not
+  # silently take your only gateway down.
+  minAvailable: 1
+  selector:
+    matchLabels:
+      app: hermes-gateway

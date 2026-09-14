@@ -10,7 +10,7 @@ translation (English technical terms preserved). Content is identical across bra
 
 ## The Course
 
-- **Syllabus:** [CURRICULUM.md](CURRICULUM.md) — 5 parts, 19 chapters, competency mapping.
+- **Syllabus:** [CURRICULUM.md](CURRICULUM.md) — 5 parts, 20 chapters, competency mapping.
 - **Path:** Agent Operator → Agent Power User → Automation Engineer → Agent Developer →
   Senior Applied AI Engineer.
 
@@ -42,10 +42,10 @@ unattended runs mean wall-clock time exceeds working time.
 | I — Foundations | 01–03c | 12–17 h |
 | II — Operating the Agent | 04–06 | 7–11 h |
 | III — Automation Engineering | 07–09 | 9–14 h |
-| IV — Building & Extending | 10–13 | 12–18 h |
+| IV — Building & Extending | 10–13b | 16–23 h |
 | V — Production Engineering | 14–15 | 9–14 h |
 | Capstone | 16 | 30–50 h over ~6 weeks (incl. a 14-day unattended run) |
-| **Total** | | **~79–122 h**, plus the capstone's calendar time |
+| **Total** | | **~83–127 h**, plus the capstone's calendar time |
 
 The capstone is deliberately calendar-bound, not effort-bound: `exercises/ex16-capstone-senior-portfolio.md`
 requires an automation that runs unattended for 14 days, and that cannot be compressed.
@@ -55,7 +55,7 @@ requires an automation that runs unattended for 14 days, and that cannot be comp
 ```
 AGENTS.md                  # Root agent instructions (what any agent working in this repo must know)
 CURRICULUM.md              # Canonical syllabus: parts, chapters, competency clusters
-chapters/                  # 19 chapters, 5 parts — one directory per chapter
+chapters/                  # 20 chapters, 5 parts — one directory per chapter
   AGENTS.md                # Shared chapter contract: the rules every chapter obeys
   NN[x]-slug/              # a letter suffix (03b) marks a chapter inserted between two others
   NN-slug/
@@ -88,7 +88,9 @@ CONTRIBUTING.md            # Workflow, chapter contract, evidence rules
 - Every chapter ends with exercises in `exercises/` — do them on a real machine.
 - Code blocks are exact, verified commands. Evidence for every claim lives in `docs/research/`.
 - Each chapter opens with a `Verified:` line: the date its commands were last run and the
-  Hermes version they were run against. Numbers quoted from live machine state are labelled
+  Hermes version they were run against. One chapter (13b, cloud deployment) opens with
+  `Reviewed:` instead, because this repo has no GCP account to run its commands against —
+  the header says exactly what was not verified and what is checked instead. Numbers quoted from live machine state are labelled
   snapshots — `python3 scripts/verify_chapters.py` re-checks the commands on your install.
 
 ## For Agents Working in This Repo
