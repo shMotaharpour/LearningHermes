@@ -7,7 +7,9 @@ Shared rules: `chapters/AGENTS.md`. Only what is specific to this chapter belong
 This is the **only** chapter with a `Reviewed:` header instead of `Verified:`, because no
 GCP project, Terraform registry or Kubernetes cluster is reachable from this repo. The
 validator lists it in `REVIEWED_CHAPTERS` and enforces both directions: this chapter may not
-claim `Verified:`, and no other chapter may use `Reviewed:`.
+claim `Verified:`, and no other chapter may use `Reviewed:`. `scripts/verify_chapters.py`
+carries the same list for its own reporting, and a test fails if the two ever disagree — if
+you change one, change both.
 
 Do not "upgrade" the header without actually gaining the ability to run the commands, and do
 not add a second chapter to that allowlist without a reason as concrete as this one. The
@@ -41,6 +43,12 @@ Rules for it, enforced by `tests/test_cloud_manifests.py`:
 - Edit the middle column (the product names) freely as things change. Do NOT let the other
   columns — the layer, when it is right, what you give up — drift into product marketing.
   Those columns are why the section survives a rename; the names are not.
+- It cites dated research under `docs/research/google/`, and a test checks that the cited
+  file exists and is non-empty. When you re-date the section, capture new research and cite
+  the new file — moving the date without moving the citation makes the header a lie.
+- When a claim turns out to be wrong, **say so in the text** rather than editing it away.
+  Observation 2 is the worked example: the correction, and how the claim went stale, is
+  more useful to a reader than a silently-correct sentence. Do not tidy those away.
 
 ## Care
 

@@ -81,6 +81,22 @@ Budget: 4–6 hours. Destroy what you create.
 10. **Write the runbook.** One page for whoever is on call: how to roll back, how to read
     logs, what to do if the gateway crash-loops, who can stop it, and what it costs per day.
 
+11. **Answer the interview question, then check your own answer.** Write half a page on
+    *"why did you build an agent instead of using Google's managed one?"* — as a layer
+    decision, naming what you keep and what you give up.
+
+    Then do the part almost nobody does: **open current Google documentation and check the
+    product names and capabilities you just relied on.** The chapter's table is a dated
+    snapshot and says so; the research behind it is in
+    `docs/research/google/ai-stack-2026-09-14.md`, with source URLs. Record every name or
+    capability that has changed since that date, and whether any change weakens your
+    answer. If the managed option has grown a capability you claimed it lacked, your answer
+    is now wrong — rewrite it.
+
+    This is the transferable habit, not a chapter chore. Confidently describing a
+    competitor's product as it was eighteen months ago is a common and expensive way to
+    lose a design argument, and the only defence is a dated check.
+
 ## Verification checklist
 
 - [ ] Monthly cost estimated **before** creating anything, with the biggest single lever
@@ -96,3 +112,5 @@ Budget: 4–6 hours. Destroy what you create.
       explained.
 - [ ] Everything destroyed; `deletion_protection` behaviour noted.
 - [ ] A one-page on-call runbook including the daily cost.
+- [ ] A written layer-decision answer, plus a dated re-check of the product names it
+      depends on and a note of anything that has changed since the chapter's snapshot.

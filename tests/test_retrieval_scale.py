@@ -2,7 +2,7 @@
 
 Offline and small: sqlite-vec is a pip wheel, the embedder is deterministic, and the IVF
 index is pure Python. Nothing here needs PostgreSQL, GCP, or a model download — and the
-things that DO need them (schema.sql, PgVectorStore, VertexEmbedder) are asserted to be
+things that DO need them (schema.sql, PgVectorStore, GeminiEmbedder) are asserted to be
 documented as unverified rather than silently trusted.
 """
 import importlib.util
@@ -65,12 +65,12 @@ class EmbedderTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             embed.get_embedder("nope")
 
-    def test_vertex_backend_refuses_without_a_project(self):
+    def test_hosted_backend_refuses_without_a_project(self):
         import os
         saved = os.environ.pop("GOOGLE_CLOUD_PROJECT", None)
         try:
             with self.assertRaises(RuntimeError):
-                embed.VertexEmbedder()
+                embed.GeminiEmbedder()
         finally:
             if saved is not None:
                 os.environ["GOOGLE_CLOUD_PROJECT"] = saved
@@ -193,9 +193,45 @@ class UnverifiedSurfacesTests(unittest.TestCase):
         for knob in ("ivfflat", "hnsw", "lists", "probes", "ef_search"):
             self.assertIn(knob, text)
 
-    def test_vertex_embedder_is_marked_unverified(self):
+    def test_hosted_embedder_is_marked_unverified(self):
         text = (SCALE / "embed.py").read_text(encoding="utf-8")
         self.assertIn("Not exercised by this repo's tests", text)
+
+    def test_it_does_not_import_the_removed_sdk_module(self):
+        """`vertexai.language_models` was deprecated in June 2025 and removed in June 2026.
+
+        Code that imports it stops working on a date somebody else picked. The module
+        docstring still NAMES it, deliberately, as the lesson — this test checks there is
+        no actual import, which is a different thing from no mention.
+        """
+        text = (SCALE / "embed.py").read_text(encoding="utf-8")
+        self.assertNotIn("from vertexai.language_models import", text)
+        self.assertNotIn("import vertexai.language_models", text)
+        self.assertIn("from google import genai", text)
+        self.assertIn("gemini-embedding-001", text)
+
+    def test_the_renamed_class_keeps_its_old_name_working(self):
+        """A rebrand upstream is not a reason to break callers downstream."""
+        self.assertIs(embed.VertexEmbedder, embed.GeminiEmbedder)
+        self.assertIsInstance(embed.get_embedder("local"), embed.LocalEmbedder)
+
+    def test_it_refuses_a_batch_size_it_cannot_honour(self):
+        """gemini-embedding-001 takes one text per request. Accepting batch_size=128 and
+        sending 128 requests anyway would leave the caller with a capacity plan built on a
+        batch that never existed — so it is refused, not ignored. Checked without a network
+        call: the refusal is deliberately the first thing the method does."""
+        import os
+        saved = os.environ.get("GOOGLE_CLOUD_PROJECT")
+        os.environ["GOOGLE_CLOUD_PROJECT"] = "not-a-real-project"
+        try:
+            backend = embed.GeminiEmbedder()
+            with self.assertRaises(ValueError):
+                backend.embed(["anything"], batch_size=128)
+        finally:
+            if saved is None:
+                os.environ.pop("GOOGLE_CLOUD_PROJECT", None)
+            else:
+                os.environ["GOOGLE_CLOUD_PROJECT"] = saved
 
     def test_readme_states_the_limits(self):
         text = (SCALE / "README.md").read_text(encoding="utf-8")

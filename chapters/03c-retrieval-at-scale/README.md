@@ -125,9 +125,21 @@ change when you swap the backend:
   re-embed of the corpus is a purchase and you should be able to price it before someone
   asks.
 
-`VertexEmbedder` is the real backend for GCP. It needs your project and credentials, so it
+`GeminiEmbedder` is the real backend for GCP. It needs your project and credentials, so it
 is documented here and **verified by you, not by this repo** — a distinction this course
 takes seriously enough to say twice.
+
+Two of this chapter's numbers move when you make that swap, and neither is obvious.
+**Dimensions**: the local embedder is 384 wide, `gemini-embedding-001` returns 3072 by
+default and truncates cleanly to 1536 or 768 — a different width is a full re-embed and an
+index rebuild, and eight times the storage at the default. **Request size**: the
+per-request limit is the provider's and does not hold even across one model family — the
+older `text-embedding-005` accepted 250 texts per call, `gemini-embedding-001` accepts one,
+and bulk throughput moves to an asynchronous batch API. Index build, latency percentiles
+and the recall methodology are unchanged. So "the engineering survives the swap" is true of
+the method and false of the tuning: measure again rather than carrying the old numbers
+across. (Model names and limits here are dated research — `docs/research/google/ai-stack-2026-09-14.md`
+— not something this repo ran. That is exactly why they sit in the block below that says so.)
 
 ### pgvector is the deployment target
 
@@ -174,7 +186,7 @@ Strip the product names and this chapter is three claims that hold on any stack:
 
 **Evidence:** `docs/research/jobs/source-01.md`, `source-02.md`, `source-04.md` (the
 postings quoted above). The pipeline's behaviour is pinned by `tests/test_retrieval_scale.py`,
-which runs offline. `schema.sql`, `PgVectorStore` and `VertexEmbedder` are **not executed by
+which runs offline. `schema.sql`, `PgVectorStore` and `GeminiEmbedder` are **not executed by
 those tests** — no PostgreSQL and no GCP project are available to them — and each says so in
 the file itself, with a test asserting that it does.
 
@@ -194,9 +206,10 @@ python3 -m unittest discover -s ../../tests -k retrieval_scale
 Against your own GCP project (your credentials, your verification):
 
 ```bash
-pip install google-cloud-aiplatform
+pip install google-genai      # the Gen AI SDK; google-cloud-aiplatform's GenAI modules
+                              # were deprecated in 2025 and removed in June 2026
 gcloud auth application-default login
-EMBED_BACKEND=vertex GOOGLE_CLOUD_PROJECT=your-project python3 bench.py --n 5000
+EMBED_BACKEND=gemini GOOGLE_CLOUD_PROJECT=your-project python3 bench.py --n 5000
 ```
 
 Against pgvector (local container, or Cloud SQL / AlloyDB):

@@ -20,7 +20,8 @@ all six.
 A **provider** is an API surface: OpenRouter, Anthropic, OpenAI, Google, Nous Portal, an
 Ollama server on localhost, any OpenAI-compatible endpoint. A **model** is an identifier a
 provider serves (`gemini/gemini-2.5-pro` = Google model via OpenRouter;
-`vertex/gemini-2.5-pro` = same weights via Vertex AI — different billing, limits, latency).
+`vertex/gemini-2.5-pro` = same weights through Google Cloud — different billing, limits,
+latency).
 Hermes resolves `provider/model` pairs at runtime and supports three auth patterns: API
 keys (`.env`), OAuth browser logins, pooled credentials.
 
