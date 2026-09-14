@@ -30,6 +30,7 @@ CLUSTERS: list[tuple[str, str]] = [
     ("Security & governance", r"\b(security|secure|secrets?|zero trust|fedramp|compliance|governance|privacy|pii|approval\w*|access control)\b"),
     ("Cost & performance optimization", r"\b(cost\w*|token (budget|usage|cost)|latency|throughput|performance optimi\w*|caching|model routing)\b"),
     ("Prompt & context engineering", r"\b(prompt (engineering|design|tuning)|system prompt\w*|few-shot|structured output\w*|context engineering|instruction tuning)\b"),
+    ("Model adaptation & local serving", r"\b(fine[- ]?tun\w*|lora|qlora|peft|adapter\w*|instruction tuning|distillation|quantiz\w*|open[- ]?weight\w*|self[- ]host\w*|on[- ]premise\w*|on[- ]prem)\b"),
     ("Stakeholder/product skills", r"\b(stakeholder\w*|cross-functional|customer[- ]facing|product (requirements|owners?|teams?)|translate business|communication skills)\b"),
     ("Workflow automation platforms", r"\b(zapier|make\.com|n8n|power automate|airtable|retool|workflow platform\w*|scheduled job\w*|scheduler|cron)\b"),
 ]

@@ -10,7 +10,7 @@ translation (English technical terms preserved). Content is identical across bra
 
 ## The Course
 
-- **Syllabus:** [CURRICULUM.md](CURRICULUM.md) — 5 parts, 20 chapters, competency mapping.
+- **Syllabus:** [CURRICULUM.md](CURRICULUM.md) — 5 parts, 21 chapters, competency mapping.
 - **Path:** Agent Operator → Agent Power User → Automation Engineer → Agent Developer →
   Senior Applied AI Engineer.
 
@@ -55,7 +55,7 @@ requires an automation that runs unattended for 14 days, and that cannot be comp
 ```
 AGENTS.md                  # Root agent instructions (what any agent working in this repo must know)
 CURRICULUM.md              # Canonical syllabus: parts, chapters, competency clusters
-chapters/                  # 20 chapters, 5 parts — one directory per chapter
+chapters/                  # 21 chapters, 5 parts — one directory per chapter
   AGENTS.md                # Shared chapter contract: the rules every chapter obeys
   NN[x]-slug/              # a letter suffix (03b) marks a chapter inserted between two others
   NN-slug/

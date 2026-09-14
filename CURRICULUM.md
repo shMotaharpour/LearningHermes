@@ -32,6 +32,7 @@ Recurring requirement clusters, ordered by observed frequency in the stored evid
 | Security & governance | 5/18 | 23 | 15 |
 | Prompt & context engineering | 5/18 | 7 | 03, 10 |
 | API & systems integration | 4/18 | 12 | 12 |
+| Model adaptation & local serving | 3/18 | 10 | 02, 03d |
 | Workflow automation platforms | 3/18 | 8 | 07, 08 |
 | Cost & performance optimization | 2/18 | 2 | 02, 15 |
 
@@ -40,7 +41,7 @@ Postings counted = the 18 with extracted body text; a posting can cite several c
 The course teaches each cluster hands-on: you do the work *with* an agent, on a real
 machine, with evidence saved under `docs/research/`.
 
-## Course Structure — 5 parts, 20 chapters
+## Course Structure — 5 parts, 21 chapters
 
 ### Part I — Foundations (know the machine)
 
@@ -51,6 +52,7 @@ machine, with evidence saved under `docs/research/`.
 | 03 | `chapters/03-context-memory/` | Context files (AGENTS.md, SOUL.md, USER.md, MEMORY.md); memory system & providers; context references; compression & caching | Prompt/context engineering, RAG-adjacent context skills |
 | 03b | `chapters/03b-retrieval-grounding/` | Chunking strategies compared; BM25; dense retrieval; reciprocal rank fusion; abstention; grounded citations and citation verification; retrieval evals | RAG & context engineering |
 | 03c | `chapters/03c-retrieval-at-scale/` | Vector stores (sqlite-vec, pgvector on Cloud SQL/AlloyDB); building an IVF index by hand; measuring recall@k against exact ground truth; dimensionality and storage; embedding batching and re-embed cost; index freshness | RAG at production scale |
+| 03d | `chapters/03d-model-adaptation/` | Full fine-tuning vs constrained edits; LoRA written from its parts (low-rank delta, why rank bounds forgetting); QLoRA's two knobs; adapter serving over a local OpenAI-compatible endpoint; the decision frame vs RAG | Model adaptation & local serving |
 
 ### Part II — Operating the Agent (daily driver)
 
@@ -99,7 +101,7 @@ Part V   -> Senior Applied AI Engineer (you ship, measure, secure, and defend th
 
 | Part | Chapters | Hands-on time | Exit capability |
 |---|---|---|---|
-| I | 01–03c | 12–17 h | Run and steer the agent; know where its context comes from, and retrieve what is not in it |
+| I | 01–03d | 15–21 h | Run and steer the agent; know where its context comes from, retrieve what is not in it, and adapt the model itself when retrieval is the wrong tool |
 | II | 04–06 | 7–11 h | Operate it across surfaces, tools, and chat platforms |
 | III | 07–09 | 9–14 h | Ship workflows that run unattended |
 | IV | 10–13b | 16–23 h | Extend the platform and distribute what you built |
@@ -107,7 +109,7 @@ Part V   -> Senior Applied AI Engineer (you ship, measure, secure, and defend th
 | 16 | Capstone | 30–50 h over ~6 weeks | Defend all of the above with evidence |
 
 Estimates are *hands-on* time for the audience in `README.md`'s prerequisites — reading the
-chapter and doing its exercise on a real machine. Total: **~83–127 h** plus the capstone's
+chapter and doing its exercise on a real machine. Total: **~86–131 h** plus the capstone's
 calendar time, which is bounded by a 14-day unattended run rather than by effort.
 
 ### A note on chapter numbering
