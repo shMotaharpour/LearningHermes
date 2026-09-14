@@ -109,6 +109,69 @@ A tag is a moving pointer. "It worked yesterday" is not a rollback plan. This is
 argument as `hermes plugins install --ref <sha>` in Chapter 12, and it recurs because it is
 the real rule: **reproducibility is a property of your references, not of your intentions.**
 
+### Google's AI stack, and which layer you are building at
+
+> **Snapshot: 2026-09-14.** This is the most perishable section in the course. Google's AI
+> product names and boundaries change faster than anything else here — things get renamed,
+> merged and retired between releases. **Verify every product name against current
+> documentation before you rely on it**, and read the table for its *columns*, which are
+> stable, rather than its middle column, which is not.
+
+Deploying a Hermes gateway to GCP raises a question a GCP-shop interviewer will ask
+directly, and the course has so far given you no answer to it:
+
+> *"Why did you build an agent instead of using Google's managed one?"*
+
+"I wanted to learn" is a true answer and a losing one. The real answer is a layer decision,
+and it is the same decision on AWS or Azure with different nouns:
+
+| Layer | You provide | Google's offering (2026-09) | Right when | What you give up |
+|---|---|---|---|---|
+| **Model API** | everything — the loop, tools, state | Gemini API, via **AI Studio** or **Vertex AI** | you need control of the loop (Chapter 01) | nothing; you own all of it |
+| **Open weights** | serving too | **Gemma** family | data cannot leave, or cost at volume demands it | managed scaling and the newest frontier capability |
+| **Agent framework** | the application, not the plumbing | **ADK** (Agent Development Kit) | you want a loop you did not write but still control | the framework's opinions become yours |
+| **Managed agent** | prompts, data, configuration | **Vertex AI Agent Builder** | a first version has to exist next week | the loop, the trajectory, and much of your ability to evaluate it |
+| **Managed retrieval** | documents | **Vertex AI Search** | retrieval is not your differentiator | chunking and ranking control (Chapters 03b, 03c) |
+| **Vector index** | embeddings and the schema | **Vertex AI Vector Search**, **AlloyDB AI**, Cloud SQL + pgvector, **BigQuery** vector search | you own the pipeline, not the ANN implementation | little — this layer is genuinely commoditised |
+| **Evaluation** | the task set and rubric | **Vertex AI evaluation** tooling | you want managed scoring | the thing Chapter 14 argues you must own |
+
+Five observations that outlive the names in that middle column:
+
+**1. There are two ways to reach Gemini, and the difference is governance, not endpoints.**
+An AI Studio key is a key: fast, personal, and it does not belong in production. Vertex AI
+uses IAM, service accounts, VPC controls, audit logs and per-project data handling. Teams
+prototype with the first and ship with the second — and the migration is the moment someone
+discovers the data-governance terms differ. Read both before you choose, not after.
+
+**2. The managed-agent trade is evaluation, not capability.** Agent Builder gets you a demo
+in an afternoon. What you give up is what Chapter 14 spends a chapter on: a frozen task set,
+a regression gate, and trajectory-level visibility. A managed agent that regresses tells you
+nothing about *why*. Pick it when time-to-first-version genuinely dominates, and know that
+you are deferring the eval problem rather than avoiding it.
+
+**3. Managed retrieval is the right default until retrieval is your product.** Vertex AI
+Search is a better first answer than a hand-built pipeline for most internal search. The
+moment you need a specific chunking strategy, a hybrid ranker, or a defensible abstention
+rule (Chapter 03b), you are building it anyway — and you will build it better for having
+measured the managed one first. That is the honest order.
+
+**4. The vector-index layer is commoditised, so pick by where your data already lives.**
+pgvector on Cloud SQL if you have PostgreSQL. BigQuery vector search if the corpus is
+already in BigQuery. A dedicated service when scale genuinely demands it. Moving data to a
+vector database it did not need to live in is the expensive mistake.
+
+**5. A2A and MCP are not competitors.** Google's **Agent2Agent** addresses agents talking to
+*other agents* (Chapter 09's peers); **MCP** addresses agents talking to *tools*
+(Chapter 11). A system can use both, and a candidate who treats them as rivals has read
+headlines rather than specifications.
+
+**Where Hermes sits.** It is the first row and part of the third: your own loop, your own
+tools, any provider — with a gateway, a scheduler and a skill system on top. Using Vertex AI
+as the *provider* underneath it (Chapter 02's routing) is a normal configuration, and it is
+the combination this chapter's Terraform assumes: Google's infrastructure and models,
+somebody else's agent runtime. That is a legitimate architecture and you should be able to
+say why you chose it.
+
 ### What is actually checked, and what is not
 
 This is the part that makes the header honest rather than an excuse.
@@ -119,6 +182,7 @@ This is the part that makes the header honest rather than an excuse.
 | Manifests parse; every object has kind and name | `tests/test_cloud_manifests.py` |
 | The *decisions* above | the same tests: digest pinning, no CPU limit, non-root, read-only root with a writable `/tmp`, PDB on a single replica, DNS in the egress policy, no secret values in HCL, private database, no `roles/editor` |
 | **Not checked** | that any of it deploys. No `terraform init`, `plan` or `apply`; no cluster. |
+| **Not checked** | every product name in "Google's AI stack" above. That section is a dated snapshot of a fast-moving lineup and carries its own warning. |
 
 Checking decisions rather than schemas turned out to be the more useful half. A manifest can
 be perfectly valid and still pin by tag, run as root, and cap CPU on an agent loop — those
@@ -236,3 +300,10 @@ anything runs.
    network path and the identity that makes the connection.
 8. How would you check a cloud deployment in CI when CI has no cloud credentials? What can
    you actually assert?
+9. Your company runs on GCP. Why did you build an agent instead of using the managed one?
+   Answer without saying "I wanted to learn".
+10. What is the difference between reaching Gemini through AI Studio and through Vertex AI,
+    and at what point in a project does that difference start to matter?
+11. When is managed retrieval the right answer, and what specifically would make you replace
+    it with your own pipeline?
+12. A2A or MCP? Describe a system that needs both.

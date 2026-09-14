@@ -187,5 +187,44 @@ class TerraformTests(unittest.TestCase):
         self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
 
 
+class PerishableSectionTests(unittest.TestCase):
+    """The Google AI stack section is the most perishable content in the course.
+
+    Product names and boundaries there change faster than anything else, and this repo
+    cannot check a single one of them. These tests do not verify the names — nothing here
+    can. They make sure the section keeps SAYING so, and that its snapshot date cannot drift
+    away from the header date without someone noticing.
+    """
+
+    def setUp(self):
+        self.chapter = (Path(__file__).resolve().parents[1] / "chapters"
+                        / "13b-cloud-deployment" / "README.md")
+        self.text = self.chapter.read_text(encoding="utf-8")
+
+    def test_the_section_exists(self):
+        self.assertIn("### Google's AI stack, and which layer you are building at", self.text)
+
+    def test_it_warns_that_the_names_are_perishable(self):
+        self.assertIn("most perishable section in the course", self.text)
+        self.assertIn("Verify every product name against current", self.text)
+
+    def test_its_snapshot_date_matches_the_chapters_reviewed_date(self):
+        """Re-reviewing the chapter must re-date this section too, or the warning lies."""
+        reviewed = re.search(r"\*\*Reviewed:\*\* (\d{4}-\d{2}-\d{2})", self.text)
+        snapshot = re.search(r"\*\*Snapshot: (\d{4}-\d{2}-\d{2})\.\*\*", self.text)
+        self.assertIsNotNone(reviewed, "chapter lost its Reviewed header")
+        self.assertIsNotNone(snapshot, "the AI-stack section lost its snapshot date")
+        self.assertEqual(reviewed.group(1), snapshot.group(1))
+
+    def test_the_unverified_table_names_this_section(self):
+        """The 'what is not checked' table must admit this section is in it."""
+        self.assertIn("every product name in", self.text)
+
+    def test_it_teaches_the_decision_not_just_the_catalogue(self):
+        """The columns are the durable part; the product names are not."""
+        for durable in ("Right when", "What you give up", "layer decision"):
+            self.assertIn(durable, self.text)
+
+
 if __name__ == "__main__":
     unittest.main()
