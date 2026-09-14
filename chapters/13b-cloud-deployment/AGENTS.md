@@ -25,6 +25,23 @@ at the platform layer, image pinning. Local and SSH backends stay in 13; the sec
 NetworkPolicy. Pinned by `tests/test_cloud_manifests.py`, which checks the DECISIONS (digest
 pinning, no CPU limit, non-root, PDB, DNS egress, no secrets in HCL) rather than schemas.
 
+## The AI-stack section is on a shorter clock than the rest
+
+"Google's AI stack, and which layer you are building at" is the most perishable content in
+the course: product names, boundaries and availability move faster than anything else here,
+and this repo can verify none of them.
+
+Rules for it, enforced by `tests/test_cloud_manifests.py`:
+
+- It keeps its `**Snapshot: YYYY-MM-DD.**` line, and that date must EQUAL the chapter's
+  `Reviewed:` date. Re-reviewing the chapter means re-checking this section; if you cannot
+  re-check it, do not re-date the chapter.
+- It keeps the instruction to verify every product name against current documentation.
+- The "what is not checked" table keeps admitting the section is in it.
+- Edit the middle column (the product names) freely as things change. Do NOT let the other
+  columns — the layer, when it is right, what you give up — drift into product marketing.
+  Those columns are why the section survives a rename; the names are not.
+
 ## Care
 
 - `kubectl apply --dry-run=client` is deliberately not used: it contacts a cluster for the
