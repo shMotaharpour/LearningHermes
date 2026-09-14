@@ -96,12 +96,26 @@ resource "google_secret_manager_secret" "provider_api_key" {
 # --- data ---------------------------------------------------------------------------
 #
 # Cloud SQL for PostgreSQL with pgvector — the deployment target from Chapter 03c.
-# AlloyDB is the alternative when you want ScaNN indexing; the schema is the same.
+#
+# AlloyDB is the alternative, and the threshold is specific rather than a matter of taste:
+# its ScaNN index (the `alloydb_scann` extension) is where you go once the index stops
+# fitting in memory. Google's own benchmark puts ScaNN at 431ms against pgvector HNSW's
+# >4s at that point. Below the memory line the difference barely shows; above it, the index
+# implementation IS the latency budget. The schema is the same either way, so this is a
+# migration you can defer until you have measured — which is the whole point of Ch 03c's
+# recall benchmark.
 
 resource "google_sql_database_instance" "vectors" {
   name             = "hermes-vectors"
   database_version = "POSTGRES_16"
   region           = var.region
+
+  # Not cosmetic. Without the peering below, an instance with ipv4_enabled = false and a
+  # private_network has nowhere to get an address from, and `apply` fails. Terraform infers
+  # dependencies from references, and this instance references the NETWORK, not the
+  # connection — so the ordering has to be stated. The general rule: an implicit dependency
+  # only exists where there is an actual reference.
+  depends_on = [google_service_networking_connection.private_vpc_connection]
 
   settings {
     tier              = "db-custom-2-7680"
@@ -129,6 +143,32 @@ resource "google_sql_database_instance" "vectors" {
 resource "google_compute_network" "vpc" {
   name                    = "hermes-vpc"
   auto_create_subnetworks = true
+}
+
+# Private services access: the two resources people forget, and the reason a "private IP"
+# Cloud SQL instance fails to create on a first apply.
+#
+# Cloud SQL does not live in your VPC. It lives in a Google-managed VPC that is PEERED with
+# yours, so "private IP" means "reachable over a peering" — and a peering needs an address
+# range on your side to peer into. You reserve that range (global address) and then
+# establish the peering (service networking connection). Omit either and
+# `ip_configuration.private_network` has nothing to attach to.
+#
+# This is the shape of most cloud-networking bugs: the managed service is not where you
+# think it is, and the thing you must create is the path to it.
+
+resource "google_compute_global_address" "private_ip_range" {
+  name          = "hermes-private-services"
+  purpose       = "VPC_PEERING"
+  address_type  = "INTERNAL"
+  prefix_length = 16
+  network       = google_compute_network.vpc.id
+}
+
+resource "google_service_networking_connection" "private_vpc_connection" {
+  network                 = google_compute_network.vpc.id
+  service                 = "servicenetworking.googleapis.com"
+  reserved_peering_ranges = [google_compute_global_address.private_ip_range.name]
 }
 
 # --- compute ------------------------------------------------------------------------

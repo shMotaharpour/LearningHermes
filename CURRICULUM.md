@@ -146,7 +146,7 @@ guard rather than a promise:
 | Which source file backs which posting | `python3 scripts/rebuild_job_ledger.py --check` |
 | Citations, section order, exercise pairing, empty evidence files | `python3 scripts/validate_course.py --root .` |
 | Chapters agreeing on one verification date + Hermes version | `python3 scripts/validate_course.py --root .` (error on disagreement; warning when the header is older than `--max-age-days`, default 180) |
-| A chapter whose commands this repo cannot run | `python3 scripts/validate_course.py --root .` — it must carry `Reviewed:` instead of `Verified:`, must be named in `REVIEWED_CHAPTERS`, and no other chapter may use that header. Currently exactly one: `13b-cloud-deployment`. |
+| A chapter whose commands this repo cannot run | `python3 scripts/validate_course.py --root .` — it must carry `Reviewed:` instead of `Verified:`, must be named in `REVIEWED_CHAPTERS`, and no other chapter may use that header. Currently exactly one: `13b-cloud-deployment`. `scripts/verify_chapters.py` keeps a matching allowlist so it reports that chapter as deliberately weaker rather than header-less, and `tests/test_verify_chapters.py` fails if the two lists disagree. |
 | All of the above at once | `scripts/check.sh` |
 
 Machine-state numbers (session counts, prompt sizes, installed model, tool lists) are

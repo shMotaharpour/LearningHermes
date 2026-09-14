@@ -104,5 +104,38 @@ class ShellSyntaxTests(unittest.TestCase):
         self.assertFalse(V.has_shell_syntax("hermes plugins list"))
 
 
+
+
+class EvidenceStandardAgreementTests(unittest.TestCase):
+    """The two validators must have the same idea of which chapters are `Reviewed:`.
+
+    `validate_course.py` enforces the weaker header in both directions; `verify_chapters.py`
+    only needs to stop calling such a chapter header-less. Nothing links the two lists at
+    runtime, so this test links them — the failure mode otherwise is that one script starts
+    complaining about a chapter the other has blessed, and whoever sees it first assumes the
+    chapter is broken. Two copies of a rule drift; that is Chapter 03's whole argument.
+    """
+
+    def test_the_two_allowlists_match(self):
+        sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "scripts"))
+        import validate_course as VC
+
+        self.assertEqual(V.REVIEWED_CHAPTERS, VC.REVIEWED_CHAPTERS)
+
+    def test_every_listed_chapter_exists_and_carries_the_header(self):
+        chapters = Path(__file__).resolve().parents[1] / "chapters"
+        for slug in V.REVIEWED_CHAPTERS:
+            readme = chapters / slug / "README.md"
+            self.assertTrue(readme.is_file(), f"{slug} is allowlisted but has no README")
+            text = readme.read_text(encoding="utf-8")
+            self.assertIsNotNone(V.REVIEWED_LINE_RE.search(text), f"{slug} lacks Reviewed:")
+            self.assertIsNone(V.VERIFIED_LINE_RE.search(text), f"{slug} also claims Verified:")
+
+    def test_chapter_slug_reads_the_directory_name(self):
+        self.assertEqual(V.chapter_slug("chapters/13b-cloud-deployment/README.md"),
+                         "13b-cloud-deployment")
+        self.assertEqual(V.chapter_slug("exercises/ex13b-cloud-deployment.md"), "")
+
+
 if __name__ == "__main__":
     unittest.main()

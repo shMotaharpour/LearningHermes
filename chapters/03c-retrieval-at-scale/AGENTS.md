@@ -17,7 +17,7 @@ index, `schema.sql` for pgvector, and `bench.py`. Pinned by `tests/test_retrieva
 
 - This chapter introduces the course's **only third-party dependency** (`sqlite-vec`). Tests
   skip cleanly without it; do not add a second package without the same treatment.
-- `schema.sql`, `PgVectorStore` and `VertexEmbedder` cannot be executed here. Each states so
+- `schema.sql`, `PgVectorStore` and `GeminiEmbedder` cannot be executed here. Each states so
   in its own file and a test asserts that the statement is present. Keep both.
 - `bench.py` must keep the pure-Python exact baseline. Without it the sweep compares C
   against Python and the chapter's central result becomes a claim about the wrong variable.

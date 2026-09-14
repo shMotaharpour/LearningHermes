@@ -55,17 +55,25 @@ Budget: 3–4 hours, plus a container if you do task 7.
    insert 10,000 rows, and measure recall. Compare with an index built after the insert.
    Record what the failure looked like — that is the point of the exercise.
 
-8. **On GCP, if you have a project.** Point the embedder at Vertex AI:
+8. **On GCP, if you have a project.** Point the embedder at a real model:
 
    ```bash
-   pip install google-cloud-aiplatform
+   pip install google-genai        # NOT google-cloud-aiplatform — see embed.py
    gcloud auth application-default login
-   EMBED_BACKEND=vertex GOOGLE_CLOUD_PROJECT=... python3 bench.py --n 2000
+   EMBED_BACKEND=gemini GOOGLE_CLOUD_PROJECT=... python3 bench.py --n 2000
    ```
 
-   Two things to record: the real throughput versus the local embedder, and whether recall
-   at fixed `nprobe` changed — real embeddings cluster differently from a hashing trick, and
-   your tuning may not survive the swap.
+   Three things to record. **Throughput** versus the local embedder — and before you run
+   it, predict the number: `gemini-embedding-001` accepts one text per request, so 2,000
+   documents is 2,000 round trips. **Recall at fixed `nprobe`** — real embeddings cluster
+   differently from a hashing trick, and your tuning may not survive the swap. **Storage**
+   — the default output is 3072 dimensions against the local 384, so run
+   `embed.storage_bytes` for both and put the two numbers next to the recall you measured.
+
+   Then answer the question that decides the design: at what corpus size does the
+   one-request-per-text limit stop being an inconvenience and start being the reason you
+   move to the Batch API? Work it out from your measured per-request latency, not from
+   intuition.
 
 9. **Write the migration plan.** One page: you are moving from a 384-dim model to a 768-dim
    one. Cover the schema change, where the new vectors live during the transition, how you

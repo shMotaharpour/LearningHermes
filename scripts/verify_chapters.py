@@ -39,10 +39,25 @@ VALUE_TAIL_FLAGS = {"--args"}
 
 HEADER_VERSION_RE = re.compile(r">\s*\*\*Verified:\*\*[^\n]*?Hermes Agent v([0-9][0-9.]*)")
 VERIFIED_LINE_RE = re.compile(r">\s*\*\*Verified:\*\*")
+REVIEWED_LINE_RE = re.compile(r">\s*\*\*Reviewed:\*\*")
+
+# A chapter whose commands this repo cannot run carries the weaker `Reviewed:` header
+# instead. `scripts/validate_course.py` owns that allowlist and enforces it in both
+# directions; this script only needs to stop reporting such a chapter as missing a header
+# it is not supposed to have. The two lists must agree, and a test asserts that they do —
+# two validators with different ideas of the same rule is the drift this course warns
+# about in Chapter 03.
+REVIEWED_CHAPTERS = {"13b-cloud-deployment"}
 FENCE_RE = re.compile(r"```[a-zA-Z0-9_-]*\n(.*?)```", re.S)
 INLINE_RE = re.compile(r"`([^`\n]+)`")
 SHELL_META_RE = re.compile(r"[|&;<>$`\\!*?~\[\]()]")
 QUOTED_RE = re.compile(r"'[^']*'|\"[^\"]*\"")
+
+
+def chapter_slug(label: str) -> str:
+    """`chapters/13b-cloud-deployment/README.md` -> `13b-cloud-deployment`."""
+    parts = Path(label).parts
+    return parts[1] if len(parts) > 1 and parts[0] == "chapters" else ""
 
 
 def has_shell_syntax(cmd: str) -> bool:
@@ -229,6 +244,7 @@ def check_file(path: Path, label: str, live_version: str, cache: dict[str, tuple
     report = {
         "file": label,
         "has_verified_header": bool(VERIFIED_LINE_RE.search(text)),
+        "has_reviewed_header": bool(REVIEWED_LINE_RE.search(text)),
         "header_version": header_match.group(1) if header_match else "",
         "commands": 0,
         "checked": 0,
@@ -299,7 +315,16 @@ def main() -> int:
     unknown = [r for r in reports if r["unknown_subcommand"]]
     partial = [r for r in reports if r["partial_subcommand"]]
     flagged = [r for r in reports if r["unverified_flags"]]
-    missing_header = [r for r in reports if not r["has_verified_header"] and r["file"].startswith("chapters/")]
+    missing_header = [
+        r for r in reports
+        if not r["has_verified_header"]
+        and r["file"].startswith("chapters/")
+        and not (r["has_reviewed_header"] and chapter_slug(r["file"]) in REVIEWED_CHAPTERS)
+    ]
+    reviewed = [
+        r for r in reports
+        if r["has_reviewed_header"] and chapter_slug(r["file"]) in REVIEWED_CHAPTERS
+    ]
     drift_version = [r for r in reports if r["version_drift"]]
 
     if args.json:
@@ -336,6 +361,11 @@ def main() -> int:
             + (f", {sum(len(r['plugin_provided']) for r in reports)} plugin-provided"
                if any(r["plugin_provided"] for r in reports) else "")
         )
+        for r in reviewed:
+            print(
+                f"{r['file']}: carries the weaker 'Reviewed:' header by design — its "
+                "commands are NOT verified against a live system here"
+            )
         if missing_header:
             print(f"missing Verified header: {', '.join(r['file'] for r in missing_header)}")
         if drift_version:

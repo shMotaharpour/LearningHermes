@@ -155,6 +155,27 @@ class TerraformTests(unittest.TestCase):
         self.assertRegex(self.text, r"ipv4_enabled\s*=\s*false")
         self.assertIn("private_network", self.text)
 
+    def test_private_ip_brings_its_own_peering(self):
+        """`private_network` alone does not work, and the first draft of this file had it
+        alone. Cloud SQL lives in a Google-managed VPC peered with yours, so a private IP
+        needs a reserved range on your side and a service-networking connection to peer
+        over. Without both, `apply` fails. This test exists because the omission is silent
+        in review and loud only at 3am on a first deploy."""
+        self.assertIn("google_compute_global_address", self.text)
+        self.assertRegex(self.text, r'purpose\s*=\s*"VPC_PEERING"')
+        self.assertIn("google_service_networking_connection", self.text)
+        self.assertRegex(self.text, r'service\s*=\s*"servicenetworking\.googleapis\.com"')
+        self.assertIn("reserved_peering_ranges", self.text)
+
+    def test_the_instance_waits_for_the_peering(self):
+        """Terraform infers ordering from references, and the instance references the
+        network, not the connection — so the dependency has to be declared or the create
+        races the peering."""
+        self.assertRegex(
+            self.text,
+            r"depends_on\s*=\s*\[google_service_networking_connection\.\w+\]",
+        )
+
     def test_the_vector_store_has_deletion_protection_and_backups(self):
         self.assertRegex(self.text, r"deletion_protection\s*=\s*true")
         self.assertRegex(self.text, r"point_in_time_recovery_enabled\s*=\s*true")
@@ -219,6 +240,18 @@ class PerishableSectionTests(unittest.TestCase):
     def test_the_unverified_table_names_this_section(self):
         """The 'what is not checked' table must admit this section is in it."""
         self.assertIn("every product name in", self.text)
+
+    def test_it_cites_the_dated_research_behind_the_names(self):
+        """No test can verify a product lineup, but an unsourced one is just a memory.
+
+        The section must point at the dated external research it was written from, and
+        that file must exist — a citation to a missing file is worse than no citation.
+        """
+        rel = "docs/research/google/ai-stack-2026-09-14.md"
+        self.assertIn(rel, self.text)
+        evidence = Path(__file__).resolve().parents[1] / rel
+        self.assertTrue(evidence.is_file(), f"{rel} is cited but missing")
+        self.assertGreater(evidence.stat().st_size, 0, f"{rel} is empty")
 
     def test_it_teaches_the_decision_not_just_the_catalogue(self):
         """The columns are the durable part; the product names are not."""

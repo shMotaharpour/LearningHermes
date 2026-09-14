@@ -10,6 +10,12 @@ directory. Nothing here is decoration: these files are the citation targets of t
 - `jobs/` — job-posting research: extracted postings (`source-NN.md`), search/extract
   dumps (`*.json`), the provenance index (`ledger.json`), and generated statistics
   (`stats-YYYY-MM-DD.txt`).
+- `google/` — third-party product research for Chapter 13b, which is the one chapter this
+  repo cannot verify by running anything. Naming: `<topic>-YYYY-MM-DD.md`. Each file is a
+  dated snapshot with source URLs, captured externally and stored verbatim under a
+  provenance header. It supports the weaker `Reviewed:` standard. A chapter carrying
+  `Verified:` may cite it only for material that chapter has *explicitly marked as not
+  verified by this repo* — never as backing for a command under the `Verified:` header.
 - `labs/`, `capstone/` — learner-produced artifacts. These paths are *expected to be
   absent* in the repo and are allowed as references; validators skip them.
 
